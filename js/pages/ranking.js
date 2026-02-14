@@ -2,7 +2,7 @@ window.KindrRanking = {
     render: (container) => {
         container.innerHTML = `
             <div class="page-header center-text">
-                <h2>🏆 Top Sitios</h2>
+                <h2 style="color: var(--primary-navy); font-weight: 800;">🏆 Top Sitios</h2>
                 <p>Los favoritos de febrero</p>
             </div>
             

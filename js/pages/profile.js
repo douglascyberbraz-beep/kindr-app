@@ -7,12 +7,12 @@ window.KindrProfile = {
         }
 
         container.innerHTML = `
-        <div class="profile-header">
-            <div class="avatar-large">
+        <div class="profile-header" style="background: linear-gradient(135deg, var(--primary-navy), var(--primary-dark)); padding: 40px 20px;">
+            <div class="avatar-large" style="font-weight: 800;">
                 ${user.name.charAt(0)}
             </div>
-            <h2>${user.name}</h2>
-            <span class="rank-badge">🏆 ${user.rank}</span>
+            <h2 style="font-weight: 800; letter-spacing: -0.5px; margin-top: 10px;">${user.name}</h2>
+            <span class="rank-badge" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);">🏆 ${user.rank}</span>
         </div>
         
         <div class="stats-row">
