@@ -80,11 +80,25 @@ body {
 }
 
 .logo-text {
-    color: var(--primary-blue);
+    color: var(--primary-dark);
     font-weight: 700;
-    font-size: 2rem;
+    font-size: 2.5rem;
+    margin-top: 5px;
+    letter-spacing: 2px;
+}
+
+.splash-logo {
+    max-width: 180px;
+    height: auto;
+    margin-bottom: 5px;
+}
+
+.slogan-text {
+    color: var(--text-light);
+    font-style: italic;
+    font-size: 1.1rem;
     margin-top: 10px;
-    letter-spacing: -1px;
+    font-weight: 400;
 }
 
 /* Navigation - Dynamic Themed Pill */

@@ -4,14 +4,9 @@ window.KindrMap = {
 
     render: (container, userLocation) => {
         if (window.KindrMap.isInitialized) {
-            // Just refresh size and position if already exists
+            // Just refresh size immediately
             const map = window.KindrMap.instance;
-            setTimeout(() => {
-                map.invalidateSize();
-                if (userLocation) {
-                    map.setView([userLocation.lat, userLocation.lng], map.getZoom());
-                }
-            }, 100);
+            setTimeout(() => { map.invalidateSize(); }, 50);
             return;
         }
 
@@ -43,7 +38,7 @@ window.KindrMap = {
 
         // Custom Icon
         const kindrIcon = L.icon({
-            iconUrl: 'assets/logo.svg',
+            iconUrl: 'assets/map-marker.png',
             iconSize: [40, 40],
             iconAnchor: [20, 20],
             popupAnchor: [0, -20],
@@ -164,9 +159,10 @@ mapStyle.textContent = `
         margin-right: 2px;
     }
     .kindr-marker {
-        border-radius: 50%;
-        border: 3px solid white;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        background: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
     }
     .popup-card {
         text-align: center;
