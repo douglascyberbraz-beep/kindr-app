@@ -108,9 +108,12 @@ function loadPage(pageName) {
 
     if (pageName === 'map') {
         mapContainer.classList.remove('hidden');
+        mapContainer.classList.add('page-enter'); // Add animation
         window.KindrMap.render(mapContainer, appState.location);
+        setTimeout(() => mapContainer.classList.remove('page-enter'), 600);
     } else {
         container.classList.remove('hidden');
+        container.classList.add('page-enter'); // Add animation
         switch (pageName) {
             case 'news':
                 window.KindrNews.render(container);
@@ -131,6 +134,7 @@ function loadPage(pageName) {
                 window.KindrProfile.render(container, appState.user);
                 break;
         }
+        setTimeout(() => container.classList.remove('page-enter'), 600);
     }
 }
 
