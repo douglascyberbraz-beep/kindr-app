@@ -95,35 +95,39 @@ window.KindrTribu = {
                 .sticky-header {
                     position: sticky;
                     top: 0;
-                    background: rgba(255,255,255,0.95);
-                    backdrop-filter: blur(10px);
+                    background: var(--glass);
+                    backdrop-filter: blur(20px);
+                    -webkit-backdrop-filter: blur(20px);
                     z-index: 100;
-                    padding-bottom: 15px;
+                    padding: 20px;
                     border-bottom: 1px solid rgba(0,0,0,0.05);
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                 }
                 .btn-icon-pulse {
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50%;
-                    background: var(--primary-color);
+                    width: 45px;
+                    height: 45px;
+                    border-radius: 16px; /* Squircle for premium look */
+                    background: var(--primary-navy);
                     color: white;
                     border: none;
                     font-size: 1.2rem;
                     cursor: pointer;
-                    box-shadow: 0 4px 15px rgba(109, 40, 217, 0.3);
-                    animation: pulse-soft 2s infinite;
+                    box-shadow: 0 8px 20px rgba(0, 44, 119, 0.2);
+                    transition: all 0.3s ease;
                 }
+                .btn-icon-pulse:active { transform: scale(0.9); }
                 .tribu-card {
                     background: white;
-                    padding: 20px;
-                    border-radius: 20px;
-                    margin-bottom: 15px;
-                    box-shadow: var(--shadow);
-                    border: 1px solid rgba(0,0,0,0.02);
+                    padding: 24px;
+                    border-radius: 24px;
+                    margin-bottom: 20px;
+                    box-shadow: var(--shadow-soft);
+                    border: 1px solid rgba(0,0,0,0.03);
+                    transition: all 0.3s ease;
                 }
+                .tribu-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-premium); }
                 .tribu-header {
                     display: flex;
                     gap: 12px;
