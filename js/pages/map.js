@@ -1,61 +1,61 @@
 window.KindrMap = {
     instance: null,
+    isInitialized: false,
 
     render: (container, userLocation) => {
-        // Destroy previous instance if any to prevent initialization errors
-        if (window.KindrMap.instance) {
-            window.KindrMap.instance.remove();
-            window.KindrMap.instance = null;
+        if (window.KindrMap.isInitialized) {
+            // Just refresh size and position if already exists
+            const map = window.KindrMap.instance;
+            setTimeout(() => {
+                map.invalidateSize();
+                if (userLocation) {
+                    map.setView([userLocation.lat, userLocation.lng], map.getZoom());
+                }
+            }, 100);
+            return;
         }
 
-        // Basic Layout with explicit height and fallback background
+        // Initialize only once
         container.innerHTML = `
-        <div id="map-view" style="width: 100%; height: 100%; min-height: 500px; background: #e5e7eb;"></div>
-        
-        <!-- Search Bar Float -->
-        <div class="search-bar-float">
-            <input type="text" placeholder="¿Qué buscas hoy? (Parques, cafeterías...)" class="search-input">
-            <button class="search-btn">🔍</button>
-        </div>
-    `;
+            <div id="map-view" style="width: 100%; height: 100%; background: #e5e7eb;"></div>
+            <div class="search-bar-float">
+                <input type="text" placeholder="¿Qué buscas hoy?" class="search-input">
+                <button class="search-btn">🔍</button>
+            </div>
+        `;
 
-        // Small delay to ensure DOM is ready
-        setTimeout(() => {
-            const mapEl = document.getElementById('map-view');
-            if (!mapEl) return;
+        const center = userLocation ? [userLocation.lat, userLocation.lng] : [40.4168, -3.7038];
+        const map = L.map('map-view', {
+            zoomControl: false,
+            tap: false
+        }).setView(center, 13);
 
-            const center = userLocation ? [userLocation.lat, userLocation.lng] : [40.4168, -3.7038];
-            const map = L.map('map-view', {
-                zoomControl: false,
-                tap: false
-            }).setView(center, 13);
+        window.KindrMap.instance = map;
+        window.KindrMap.isInitialized = true;
 
-            window.KindrMap.instance = map;
+        // Add Tile Layer (Google Roadmap - Clean & Reliable)
+        L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            attribution: '&copy; Google Maps',
+            maxZoom: 19
+        }).on('tileerror', (e) => {
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        }).addTo(map);
 
-            // Add Tile Layer (Google Roadmap - Clean & Reliable)
-            L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-                attribution: '&copy; Google Maps',
-                maxZoom: 19
-            }).on('tileerror', (e) => {
-                console.warn('Google Tiles failed, falling back to OSM');
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            }).addTo(map);
+        // Custom Icon
+        const kindrIcon = L.icon({
+            iconUrl: 'assets/logo.svg',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20],
+            className: 'kindr-marker'
+        });
 
-            // Custom Icon
-            const kindrIcon = L.icon({
-                iconUrl: 'assets/logo.svg',
-                iconSize: [40, 40],
-                iconAnchor: [20, 20],
-                popupAnchor: [0, -20],
-                className: 'kindr-marker'
-            });
+        // Add Markers from Mock Data
+        const locations = window.KindrData.getLocations();
+        locations.forEach(loc => {
+            const marker = L.marker([loc.lat, loc.lng], { icon: kindrIcon }).addTo(map);
 
-            // Add Markers from Mock Data
-            const locations = window.KindrData.getLocations();
-            locations.forEach(loc => {
-                const marker = L.marker([loc.lat, loc.lng], { icon: kindrIcon }).addTo(map);
-
-                const popupContent = `
+            const popupContent = `
                 <div class="popup-card">
                     <b>${loc.name}</b><br>
                     <span>⭐ ${loc.rating} (${loc.reviews})</span><br>
@@ -66,26 +66,24 @@ window.KindrMap = {
                     </div>
                 </div>
             `;
-                marker.bindPopup(popupContent);
-            });
+            marker.bindPopup(popupContent);
+        });
 
-            // Add User Location Marker
-            if (userLocation) {
-                L.circleMarker([userLocation.lat, userLocation.lng], {
-                    radius: 10,
-                    fillColor: "#4CC9F0",
-                    color: "#fff",
-                    weight: 3,
-                    opacity: 1,
-                    fillOpacity: 0.9
-                }).addTo(map).bindPopup("Estás aquí");
-            }
+        // Add User Location Marker
+        if (userLocation) {
+            L.circleMarker([userLocation.lat, userLocation.lng], {
+                radius: 10,
+                fillColor: "#4CC9F0",
+                color: "#fff",
+                weight: 3,
+                opacity: 1,
+                fillOpacity: 0.9
+            }).addTo(map).bindPopup("Estás aquí");
+        }
 
-            // Force multiple layout refreshes for browser compatibility
-            const refresh = () => { map.invalidateSize(); };
-            setTimeout(refresh, 100);
-            setTimeout(refresh, 800);
-        }, 60);
+        const refresh = () => { map.invalidateSize(); };
+        setTimeout(refresh, 100);
+        setTimeout(refresh, 800);
 
         // Initialize Review Modal (Singleton)
         if (!document.getElementById('review-modal')) {
@@ -97,7 +95,6 @@ window.KindrMap = {
                             <p id="review-target-name" style="color:var(--primary-dark); font-weight:600; margin-bottom:15px;"></p>
                             <div class="star-rating" style="font-size: 2rem; margin-bottom: 15px;"><span>⭐⭐⭐⭐⭐</span></div>
                             <textarea id="review-text" placeholder="¿Qué te pareció?" class="auth-input" style="height:100px; text-align:left;"></textarea>
-                            <button class="btn-primary full-width" style="background:var(--accent-gray); color:var(--text-dark); margin-bottom: 10px; box-shadow:none;">📸 Añadir Foto</button>
                             <button id="submit-review-btn" class="btn-primary full-width">Publicar Reseña</button>
                             <button onclick="document.getElementById('review-modal').classList.add('hidden')" class="btn-text" style="margin-top:15px; width:100%;">Cancelar</button>
                         </div>
@@ -127,7 +124,6 @@ window.KindrMap = {
     }
 };
 
-// Map-specific styles
 const mapStyle = document.createElement('style');
 mapStyle.textContent = `
     .search-bar-float {

@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => {
             splash.style.display = 'none';
             document.getElementById('bottom-nav').classList.remove('hidden');
-            document.getElementById('main-content').classList.remove('hidden');
+            // Initial load handles showing correct container
         }, 500);
     }, 2500);
 
@@ -96,35 +96,41 @@ function setupNavigation() {
 function loadPage(pageName) {
     appState.currentPage = pageName;
     const container = document.getElementById('main-content');
-    container.innerHTML = ''; // Clear current content
+    const mapContainer = document.getElementById('map-container');
+
+    // Default hiding
+    container.classList.add('hidden');
+    mapContainer.classList.add('hidden');
+    container.innerHTML = ''; // Clear other pages content
 
     // Special style for nav items
     updateNavStyles(pageName);
 
-    switch (pageName) {
-        case 'map':
-            window.KindrMap.render(container, appState.location);
-            break;
-        case 'news':
-            window.KindrNews.render(container);
-            break;
-        case 'events':
-            window.KindrEvents.render(container);
-            break;
-        case 'tribu':
-            window.KindrTribu.render(container);
-            break;
-        case 'ranking':
-            window.KindrRanking.render(container);
-            break;
-        case 'chat':
-            window.KindrChat.render(container);
-            break;
-        case 'profile':
-            window.KindrProfile.render(container, appState.user);
-            break;
-        default:
-            window.KindrMap.render(container);
+    if (pageName === 'map') {
+        mapContainer.classList.remove('hidden');
+        window.KindrMap.render(mapContainer, appState.location);
+    } else {
+        container.classList.remove('hidden');
+        switch (pageName) {
+            case 'news':
+                window.KindrNews.render(container);
+                break;
+            case 'events':
+                window.KindrEvents.render(container);
+                break;
+            case 'tribu':
+                window.KindrTribu.render(container);
+                break;
+            case 'ranking':
+                window.KindrRanking.render(container);
+                break;
+            case 'chat':
+                window.KindrChat.render(container);
+                break;
+            case 'profile':
+                window.KindrProfile.render(container, appState.user);
+                break;
+        }
     }
 }
 
