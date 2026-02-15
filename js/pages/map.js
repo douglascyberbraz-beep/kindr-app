@@ -7,16 +7,16 @@ window.KindrMap = {
 
         if (!window.KindrMap.isInitialized) {
             window.KindrMap.init(mapContainer, userLocation);
-        } else {
-            // If already initialized elsewhere, just ensure it's in the right container (if moved)
-            if (mapContainer.childElementCount === 0) {
-                // This shouldn't happen with our persistent container but good for safety
-                window.KindrMap.init(mapContainer, userLocation);
-            }
+        }
 
-            // Refresh size immediately and after a bit
-            const map = window.KindrMap.instance;
+        // Show the layer (CSS handles the rest)
+        mapContainer.classList.remove('map-layer-hidden');
+
+        // Refresh size immediately and with multiple steps to ensure fluidity
+        const map = window.KindrMap.instance;
+        if (map) {
             map.invalidateSize();
+            setTimeout(() => map.invalidateSize(), 50);
             setTimeout(() => map.invalidateSize(), 300);
         }
     },
@@ -140,9 +140,17 @@ window.KindrMap = {
             }).addTo(map).bindPopup("Estás aquí");
         }
 
-        const refresh = () => { map.invalidateSize(); };
+        const refresh = () => { if (map) map.invalidateSize(); };
         setTimeout(refresh, 100);
-        setTimeout(refresh, 800);
+        setTimeout(refresh, 500);
+
+        // ResizeObserver: The magic fix for tiling
+        const resizeObserver = new ResizeObserver(() => {
+            if (window.KindrMap.instance) {
+                window.KindrMap.instance.invalidateSize();
+            }
+        });
+        resizeObserver.observe(container);
 
         // Initialize Review Modal (Singleton)
         if (!document.getElementById('review-modal')) {
