@@ -2,13 +2,13 @@
 window.KindrSound = {
     play: (type) => {
         const sounds = {
-            click: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', // Soft pop
-            start: 'https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3', // Magic chime
-            success: 'https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3' // Achievement
+            click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3', // Soft wooden tap
+            start: 'https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3', // Ethereal chime
+            success: 'https://assets.mixkit.co/active_storage/sfx/1918/1918-preview.mp3' // Harp success
         };
         if (sounds[type]) {
             const audio = new Audio(sounds[type]);
-            audio.volume = 0.3;
+            audio.volume = 0.2; // Softer volume for premium feel
             audio.play().catch(e => console.log('Audio auto-play blocked:', e));
         }
     }

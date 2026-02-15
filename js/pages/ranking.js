@@ -6,7 +6,7 @@ window.KindrRanking = {
                 <p>Los favoritos de febrero</p>
             </div>
             
-            <div id="ranking-list" class="content-list" style="padding-bottom: 20px;">
+            <div id="ranking-list" class="content-list stagger-group" style="padding-bottom: 20px;">
                 <div class="contributor-card gold-border">
                     <div style="font-size: 1.5rem;">👑</div>
                     <div style="flex:1">

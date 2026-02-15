@@ -22,7 +22,7 @@ window.KindrNews = {
             </div>
         </div>
 
-        <div id="news-list" class="content-list"></div>
+        <div id="news-list" class="content-list stagger-group"></div>
     `;
 
         const list = document.getElementById('news-list');

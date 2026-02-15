@@ -7,7 +7,7 @@ window.KindrTribu = {
                 <button class="btn-icon-pulse" id="new-post-btn">➕</button>
             </div>
             
-            <div id="tribu-feed" class="content-list" style="padding-bottom: 100px;">
+            <div id="tribu-feed" class="content-list stagger-group" style="padding-bottom: 100px;">
                 <!-- Posts go here -->
             </div>
 

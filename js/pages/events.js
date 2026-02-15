@@ -13,7 +13,7 @@ window.KindrEvents = {
             .event-date-box .day { color: white !important; }
             .event-date-box .month { color: rgba(255,255,255,0.8); }
         </style>
-        <div id="events-list" class="content-list"></div>
+        <div id="events-list" class="content-list stagger-group"></div>
     `;
 
         const list = document.getElementById('events-list');
