@@ -1,5 +1,5 @@
-const CACHE_NAME = 'kindr-cache-v6';
-const TILE_CACHE = 'kindr-tiles-v1';
+const CACHE_NAME = 'kindr-cache-v7';
+const TILE_CACHE = 'kindr-tiles-v2';
 const ASSETS = [
     './',
     'index.html',
@@ -37,15 +37,14 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         Promise.all([
+            // Force takeover
             clients.claim(),
-            // NUCLEAR PURGE: All caches that aren't the current ones go away
+            // TOTAL NUCLEAR PURGE: Delete EVERY cache that exists
             caches.keys().then((cacheNames) => {
                 return Promise.all(
                     cacheNames.map((cacheName) => {
-                        if (cacheName !== CACHE_NAME && cacheName !== TILE_CACHE) {
-                            console.log('[SW] Nuclear Purge of old cache:', cacheName);
-                            return caches.delete(cacheName);
-                        }
+                        console.log('[SW] Nuclear Purge deleting cache:', cacheName);
+                        return caches.delete(cacheName);
                     })
                 );
             })

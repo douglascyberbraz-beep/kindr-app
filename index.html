@@ -117,8 +117,8 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js?v=5').then(reg => {
-                    console.log('Service Worker registrado');
+                navigator.serviceWorker.register('sw.js?v=7').then(reg => {
+                    console.log('Service Worker v7 registrado (Nuclear Update)');
 
                     // Detect updates and reload
                     reg.addEventListener('updatefound', () => {
