@@ -33,7 +33,11 @@ window.KindrMap = {
 
         // Initialize only once
         container.innerHTML = `
-            <div id="map-view" style="width: 100%; height: 100%; background: #f3f4f6; position: absolute; top: 0; left: 0;"></div>
+            <div id="map-loading-overlay" class="map-loading-overlay">
+                <div class="premium-spinner"></div>
+                <span>Cargando Mapa...</span>
+            </div>
+            <div id="map-view" style="width: 100%; height: 100%; background: #f3f4f6; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.5s ease;"></div>
             <div class="search-bar-accessible">
                 <input type="text" placeholder="¿Qué buscas hoy?" class="search-input">
                 <button class="search-btn">🔍</button>
@@ -55,13 +59,24 @@ window.KindrMap = {
         window.KindrMap.instance = map;
         window.KindrMap.isInitialized = true;
 
-        // Add Tile Layer (OpenStreetMap prioritized for reliability, fallback to Google)
-        L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap',
-            maxZoom: 19
-        }).addTo(map);
+        // Add Tile Layer (CartoDB Voyager - Premium, Clean, High Perf)
+        const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; CartoDB',
+            subdomains: 'abcd',
+            maxZoom: 20
+        });
 
-        // Fallback for Google if needed later, but OSM is more reliable for initial dev domains
+        tiles.on('load', () => {
+            const overlay = document.getElementById('map-loading-overlay');
+            const mapView = document.getElementById('map-view');
+            if (overlay) overlay.style.opacity = '0';
+            if (mapView) mapView.style.opacity = '1';
+            setTimeout(() => { if (overlay) overlay.remove(); }, 500);
+        });
+
+        tiles.addTo(map);
+
+        // Fallback for Google if needed later...
 
         // Custom Icon
         const kindrIcon = L.icon({
@@ -222,6 +237,32 @@ mapStyle.textContent = `
     .popup-card {
         text-align: center;
         padding: 5px;
+    }
+    .map-loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 1001;
+        transition: opacity 0.5s ease;
+    }
+    .premium-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(0, 44, 119, 0.1);
+        border-top: 3px solid var(--primary-blue);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 12px;
+    }
+    @keyframes spin {
+        to { transform: rotate(360deg); }
     }
 `;
 document.head.appendChild(mapStyle);
