@@ -27,7 +27,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Warm Initialization: Start loading map in background immediately
     const mapContainer = document.getElementById('map-container');
     if (mapContainer) {
-        window.KindrMap.init(mapContainer, null);
+        try {
+            window.KindrMap.init(mapContainer, null);
+        } catch (e) {
+            console.error("No se pudo pre-inicializar el mapa:", e);
+        }
     }
 
     // Simulate Splash Screen
@@ -100,7 +104,10 @@ function loadPage(pageName) {
         mapContainer.classList.remove('hidden');
         mapContainer.classList.add('page-enter'); // Add animation
         window.KindrMap.render(mapContainer, appState.location);
-        setTimeout(() => mapContainer.classList.remove('page-enter'), 600);
+        setTimeout(() => {
+            mapContainer.classList.remove('page-enter');
+            if (window.KindrMap.instance) window.KindrMap.instance.invalidateSize();
+        }, 600);
     } else {
         container.classList.remove('hidden');
         container.classList.add('page-enter'); // Add animation

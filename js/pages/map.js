@@ -24,9 +24,16 @@ window.KindrMap = {
     init: (container, userLocation) => {
         if (window.KindrMap.isInitialized) return;
 
+        // Defensive check for Leaflet library
+        if (typeof L === 'undefined') {
+            console.error("Leaflet (L) no está cargado. Reintentando en 1s...");
+            setTimeout(() => window.KindrMap.init(container, userLocation), 1000);
+            return;
+        }
+
         // Initialize only once
         container.innerHTML = `
-            <div id="map-view" style="width: 100%; height: 100%; background: #f3f4f6;"></div>
+            <div id="map-view" style="width: 100%; height: 100%; background: #f3f4f6; position: absolute; top: 0; left: 0;"></div>
             <div class="search-bar-accessible">
                 <input type="text" placeholder="¿Qué buscas hoy?" class="search-input">
                 <button class="search-btn">🔍</button>
@@ -42,19 +49,19 @@ window.KindrMap = {
             tap: false,
             fadeAnimation: true,
             markerZoomAnimation: true,
-            preferCanvas: true // Significant performance boost for mobile
+            preferCanvas: true
         }).setView(center, 13);
 
         window.KindrMap.instance = map;
         window.KindrMap.isInitialized = true;
 
-        // Add Tile Layer (Google Roadmap - Clean & Reliable)
-        L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-            attribution: '&copy; Google Maps',
+        // Add Tile Layer (OpenStreetMap prioritized for reliability, fallback to Google)
+        L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap',
             maxZoom: 19
-        }).on('tileerror', (e) => {
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         }).addTo(map);
+
+        // Fallback for Google if needed later, but OSM is more reliable for initial dev domains
 
         // Custom Icon
         const kindrIcon = L.icon({
