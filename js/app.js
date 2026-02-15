@@ -1,4 +1,4 @@
-// Kindr App - Sensory & Branding Build 2024.02.15.1
+// Kindr App - Premium Pulse Build 2024.02.15.2
 // Sound System
 window.KindrSound = {
     play: (type) => {

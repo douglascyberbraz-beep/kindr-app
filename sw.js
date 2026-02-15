@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kindr-cache-v1';
+const CACHE_NAME = 'kindr-cache-v2';
 const ASSETS = [
     './',
     'index.html',
@@ -15,6 +15,7 @@ const ASSETS = [
     'js/pages/profile.js',
     'js/pages/chat.js',
     'assets/logo.png',
+    'assets/logo.svg',
     'assets/map-marker.png',
     'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
     'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
@@ -33,7 +34,22 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-    event.waitUntil(clients.claim());
+    event.waitUntil(
+        Promise.all([
+            clients.claim(),
+            // Clean up old caches
+            caches.keys().then((cacheNames) => {
+                return Promise.all(
+                    cacheNames.map((cacheName) => {
+                        if (cacheName !== CACHE_NAME) {
+                            console.log('Borrando caché antigua:', cacheName);
+                            return caches.delete(cacheName);
+                        }
+                    })
+                );
+            })
+        ])
+    );
 });
 
 self.addEventListener('fetch', (event) => {
