@@ -6,7 +6,8 @@ window.KindrMap = {
         if (window.KindrMap.isInitialized) {
             // Just refresh size immediately
             const map = window.KindrMap.instance;
-            setTimeout(() => { map.invalidateSize(); }, 50);
+            setTimeout(() => { map.invalidateSize(); }, 100);
+            setTimeout(() => { map.invalidateSize(); }, 500); // After animation
             return;
         }
 
