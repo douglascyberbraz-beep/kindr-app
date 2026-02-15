@@ -203,6 +203,35 @@ window.KindrMap = {
             lat: lat + (Math.random() - 0.5) * offset,
             lng: lng + (Math.random() - 0.5) * offset
         };
+    },
+
+    // PRE-CACHE Magic: Fetch all tiles for Castilla y León initial view
+    warmUpTiles: async () => {
+        console.log("Pre-cargando mapa de Castilla y León...");
+        const zoomLevels = [8, 9, 10]; // Core levels for regional view
+        const center = { lat: 41.6523, lng: -4.7245 };
+
+        const deg2tile = (lat, lon, zoom) => {
+            const x = Math.floor((lon + 180) / 360 * Math.pow(2, zoom));
+            const y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom));
+            return { x, y };
+        };
+
+        const tilesToFetch = [];
+        zoomLevels.forEach(z => {
+            const { x, y } = deg2tile(center.lat, center.lng, z);
+            // Fetch a 3x3 grid around the center for each zoom
+            for (let dx = -1; dx <= 1; dx++) {
+                for (let dy = -1; dy <= 1; dy++) {
+                    const r = window.devicePixelRatio > 1 ? '@2x' : '';
+                    const s = ['a', 'b', 'c', 'd'][Math.floor(Math.random() * 4)];
+                    tilesToFetch.push(`https://${s}.basemaps.cartocdn.com/rastertiles/voyager/${z}/${x + dx}/${y + dy}${r}.png`);
+                }
+            }
+        });
+
+        // Fetch them in background (don't await to block app start)
+        tilesToFetch.forEach(url => fetch(url, { mode: 'no-cors' }).catch(() => { }));
     }
 };
 

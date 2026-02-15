@@ -1,4 +1,5 @@
-const CACHE_NAME = 'kindr-cache-v5';
+const CACHE_NAME = 'kindr-cache-v6';
+const TILE_CACHE = 'kindr-tiles-v1';
 const ASSETS = [
     './',
     'index.html',
@@ -37,11 +38,11 @@ self.addEventListener('activate', (event) => {
     event.waitUntil(
         Promise.all([
             clients.claim(),
-            // NUCLEAR PURGE: All caches that aren't the current one go away
+            // NUCLEAR PURGE: All caches that aren't the current ones go away
             caches.keys().then((cacheNames) => {
                 return Promise.all(
                     cacheNames.map((cacheName) => {
-                        if (cacheName !== CACHE_NAME) {
+                        if (cacheName !== CACHE_NAME && cacheName !== TILE_CACHE) {
                             console.log('[SW] Nuclear Purge of old cache:', cacheName);
                             return caches.delete(cacheName);
                         }
@@ -53,6 +54,23 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    const url = new URL(event.request.url);
+
+    // Map Tiles Strategy: Cache-First
+    if (url.hostname.includes('basemaps.cartocdn.com')) {
+        event.respondWith(
+            caches.open(TILE_CACHE).then((cache) => {
+                return cache.match(event.request).then((response) => {
+                    return response || fetch(event.request).then((networkResponse) => {
+                        cache.put(event.request, networkResponse.clone());
+                        return networkResponse;
+                    });
+                });
+            })
+        );
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request).then((response) => {
             return response || fetch(event.request);

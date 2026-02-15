@@ -29,6 +29,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (mapContainer) {
         try {
             window.KindrMap.init(mapContainer, null);
+            // Magic: Start pre-cached download for CyL tiles
+            window.KindrMap.warmUpTiles();
         } catch (e) {
             console.error("No se pudo pre-inicializar el mapa:", e);
         }
