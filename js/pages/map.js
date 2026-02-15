@@ -41,7 +41,8 @@ window.KindrMap = {
             zoomControl: false,
             tap: false,
             fadeAnimation: true,
-            markerZoomAnimation: true
+            markerZoomAnimation: true,
+            preferCanvas: true // Significant performance boost for mobile
         }).setView(center, 13);
 
         window.KindrMap.instance = map;

@@ -117,9 +117,29 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('Service Worker registrado'))
-                    .catch(err => console.log('Error al registrar SW', err));
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('Service Worker registrado');
+
+                    // Detect updates and reload
+                    reg.addEventListener('updatefound', () => {
+                        const newWorker = reg.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // New version available, reload to apply
+                                window.location.reload();
+                            }
+                        });
+                    });
+                }).catch(err => console.log('Error al registrar SW', err));
+            });
+
+            // Handle controller change (claim)
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!refreshing) {
+                    window.location.reload();
+                    refreshing = true;
+                }
             });
         }
     </script>
