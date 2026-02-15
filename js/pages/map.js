@@ -66,12 +66,29 @@ window.KindrMap = {
             maxZoom: 20
         });
 
-        tiles.on('load', () => {
+        // Safety Timeout: If tiles don't load in 3s, show map anyway
+        const safetyTimeout = setTimeout(() => {
             const overlay = document.getElementById('map-loading-overlay');
             const mapView = document.getElementById('map-view');
             if (overlay) overlay.style.opacity = '0';
             if (mapView) mapView.style.opacity = '1';
             setTimeout(() => { if (overlay) overlay.remove(); }, 500);
+            map.invalidateSize(); // Final force
+        }, 3500);
+
+        tiles.on('load', () => {
+            clearTimeout(safetyTimeout);
+            const overlay = document.getElementById('map-loading-overlay');
+            const mapView = document.getElementById('map-view');
+            if (overlay) overlay.style.opacity = '0';
+            if (mapView) mapView.style.opacity = '1';
+            setTimeout(() => { if (overlay) overlay.remove(); }, 500);
+            map.invalidateSize();
+        });
+
+        // Trigger size refresh on move/drag to fix partial loads
+        map.on('moveend', () => {
+            map.invalidateSize();
         });
 
         tiles.addTo(map);
