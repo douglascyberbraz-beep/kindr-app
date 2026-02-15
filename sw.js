@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kindr-cache-v3';
+const CACHE_NAME = 'kindr-cache-v4';
 const ASSETS = [
     './',
     'index.html',

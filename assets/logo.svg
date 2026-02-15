@@ -1,15 +1,19 @@
-<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-    <!-- Background is transparent -->
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+    <!-- Transparent background handled by SVG -->
     
-    <!-- Kindr Icon (Heart-Pin) scaled and centered -->
-    <g transform="translate(150, 40) scale(4.2)">
-        <path d="M12 4C8.13 4 5 7.13 5 11C5 16.25 12 22 12 22C12 22 19 16.25 19 11C19 7.13 15.87 4 12 4ZM12 13.5C10.62 13.5 9.5 12.38 9.5 11C9.5 9.62 10.62 8.5 12 8.5C13.38 8.5 14.5 9.62 14.5 11C14.5 12.38 13.38 13.5 12 13.5Z" fill="#002C77"/>
-        <path d="M12 9.5C11.17 9.5 10.5 10.17 10.5 11C10.5 11.83 11.17 12.5 12 12.5C12.83 12.5 13.5 11.83 13.5 11C13.5 10.17 12.83 9.5 12 9.5Z" fill="#002C77"/>
+    <!-- Branding Color: #002C77 -->
+    
+    <!-- Kindr Icon: Pin with Heart -->
+    <g transform="translate(256, 160) scale(12)" text-anchor="middle">
+        <!-- Pin Outline -->
+        <path d="M0 -10 C -5.5 -10, -10 -5.5, -10 0 C -10 5.5, 0 10, 0 10 C 0 10, 10 5.5, 10 0 C 10 -5.5, 5.5 -10, 0 -10 Z M 0 -7.5 C 4.1 -7.5, 7.5 -4.1, 7.5 0 C 7.5 3.3, 2.5 7.1, 0 8.8 C -2.5 7.1, -7.5 3.3, -7.5 0 C -7.5 -4.1, -4.1 -7.5, 0 -7.5 Z" fill="#002C77"/>
+        <!-- Heart Outline inside -->
+        <path d="M 0 -3.5 C -0.5 -4.5, -2.5 -4.5, -3.5 -3.5 C -4.5 -2.5, -4.5 -0.5, -3.5 0.5 L 0 4 L 3.5 0.5 C 4.5 -0.5, 4.5 -2.5, 3.5 -3.5 C 2.5 -4.5, 0.5 -4.5, 0 -3.5 Z M 0 -1 C 0.5 -2, 1.8 -2, 2.3 -1.4 C 2.8 -0.8, 2.8 0.2, 2.3 0.7 L 0 3 L -2.3 0.7 C -2.8 0.2, -2.8 -0.8, -2.3 -1.4 C -1.8 -2, -0.5 -2, 0 -1 Z" fill="#002C77" />
     </g>
     
     <!-- Text: KINDR -->
-    <text x="200" y="280" font-family="'Inter', sans-serif" font-weight="800" font-size="64" fill="#002C77" text-anchor="middle" letter-spacing="2">KINDR</text>
+    <text x="256" y="380" font-family="'Inter', -apple-system, sans-serif" font-weight="700" font-size="78" fill="#002C77" text-anchor="middle" letter-spacing="4">KINDR</text>
     
-    <!-- Slogan: Stop Searching. Start Living. -->
-    <text x="200" y="330" font-family="'Inter', sans-serif" font-weight="400" font-size="18" fill="#64748B" text-anchor="middle">Stop Searching. Start Living.</text>
+    <!-- Slogan -->
+    <text x="256" y="440" font-family="'Inter', -apple-system, sans-serif" font-weight="500" font-size="22" fill="#002C77" text-anchor="middle" letter-spacing="0.5">Stop Searching. Start Living.</text>
 </svg>
