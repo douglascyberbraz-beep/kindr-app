@@ -37,10 +37,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Check Auth
     const user = window.KindrAuth.checkAuth();
-    if (!user) {
+    const isGuest = localStorage.getItem('kindr_guest') === 'true';
+
+    if (!user && !isGuest) {
         window.KindrAuth.renderAuthModal();
     } else {
-        appState.user = user;
+        appState.user = user || { name: 'Invitado', isGuest: true };
     }
 
     // Initialize Navigation
@@ -49,26 +51,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Default Page Load
     loadPage('map');
 
-    // Request Geolocation
-    if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                appState.location = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                // Re-render map if it's the current page to update position
-                if (appState.currentPage === 'map') {
-                    window.KindrMap.render(document.getElementById('main-content'), appState.location);
-                }
-            },
-            (error) => {
-                console.log("Ubicación denegada o error:", error);
-                // Default location (e.g., Madrid)
-                appState.location = { lat: 40.4168, lng: -3.7038 };
-            }
-        );
-    }
+    // Geolocation moved to be requested only when Map is loaded or explicitly requested
+    // see window.KindrMap.requestLocation()
 });
 
 function setupNavigation() {

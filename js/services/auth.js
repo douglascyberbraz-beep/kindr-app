@@ -22,7 +22,13 @@ window.KindrAuth = {
 
     logout: () => {
         localStorage.removeItem('kindr_user');
+        localStorage.removeItem('kindr_guest');
         window.location.reload();
+    },
+
+    setGuestMode: () => {
+        localStorage.setItem('kindr_guest', 'true');
+        return { name: "Invitado", isGuest: true };
     },
 
     renderAuthModal: () => {
@@ -44,6 +50,7 @@ window.KindrAuth = {
                         <input type="email" id="email" placeholder="Correo electrónico" required class="auth-input">
                         <input type="password" id="password" placeholder="Contraseña" required class="auth-input">
                         <button type="submit" class="auth-btn">Iniciar Sesión</button>
+                        <button type="button" id="guest-btn" class="auth-btn secondary-btn" style="background: var(--secondary-blue); color: var(--primary-dark); margin-top: -10px;">Continuar como Invitado</button>
                         <div class="divider">o</div>
                         <button type="button" class="google-btn">Continuar con Google</button>
                         <button type="button" class="apple-btn">Continuar con Apple</button>
@@ -63,8 +70,14 @@ window.KindrAuth = {
             const user = window.KindrAuth.login(email, password);
             if (user) {
                 modal.classList.add('hidden');
-                location.reload(); // Simple reload to refresh app state
+                location.reload();
             }
+        });
+
+        document.getElementById('guest-btn').addEventListener('click', () => {
+            window.KindrAuth.setGuestMode();
+            modal.classList.add('hidden');
+            location.reload();
         });
     }
 };

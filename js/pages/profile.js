@@ -16,20 +16,30 @@ window.KindrProfile = {
         </div>
         
         <div class="stats-row">
-            <div class="stat-item">
-                <span class="count">
-                    ${user.points} 
-                    <span id="trophy-btn" style="cursor:pointer; display:inline-block;">🏆</span>
-                </span>
-                <span class="label">Puntos KINDR</span>
+            <div class="stats-row">
+                <div class="stat-item">
+                    <span class="count">${user.points}</span>
+                    <span class="label">Puntos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="count">12</span>
+                    <span class="label">Reseñas</span>
+                </div>
+                <div class="stat-item">
+                    <span class="count">5</span>
+                    <span class="label">Logros</span>
+                </div>
             </div>
-            <div class="stat-item">
-                <span class="count">12</span>
-                <span class="label">Reseñas</span>
-            </div>
-            <div class="stat-item">
-                <span class="count">5</span>
-                <span class="label">Eventos</span>
+
+            <div class="level-progress-container" style="margin: 0 20px; padding: 20px; background: white; border-radius: 20px; box-shadow: var(--shadow-soft);">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span style="font-weight:700; color:var(--primary-navy);">Nivel 4: Explorador</span>
+                    <span style="font-size:0.8rem; color:var(--text-light);">150 / 200 XP</span>
+                </div>
+                <div style="width:100%; height:12px; background:#f0f0f0; border-radius:10px; overflow:hidden;">
+                    <div style="width:75%; height:100%; background:linear-gradient(90deg, var(--primary-blue), var(--primary-dark));"></div>
+                </div>
+                <p style="font-size:0.75rem; color:var(--text-light); margin-top:10px;">¡Aporta 5 reseñas más para subir de nivel!</p>
             </div>
         </div>
 

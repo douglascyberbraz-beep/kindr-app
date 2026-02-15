@@ -13,13 +13,16 @@ window.KindrMap = {
         // Initialize only once
         container.innerHTML = `
             <div id="map-view" style="width: 100%; height: 100%; background: #e5e7eb;"></div>
-            <div class="search-bar-float">
+            <div class="search-bar-accessible">
                 <input type="text" placeholder="¿Qué buscas hoy?" class="search-input">
                 <button class="search-btn">🔍</button>
             </div>
+            <div class="location-btn-float" onclick="window.KindrMap.requestLocation()">
+                📍
+            </div>
         `;
 
-        const center = userLocation ? [userLocation.lat, userLocation.lng] : [40.4168, -3.7038];
+        const center = userLocation ? [userLocation.lat, userLocation.lng] : [41.6523, -4.7245];
         const map = L.map('map-view', {
             zoomControl: false,
             tap: false
@@ -116,6 +119,34 @@ window.KindrMap = {
             document.getElementById('review-target-name').innerText = placeName;
             modal.classList.remove('hidden');
         }
+    },
+
+    requestLocation: () => {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    window.KindrMap.render(document.getElementById('map-container'), userLocation);
+                    window.KindrMap.instance.setView([userLocation.lat, userLocation.lng], 15);
+                },
+                (error) => {
+                    console.log("Ubicación denegada:", error);
+                    alert("Para ver tu posición exacta, activa la ubicación en tu navegador.");
+                }
+            );
+        }
+    },
+
+    blurCoordinates: (lat, lng) => {
+        // Privacy blurring for non-user locations if needed
+        const offset = 0.002; // Approx 200m
+        return {
+            lat: lat + (Math.random() - 0.5) * offset,
+            lng: lng + (Math.random() - 0.5) * offset
+        };
     }
 };
 

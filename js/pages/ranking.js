@@ -6,7 +6,15 @@ window.KindrRanking = {
                 <p>Los favoritos de febrero</p>
             </div>
             
-            <div id="ranking-list" class="content-list" style="padding-bottom: 100px;">
+            <div id="ranking-list" class="content-list" style="padding-bottom: 20px;">
+                <div class="contributor-card gold-border">
+                    <div style="font-size: 1.5rem;">👑</div>
+                    <div style="flex:1">
+                        <h4 style="color:var(--primary-navy)">Contribuidor del Mes</h4>
+                        <p style="font-size:0.8rem">Laura M. (+45 aportaciones)</p>
+                    </div>
+                    <div class="points-badge">1,200 pts</div>
+                </div>
                 <!-- Ranking items -->
             </div>
         `;

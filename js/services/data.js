@@ -3,33 +3,103 @@ window.KindrData = {
         return [
             {
                 id: 1,
-                name: "Parque del Retiro - Zona Infantil",
-                lat: 40.4152606,
-                lng: -3.6844988,
+                name: "Campo Grande - Valladolid",
+                lat: 41.6480,
+                lng: -4.7290,
                 type: "park",
-                rating: 4.8,
-                reviews: 120,
+                rating: 4.9,
+                reviews: 2450,
                 image: "https://images.unsplash.com/photo-1596464716127-f9a804e0647e"
             },
             {
                 id: 2,
-                name: "Café Kids Friendly 'El Recreo'",
-                lat: 40.4206,
-                lng: -3.7040,
-                type: "restaurant",
-                rating: 4.5,
-                reviews: 85,
+                name: "Museo de la Evolución Humana - Burgos",
+                lat: 42.3392,
+                lng: -3.6972,
+                type: "museum",
+                rating: 4.8,
+                reviews: 1850,
                 image: "https://images.unsplash.com/photo-1559339352-11d035aa65de"
             },
             {
                 id: 3,
-                name: "Museo de Ciencias Naturales",
-                lat: 40.4409,
-                lng: -3.6898,
+                name: "Parque de los Jesuitas - Salamanca",
+                lat: 40.9616,
+                lng: -5.6558,
+                type: "park",
+                rating: 4.7,
+                reviews: 900,
+                image: ""
+            },
+            {
+                id: 4,
+                name: "Parque de los Reyes - León",
+                lat: 42.5930,
+                lng: -5.5650,
+                type: "park",
+                rating: 4.6,
+                reviews: 450,
+                image: ""
+            },
+            {
+                id: 5,
+                name: "Jardines de La Granja - Segovia",
+                lat: 40.8918,
+                lng: -4.0027,
+                type: "park",
+                rating: 4.9,
+                reviews: 3200,
+                image: ""
+            },
+            {
+                id: 6,
+                name: "El Valle de los 6 Sentidos - Renedo",
+                lat: 41.6530,
+                lng: -4.6250,
+                type: "park",
+                rating: 4.8,
+                reviews: 560,
+                image: ""
+            },
+            {
+                id: 7,
+                name: "Museo de la Ciencia - Valladolid",
+                lat: 41.6420,
+                lng: -4.7290,
                 type: "museum",
                 rating: 4.7,
-                reviews: 300,
-                image: "https://images.unsplash.com/photo-1534234828569-12345" // Mock
+                reviews: 1200,
+                image: ""
+            },
+            {
+                id: 8,
+                name: "Alcázar de Segovia",
+                lat: 40.9525,
+                lng: -4.1325,
+                type: "culture",
+                rating: 4.9,
+                reviews: 5000,
+                image: ""
+            },
+            {
+                id: 9,
+                name: "Parque de Quevedo - León",
+                lat: 42.6010,
+                lng: -5.5820,
+                type: "park",
+                rating: 4.5,
+                reviews: 320,
+                image: ""
+            },
+            {
+                id: 10,
+                name: "Parque de las Moreras - Valladolid",
+                lat: 41.6569,
+                lng: -4.7323,
+                type: "park",
+                rating: 4.6,
+                reviews: 780,
+                image: ""
             }
         ];
     },
@@ -38,16 +108,16 @@ window.KindrData = {
         return [
             {
                 id: 1,
-                title: "Abierto plazo de becas comedor 2024",
-                summary: "El Ministerio de Educación ha abierto el plazo para solicitar las becas de comedor para el curso 2024-2025. Consulta los requisitos aquí.",
-                source: "Ministerio de Educación",
+                title: "Ayudas Junta CyL: Conciliación 2024",
+                summary: "La Junta de Castilla y León abre el plazo para las ayudas directas a la conciliación de la vida familiar y laboral.",
+                source: "Junta de Castilla y León",
                 date: "Hace 2 horas"
             },
             {
                 id: 2,
-                title: "Nueva zona de juegos en Madrid Río",
-                summary: "Se inaugura el nuevo barco pirata en la zona de Madrid Río, con accesibilidad para todos los niños.",
-                source: "Ayuntamiento de Madrid",
+                title: "Nueva ludoteca en Valladolid",
+                summary: "Inaugurada la mayor ludoteca municipal en el barrio de Parquesol, con actividades gratuitas de fin de semana.",
+                source: "Ayuntamiento de Valladolid",
                 date: "Hace 5 horas"
             }
         ];
@@ -57,18 +127,18 @@ window.KindrData = {
         return [
             {
                 id: 1,
-                title: "Taller de Pintura Creativa",
+                title: "Titirimundi 2024: Avance",
                 date: "Sábado, 15 Feb - 11:00",
-                location: "Centro Cultural Conde Duque",
+                location: "Plaza Mayor de Segovia",
                 price: "Gratis",
                 link: "#"
             },
             {
                 id: 2,
-                title: "Teatro de Títeres: El Bosque Encantado",
+                title: "Taller 'Pequeños Evolucionadores'",
                 date: "Domingo, 16 Feb - 12:30",
-                location: "Teatro del Barrio",
-                price: "10€",
+                location: "Museo Evolución Humana, Burgos",
+                price: "5€",
                 link: "#"
             }
         ];
@@ -78,30 +148,30 @@ window.KindrData = {
         return [
             {
                 id: 1,
-                user: "Laura M.",
+                user: "Marta S. (Valladolid)",
                 avatar: "👩‍🦰",
                 time: "Hace 20 min",
-                content: "¿Alguien sabe si el parque de la calle Pez tiene columpios para bebés?",
-                likes: 5,
-                comments: 2
+                content: "¿Vais a ir al Titirimundi este año? Busco grupo de padres para ir el sábado por la mañana. 🎭",
+                likes: 8,
+                comments: 3
             },
             {
                 id: 2,
-                user: "Carlos P.",
+                user: "Jorge L. (Burgos)",
                 avatar: "🧔",
                 time: "Hace 1h",
-                content: "¡Acabamos de salir del Museo de Ciencias y es genial para niños de 5 años! Super recomendado el taller de dinosaurios 🦖",
-                likes: 24,
-                comments: 0
+                content: "¡Increíble la visita a Atapuerca con niños de 7 años! Recomiendo muchísimo el Safari Paleolítico Vivo. 🦣",
+                likes: 31,
+                comments: 2
             },
             {
                 id: 3,
-                user: "Ana R.",
+                user: "Elena G. (Salamanca)",
                 avatar: "👩‍⚕️",
                 time: "Hace 3h",
-                content: "Buscando pediatra respetuoso por zona Chamberí. ¿Recomendaciones? 🙏",
-                likes: 8,
-                comments: 12
+                content: "¿Alguien sabe si el Parque de los Jesuitas tiene zona de sombras ahora que empieza el buen tiempo? 🌳",
+                likes: 12,
+                comments: 15
             }
         ];
     },
