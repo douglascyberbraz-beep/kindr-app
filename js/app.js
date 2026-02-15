@@ -44,6 +44,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => {
             splash.style.display = 'none';
             document.getElementById('bottom-nav').classList.remove('hidden');
+
+            // Beta Readiness Notification
+            if (localStorage.getItem('kindr_beta_cached')) {
+                const badge = document.createElement('div');
+                badge.textContent = "Beta Ready: Castilla y León (Offline)";
+                badge.style.cssText = "position:fixed; top:20px; left:50%; transform:translateX(-50%); background:rgba(0,44,119,0.8); color:white; padding:6px 15px; border-radius:20px; font-size:11px; z-index:2000; font-weight:600; backdrop-filter:blur(5px);";
+                document.body.appendChild(badge);
+                setTimeout(() => badge.style.opacity = '0', 3000);
+            }
         }, 500);
     }, 2000); // Reduced slightly for better feel
 
