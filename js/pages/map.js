@@ -3,17 +3,30 @@ window.KindrMap = {
     isInitialized: false,
 
     render: (container, userLocation) => {
-        if (window.KindrMap.isInitialized) {
-            // Just refresh size immediately
+        const mapContainer = document.getElementById('map-container');
+
+        if (!window.KindrMap.isInitialized) {
+            window.KindrMap.init(mapContainer, userLocation);
+        } else {
+            // If already initialized elsewhere, just ensure it's in the right container (if moved)
+            if (mapContainer.childElementCount === 0) {
+                // This shouldn't happen with our persistent container but good for safety
+                window.KindrMap.init(mapContainer, userLocation);
+            }
+
+            // Refresh size immediately and after a bit
             const map = window.KindrMap.instance;
-            setTimeout(() => { map.invalidateSize(); }, 100);
-            setTimeout(() => { map.invalidateSize(); }, 500); // After animation
-            return;
+            map.invalidateSize();
+            setTimeout(() => map.invalidateSize(), 300);
         }
+    },
+
+    init: (container, userLocation) => {
+        if (window.KindrMap.isInitialized) return;
 
         // Initialize only once
         container.innerHTML = `
-            <div id="map-view" style="width: 100%; height: 100%; background: #e5e7eb;"></div>
+            <div id="map-view" style="width: 100%; height: 100%; background: #f3f4f6;"></div>
             <div class="search-bar-accessible">
                 <input type="text" placeholder="¿Qué buscas hoy?" class="search-input">
                 <button class="search-btn">🔍</button>
@@ -26,7 +39,9 @@ window.KindrMap = {
         const center = userLocation ? [userLocation.lat, userLocation.lng] : [41.6523, -4.7245];
         const map = L.map('map-view', {
             zoomControl: false,
-            tap: false
+            tap: false,
+            fadeAnimation: true,
+            markerZoomAnimation: true
         }).setView(center, 13);
 
         window.KindrMap.instance = map;

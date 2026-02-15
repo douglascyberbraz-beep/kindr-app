@@ -24,6 +24,12 @@ const appState = {
 // Initialize App
 document.addEventListener('DOMContentLoaded', async () => {
 
+    // Warm Initialization: Start loading map in background immediately
+    const mapContainer = document.getElementById('map-container');
+    if (mapContainer) {
+        window.KindrMap.init(mapContainer, null);
+    }
+
     // Simulate Splash Screen
     setTimeout(() => {
         const splash = document.getElementById('splash-screen');
@@ -32,9 +38,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => {
             splash.style.display = 'none';
             document.getElementById('bottom-nav').classList.remove('hidden');
-            // Initial load handles showing correct container
         }, 500);
-    }, 2500);
+    }, 2000); // Reduced slightly for better feel
 
     // Check Auth
     const user = window.KindrAuth.checkAuth();
