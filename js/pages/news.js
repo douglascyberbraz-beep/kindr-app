@@ -11,14 +11,16 @@ window.KindrNews = {
             .news-card { border: 1px solid rgba(0,0,0,0.05) !important; box-shadow: var(--shadow-soft) !important; }
             .news-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-premium) !important; }
         </style>
-        <div id="alerts-section" class="alerts-container">
-            <div class="alert-premium">
-                <div class="alert-icon">⚡</div>
-                <div class="alert-content">
-                    <h4>Factor X: Becas Comedor</h4>
-                    <p>Últimos 3 días para solicitar becas 2024. ¡Comprueba si cumples!</p>
+        <div id="alerts-section" class="alerts-container stagger-group">
+            <!-- Factor X integrated as a special news card or slim alert -->
+            <div class="card alert-card-premium">
+                <div class="alert-header">
+                    <span class="alert-pill">FACTOR X</span>
+                    <span class="alert-time">Urgente</span>
                 </div>
-                <button class="alert-action">Ver</button>
+                <h3>Becas Comedor 2024</h3>
+                <p>Quedan solos 3 días para solicitar la ayuda regional. ¡No pierdas el plazo!</p>
+                <button class="btn-primary full-width">Ver Requisitos</button>
             </div>
         </div>
 

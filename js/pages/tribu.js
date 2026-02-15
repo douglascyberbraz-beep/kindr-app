@@ -2,7 +2,7 @@ window.KindrTribu = {
     render: (container) => {
         container.innerHTML = `
             <div class="page-header sticky-header">
-                <h2>🐦 Tribu</h2>
+                <h2><img src="assets/logo.png" style="height:24px; vertical-align:middle; margin-right:8px;"> Tribu</h2>
                 <p>Lo que dicen otros padres</p>
                 <button class="btn-icon-pulse" id="new-post-btn">➕</button>
             </div>
