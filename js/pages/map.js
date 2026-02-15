@@ -59,11 +59,11 @@ window.KindrMap = {
         window.KindrMap.instance = map;
         window.KindrMap.isInitialized = true;
 
-        // Add Tile Layer (CartoDB Voyager - Premium, Clean, High Perf)
-        const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        // Add Tile Layer (CartoDB Voyager - Simplified for maximum compatibility)
+        const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
             attribution: '&copy; CartoDB',
             subdomains: 'abcd',
-            maxZoom: 20
+            maxZoom: 19
         });
 
         // Safety Timeout: If tiles don't load in 3s, show map anyway
@@ -77,6 +77,7 @@ window.KindrMap = {
         }, 3500);
 
         tiles.on('load', () => {
+            console.log("Tiles cargados con éxito");
             clearTimeout(safetyTimeout);
             const overlay = document.getElementById('map-loading-overlay');
             const mapView = document.getElementById('map-view');
@@ -84,6 +85,10 @@ window.KindrMap = {
             if (mapView) mapView.style.opacity = '1';
             setTimeout(() => { if (overlay) overlay.remove(); }, 500);
             map.invalidateSize();
+        });
+
+        tiles.on('tileerror', (e) => {
+            console.error("Error cargando tile:", e.url);
         });
 
         // Trigger size refresh on move/drag to fix partial loads

@@ -32,6 +32,9 @@
             <div class="logo-container">
                 <img src="assets/logo.svg" alt="Kindr Logo" class="splash-logo">
             </div>
+            <div id="v-tag"
+                style="position:absolute; bottom:20px; font-size:10px; opacity:0.5; color:var(--primary-dark);">Build:
+                v7.0.1 (Nuclear)</div>
         </div>
 
         <!-- Main Content Area -->
@@ -117,8 +120,20 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js?v=7').then(reg => {
-                    console.log('Service Worker v7 registrado (Nuclear Update)');
+                // Nuclear cleanup command for the user if needed
+                window.forceResetApp = () => {
+                    localStorage.clear();
+                    caches.keys().then(names => {
+                        for (let name of names) caches.delete(name);
+                    });
+                    navigator.serviceWorker.getRegistrations().then(regs => {
+                        for (let reg of regs) reg.unregister();
+                    });
+                    setTimeout(() => window.location.reload(true), 500);
+                };
+
+                navigator.serviceWorker.register('sw.js?v=7.0.1').then(reg => {
+                    console.log('Service Worker v7.0.1 registrado');
 
                     // Detect updates and reload
                     reg.addEventListener('updatefound', () => {
