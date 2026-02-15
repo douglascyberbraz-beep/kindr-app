@@ -8,6 +8,7 @@ const ASSETS = [
     '/js/services/auth.js',
     '/js/pages/map.js',
     '/assets/logo.png',
+    '/assets/logo.svg',
     'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
     'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
 ];
