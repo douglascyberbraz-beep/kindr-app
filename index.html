@@ -34,7 +34,7 @@
             </div>
             <div id="v-tag"
                 style="position:absolute; bottom:20px; font-size:10px; opacity:0.5; color:var(--primary-dark);">Build:
-                v7.0.1 (Nuclear)</div>
+                v8.0.0 (Liquid)</div>
         </div>
 
         <!-- Main Content Area -->
@@ -132,8 +132,8 @@
                     setTimeout(() => window.location.reload(true), 500);
                 };
 
-                navigator.serviceWorker.register('sw.js?v=7.0.1').then(reg => {
-                    console.log('Service Worker v7.0.1 registrado');
+                navigator.serviceWorker.register('sw.js?v=8.0.0').then(reg => {
+                    console.log('Service Worker v8.0.0 registrado');
 
                     // Detect updates and reload
                     reg.addEventListener('updatefound', () => {

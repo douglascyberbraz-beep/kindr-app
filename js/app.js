@@ -105,20 +105,15 @@ function loadPage(pageName) {
 
     // Default hiding
     container.classList.add('hidden');
-    mapContainer.classList.add('hidden');
+    mapContainer.classList.add('map-layer-hidden');
     container.innerHTML = ''; // Clear other pages content
 
     // Special style for nav items
     updateNavStyles(pageName);
 
     if (pageName === 'map') {
-        mapContainer.classList.remove('hidden');
-        mapContainer.classList.add('page-enter'); // Add animation
+        // Map handles its own visibility/render
         window.KindrMap.render(mapContainer, appState.location);
-        setTimeout(() => {
-            mapContainer.classList.remove('page-enter');
-            if (window.KindrMap.instance) window.KindrMap.instance.invalidateSize();
-        }, 600);
     } else {
         container.classList.remove('hidden');
         container.classList.add('page-enter'); // Add animation
