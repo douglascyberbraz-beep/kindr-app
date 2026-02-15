@@ -2,7 +2,7 @@
   "name": "KINDR",
   "short_name": "Kindr",
   "description": "Comunidad de padres de Castilla y León",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#002C77",
