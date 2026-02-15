@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kindr-cache-v4';
+const CACHE_NAME = 'kindr-cache-v5';
 const ASSETS = [
     './',
     'index.html',
@@ -37,12 +37,12 @@ self.addEventListener('activate', (event) => {
     event.waitUntil(
         Promise.all([
             clients.claim(),
-            // Clean up old caches
+            // NUCLEAR PURGE: All caches that aren't the current one go away
             caches.keys().then((cacheNames) => {
                 return Promise.all(
                     cacheNames.map((cacheName) => {
                         if (cacheName !== CACHE_NAME) {
-                            console.log('Borrando caché antigua:', cacheName);
+                            console.log('[SW] Nuclear Purge of old cache:', cacheName);
                             return caches.delete(cacheName);
                         }
                     })
