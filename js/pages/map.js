@@ -141,8 +141,9 @@ window.KindrMap = {
         }
 
         const refresh = () => { if (map) map.invalidateSize(); };
-        setTimeout(refresh, 100);
-        setTimeout(refresh, 500);
+        setTimeout(refresh, 50);
+        setTimeout(refresh, 300);
+        setTimeout(refresh, 1000);
 
         // ResizeObserver: The magic fix for tiling
         const resizeObserver = new ResizeObserver(() => {
@@ -151,6 +152,13 @@ window.KindrMap = {
             }
         });
         resizeObserver.observe(container);
+
+        // Medic Loop: Force size every second for the first 5 seconds
+        let checks = 0;
+        const medic = setInterval(() => {
+            if (window.KindrMap.instance) window.KindrMap.instance.invalidateSize();
+            if (++checks > 5) clearInterval(medic);
+        }, 1000);
 
         // Initialize Review Modal (Singleton)
         if (!document.getElementById('review-modal')) {
