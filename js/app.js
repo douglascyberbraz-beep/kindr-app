@@ -25,12 +25,10 @@ const appState = {
 document.addEventListener('DOMContentLoaded', async () => {
 
     // Warm Initialization: Start loading map in background immediately
-    const mapContainer = document.getElementById('map-container');
+    const mapContainer = document.getElementById('map-viewport-v11');
     if (mapContainer) {
         try {
             window.KindrMap.init(mapContainer, null);
-            // Magic: Start pre-cached download for CyL tiles
-            window.KindrMap.warmUpTiles();
         } catch (e) {
             console.error("No se pudo pre-inicializar el mapa:", e);
         }
