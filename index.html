@@ -34,7 +34,7 @@
             </div>
             <div id="v-tag"
                 style="position:absolute; bottom:20px; font-size:10px; opacity:0.5; color:var(--primary-dark);">Build:
-                v10.0.0 (Rescue)</div>
+                v11.0.0 (Tabula Rasa)</div>
         </div>
 
         <!-- Main Content Area -->
@@ -42,10 +42,10 @@
             <!-- Dynamic Content (News, Events, etc.) -->
         </main>
 
-        <!-- Persistent Map Container (For performance) -->
-        <div id="map-container" class="map-layer-hidden"
-            style="width: 100%; height: 100%; flex: 1; position: relative; overflow: hidden;">
-            <!-- Map will live here forever once initialized -->
+        <!-- Persistent Map Container v11 -->
+        <div id="map-viewport-v11"
+            style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 10; background: white; display: none;">
+            <!-- New Map lives here -->
         </div>
 
         <!-- Bottom Navigation with Smooth Centering -->
@@ -106,7 +106,7 @@
     <!-- App Services & Pages (Order matters) -->
     <script src="js/services/data.js"></script>
     <script src="js/services/auth.js"></script>
-    <script src="js/pages/map.js"></script>
+    <script src="js/pages/map_v11.js"></script>
     <script src="js/pages/tribu.js"></script>
     <script src="js/pages/ranking.js"></script>
     <script src="js/pages/news.js"></script>

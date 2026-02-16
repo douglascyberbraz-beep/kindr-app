@@ -101,19 +101,18 @@ function setupNavigation() {
 function loadPage(pageName) {
     appState.currentPage = pageName;
     const container = document.getElementById('main-content');
-    const mapContainer = document.getElementById('map-container');
+    const mapViewport = document.getElementById('map-viewport-v11');
 
     // Default hiding
     container.classList.add('hidden');
-    mapContainer.classList.add('map-layer-hidden');
+    mapViewport.style.display = 'none';
     container.innerHTML = ''; // Clear other pages content
 
     // Special style for nav items
     updateNavStyles(pageName);
 
     if (pageName === 'map') {
-        // Map handles its own visibility/render
-        window.KindrMap.render(mapContainer, appState.location);
+        window.KindrMap.render(mapViewport);
     } else {
         container.classList.remove('hidden');
         container.classList.add('page-enter'); // Add animation
