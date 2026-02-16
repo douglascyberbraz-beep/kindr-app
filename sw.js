@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kindr-cache-v9';
+const CACHE_NAME = 'kindr-cache-v10';
 const TILE_CACHE = 'kindr-tiles-v2';
 const ASSETS = [
     './',

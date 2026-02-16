@@ -59,11 +59,10 @@ window.KindrMap = {
         window.KindrMap.instance = map;
         window.KindrMap.isInitialized = true;
 
-        // Add Tile Layer (CartoDB Voyager - Simplified for maximum compatibility)
-        const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
-            attribution: '&copy; CartoDB',
-            subdomains: 'abcd',
-            maxZoom: 19
+        // Add Tile Layer (Google Maps Roadmap - Fast, Light, Bulletproof)
+        const tiles = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            attribution: '&copy; Google Maps',
+            maxZoom: 20
         });
 
         // Safety Timeout: If tiles don't load in 3s, show map anyway
@@ -306,11 +305,11 @@ mapStyle.textContent = `
         padding: 5px;
     }
     .map-loading-overlay {
-        position: absolute;
+        position: absolute !important;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
+        width: 100% !important;
+        height: 100% !important;
         background: white;
         display: flex;
         flex-direction: column;
@@ -318,6 +317,18 @@ mapStyle.textContent = `
         justify-content: center;
         z-index: 1001;
         transition: opacity 0.5s ease;
+    }
+    #map-view, #map-container {
+        width: 100% !important;
+        height: 100% !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        display: block !important;
+    }
+    .leaflet-container {
+        width: 100% !important;
+        height: 100% !important;
     }
     .premium-spinner {
         width: 40px;

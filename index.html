@@ -34,7 +34,7 @@
             </div>
             <div id="v-tag"
                 style="position:absolute; bottom:20px; font-size:10px; opacity:0.5; color:var(--primary-dark);">Build:
-                v9.0.0 (Ultimate)</div>
+                v10.0.0 (Rescue)</div>
         </div>
 
         <!-- Main Content Area -->
@@ -132,8 +132,8 @@
                     setTimeout(() => window.location.reload(true), 500);
                 };
 
-                navigator.serviceWorker.register('sw.js?v=9.0.0').then(reg => {
-                    console.log('Service Worker v9.0.0 registrado');
+                navigator.serviceWorker.register('sw.js?v=10.0.0').then(reg => {
+                    console.log('Service Worker v10.0.0 registrado');
 
                     // Detect updates and reload
                     reg.addEventListener('updatefound', () => {
