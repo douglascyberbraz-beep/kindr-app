@@ -34,17 +34,15 @@ window.KindrMap = {
             tap: true
         }).setView([40.4168, -3.7038], 6); // Default to Spain center
 
-        // Standard OSM Tiles (Most reliable for now)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            subdomains: ['a', 'b', 'c']
+        // CartoDB Dark Matter (Premium "Anti Gravity" Look)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
         }).addTo(map);
 
-        // Robustness: Fallback if Google Tiles fail
-        googleTiles.on('tileerror', () => {
-            console.warn("Google Tiles failed, falling back to OSM");
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        });
+        // Add a subtle glow/shadow to the map container for depth
+        container.style.boxShadow = "inset 0 0 100px rgba(0,0,0,0.9)";
 
         window.KindrMap.instance = map;
         window.KindrMap.isInitialized = true;
