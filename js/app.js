@@ -24,6 +24,11 @@ const appState = {
 // Initialize App
 document.addEventListener('DOMContentLoaded', async () => {
 
+    // Config Safeguard
+    if (window.GEMINI_KEY && window.GEMINI_KEY.includes('PEGAR_AQUI')) {
+        console.warn("⚠️ Advertencia: API Key de Gemini no configurada.");
+    }
+
     // Warm Initialization: Start loading map in background immediately
     const mapContainer = document.getElementById('map-viewport-v11');
     if (mapContainer) {

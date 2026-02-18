@@ -5,14 +5,7 @@ window.KindrEvents = {
             <h2>Próximos Eventos</h2>
             <p>Planes en familia cerca de ti</p>
         </div>
-        <style>
-            .premium-header { padding: 30px 20px 10px; }
-            .premium-header h2 { color: var(--primary-navy); font-weight: 800; }
-            .event-card { border: 1px solid rgba(0,0,0,0.05) !important; padding: 20px !important; }
-            .event-date-box { background: var(--primary-navy) !important; }
-            .event-date-box .day { color: white !important; }
-            .event-date-box .month { color: rgba(255,255,255,0.8); }
-        </style>
+
         <div id="events-list" class="content-list stagger-group"></div>
     `;
 
@@ -22,9 +15,12 @@ window.KindrEvents = {
         events.forEach(item => {
             const card = document.createElement('div');
             card.className = 'card event-card';
+            const dateParts = item.date.split(' ');
+            const dayNum = dateParts.length > 1 ? dateParts[1] : '??';
+
             card.innerHTML = `
             <div class="event-date-box">
-                <span class="day">${item.date.split(' ')[1]}</span>
+                <span class="day">${dayNum}</span>
                 <span class="month">FEB</span>
             </div>
             <div class="event-details">
@@ -33,7 +29,7 @@ window.KindrEvents = {
                 <p>💰 ${item.price}</p>
             </div>
             <button class="btn-primary" onclick="window.open('${item.link}', '_blank')">Entradas</button>
-        `;
+            `;
             list.appendChild(card);
         });
     }

@@ -5,12 +5,7 @@ window.KindrNews = {
             <h2>Noticias KINDR</h2>
             <p>Actualidad para padres modernos</p>
         </div>
-        <style>
-            .premium-header { padding: 30px 20px 10px; }
-            .premium-header h2 { color: var(--primary-navy); font-weight: 800; letter-spacing: -0.5px; }
-            .news-card { border: 1px solid rgba(0,0,0,0.05) !important; box-shadow: var(--shadow-soft) !important; }
-            .news-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-premium) !important; }
-        </style>
+
         <div id="alerts-section" class="alerts-container stagger-group">
             <!-- Factor X integrated as a special news card or slim alert -->
             <div class="card alert-card-premium">

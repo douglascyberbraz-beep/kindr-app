@@ -1,5 +1,5 @@
-const CACHE_NAME = 'kindr-cache-v10';
-const TILE_CACHE = 'kindr-tiles-v2';
+const CACHE_NAME = 'kindr-cache-v11';
+const TILE_CACHE = 'kindr-tiles-v11';
 const ASSETS = [
     './',
     'index.html',
@@ -8,7 +8,7 @@ const ASSETS = [
     'js/config.js',
     'js/services/data.js',
     'js/services/auth.js',
-    'js/pages/map.js',
+    'js/pages/map_v11.js',
     'js/pages/news.js',
     'js/pages/events.js',
     'js/pages/tribu.js',

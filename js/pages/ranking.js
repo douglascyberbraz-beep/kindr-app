@@ -36,26 +36,31 @@ window.KindrRanking = {
         };
 
         const renderContributors = () => {
-            list.innerHTML = `
-                <div class="contributor-card gold-border">
-                    <div style="font-size: 1.5rem;">👑</div>
-                    <div style="flex:1">
-                        <h4 style="color:var(--primary-navy)">Contribuidor del Mes</h4>
-                        <p style="font-size:0.8rem">Laura M. (+45 aportaciones)</p>
-                    </div>
-                    <div class="points-badge">1,200 pts</div>
-                </div>
-                <div class="ranking-card">
-                    <div class="rank-position">4</div>
-                    <div class="rank-info"><h3>Diego R.</h3><span class="rank-badge">Explorador</span></div>
-                    <div class="rank-score">850 pts</div>
-                </div>
-                <div class="ranking-card">
-                    <div class="rank-position">5</div>
-                    <div class="rank-info"><h3>Sonia T.</h3><span class="rank-badge">Colaboradora</span></div>
-                    <div class="rank-score">620 pts</div>
-                </div>
-            `;
+            const users = window.KindrData.getContributors();
+            list.innerHTML = '';
+
+            users.forEach(user => {
+                if (user.special) {
+                    list.innerHTML += `
+                        <div class="contributor-card gold-border">
+                            <div style="font-size: 1.5rem;">${user.role}</div>
+                            <div style="flex:1">
+                                <h4 style="color:var(--primary-navy)">${user.rank}</h4>
+                                <p style="font-size:0.8rem">${user.name} (+${user.contributions} aportaciones)</p>
+                            </div>
+                            <div class="points-badge">${user.points} pts</div>
+                        </div>
+                    `;
+                } else {
+                    list.innerHTML += `
+                        <div class="ranking-card">
+                            <div class="rank-position">${user.role}</div>
+                            <div class="rank-info"><h3>${user.name}</h3><span class="rank-badge">${user.rank}</span></div>
+                            <div class="rank-score">${user.points} pts</div>
+                        </div>
+                    `;
+                }
+            });
         };
 
         // Initial Render
@@ -73,27 +78,6 @@ window.KindrRanking = {
             });
         });
 
-        if (!document.getElementById('ranking-styles')) {
-            const style = document.createElement('style');
-            style.id = 'ranking-styles';
-            style.textContent = `
-                .center-text { text-align: center; margin-bottom: 20px; }
-                .tab-scroller { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
-                .tab-btn { background: #f1f5f9; border: none; padding: 8px 20px; border-radius: 20px; font-weight: 600; color: var(--text-light); cursor: pointer; transition: all 0.2s; }
-                .tab-btn.active { background: var(--primary-blue); color: white; box-shadow: 0 4px 10px rgba(0, 44, 119, 0.2); }
-                .ranking-card { display: flex; align-items: center; background: white; padding: 15px 20px; border-radius: 20px; margin-bottom: 12px; box-shadow: var(--shadow); border: 1px solid transparent; }
-                .rank-1 { background: linear-gradient(135deg, #FFF9C4 0%, #FFFFFF 100%); border: 1px solid #FFD54F; }
-                .rank-2 { background: linear-gradient(135deg, #ECEFF1 0%, #FFFFFF 100%); border: 1px solid #B0BEC5; }
-                .rank-3 { background: linear-gradient(135deg, #FFE0B2 0%, #FFFFFF 100%); border: 1px solid #FFCC80; }
-                .rank-position { font-size: 1.5rem; margin-right: 15px; width: 40px; text-align: center; font-weight: 800; color: var(--primary-navy); }
-                .rank-info { flex: 1; }
-                .rank-info h3 { margin: 0 0 5px 0; font-size: 1.1rem; color: var(--primary-navy); }
-                .rank-badge { background: rgba(0,0,0,0.05); padding: 3px 8px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; color: var(--primary-blue); }
-                .rank-score { font-weight: 700; color: var(--primary-navy); }
-                .contributor-card { display: flex; align-items: center; gap: 15px; background: white; padding: 20px; border-radius: 24px; margin-bottom: 20px; box-shadow: var(--shadow-premium); border: 2px solid var(--accent-yellow); }
-                .points-badge { background: var(--accent-yellow); color: var(--primary-navy); padding: 5px 12px; border-radius: 12px; font-weight: 800; font-size: 0.85rem; }
-            `;
-            document.head.appendChild(style);
-        }
+        /* Styles moved to main.css */
     }
 };

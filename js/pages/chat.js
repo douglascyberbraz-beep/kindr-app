@@ -19,23 +19,7 @@ window.KindrChat = {
                     <button id="send-btn" class="send-btn premium-shadow">➤</button>
                 </div>
             </div>
-            <style>
-                .premium-glass { background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); }
-                .gradient-bg { background: linear-gradient(135deg, var(--primary-navy), var(--primary-blue)); color: white; }
-                .status-indicator { font-size: 0.7rem; color: #10B981; display:flex; align-items:center; gap:5px; font-weight:600; }
-                .pulse-dot { width: 6px; height: 6px; background: #10B981; border-radius: 50%; animation: pulse-green 2s infinite; }
-                .chat-messages.premium-bg { background: #F8FAFC; }
-                .message { border-radius: 20px !important; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.02); }
-                .message.bot { background: white; border-bottom-left-radius: 5px !important; }
-                .message.user { background: var(--primary-navy); border-bottom-right-radius: 5px !important; }
-                .entry-anim { animation: messageIn 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
-                @keyframes pulse-green { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-                @keyframes messageIn { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-                .typing-dots span { width: 4px; height: 4px; background: var(--text-light); border-radius: 50%; display: inline-block; animation: typing 1s infinite; }
-                .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-                .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-                @keyframes typing { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-            </style>
+            <!-- Styles moved to main.css -->
         `;
 
         const input = document.getElementById('chat-input');

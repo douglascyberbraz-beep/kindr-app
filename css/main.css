@@ -205,6 +205,17 @@ body {
     display: none !important;
 }
 
+#map-viewport-v11 {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 10;
+    background: white;
+}
+
 /* Page Transition */
 .page-enter {
     animation: slideUpFade 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;

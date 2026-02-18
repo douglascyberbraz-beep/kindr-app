@@ -219,5 +219,37 @@ window.KindrData = {
                 image: ""
             }
         ];
+    },
+
+    getContributors: () => {
+        return [
+            {
+                id: 1,
+                name: "Laura M.",
+                rank: "Contribuidor del Mes",
+                role: "👑",
+                points: 1200,
+                contributions: 45,
+                special: true
+            },
+            {
+                id: 2,
+                name: "Diego R.",
+                rank: "Explorador",
+                role: "4",
+                points: 850,
+                contributions: 30,
+                special: false
+            },
+            {
+                id: 3,
+                name: "Sonia T.",
+                rank: "Colaboradora",
+                role: "5",
+                points: 620,
+                contributions: 20,
+                special: false
+            }
+        ];
     }
 };
