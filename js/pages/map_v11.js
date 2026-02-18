@@ -27,17 +27,26 @@ window.KindrMap = {
 
         console.log("Initializing Clean Slate Map v11...");
 
-        // Efficient Google Maps tiles for better mobile performance
+        // Emergency Switch: Use Standard OSM for reliability
         const map = L.map(container, {
             zoomControl: false,
             attributionControl: false,
-            tap: true // Ensure touch events are handled correctly on mobile
-        }).setView([41.6523, -4.7245], 13);
+            tap: true
+        }).setView([40.4168, -3.7038], 6); // Default to Spain center
 
+        // Standard OSM Tiles (Most reliable)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            subdomains: ['a', 'b', 'c']
+        }).addTo(map);
+
+        /*
+        // Google Tiles (Commented out until verified)
         const googleTiles = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
             maxZoom: 20,
             subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
         });
+        */
 
         googleTiles.addTo(map);
 
