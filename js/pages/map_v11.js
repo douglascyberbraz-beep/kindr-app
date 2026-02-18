@@ -34,21 +34,11 @@ window.KindrMap = {
             tap: true
         }).setView([40.4168, -3.7038], 6); // Default to Spain center
 
-        // Standard OSM Tiles (Most reliable)
+        // Standard OSM Tiles (Most reliable for now)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             subdomains: ['a', 'b', 'c']
         }).addTo(map);
-
-        /*
-        // Google Tiles (Commented out until verified)
-        const googleTiles = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-            maxZoom: 20,
-            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-        });
-        */
-
-        googleTiles.addTo(map);
 
         // Robustness: Fallback if Google Tiles fail
         googleTiles.on('tileerror', () => {
