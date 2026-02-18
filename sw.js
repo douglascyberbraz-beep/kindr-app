@@ -1,5 +1,5 @@
-const CACHE_NAME = 'kindr-cache-v11.2.2';
-const TILE_CACHE = 'kindr-tiles-v11.2.2';
+const CACHE_NAME = 'kindr-cache-v11.3.0';
+const TILE_CACHE = 'kindr-tiles-v11.3.0';
 const ASSETS = [
     './',
     'index.html',

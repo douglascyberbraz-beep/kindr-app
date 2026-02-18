@@ -1,106 +1,42 @@
 window.KindrData = {
     getLocations: () => {
         return [
-            {
-                id: 1,
-                name: "Campo Grande - Valladolid",
-                lat: 41.6480,
-                lng: -4.7290,
-                type: "park",
-                rating: 4.9,
-                reviews: 2450,
-                image: "https://images.unsplash.com/photo-1596464716127-f9a804e0647e"
-            },
-            {
-                id: 2,
-                name: "Museo de la Evolución Humana - Burgos",
-                lat: 42.3392,
-                lng: -3.6972,
-                type: "museum",
-                rating: 4.8,
-                reviews: 1850,
-                image: "https://images.unsplash.com/photo-1559339352-11d035aa65de"
-            },
-            {
-                id: 3,
-                name: "Parque de los Jesuitas - Salamanca",
-                lat: 40.9616,
-                lng: -5.6558,
-                type: "park",
-                rating: 4.7,
-                reviews: 900,
-                image: ""
-            },
-            {
-                id: 4,
-                name: "Parque de los Reyes - León",
-                lat: 42.5930,
-                lng: -5.5650,
-                type: "park",
-                rating: 4.6,
-                reviews: 450,
-                image: ""
-            },
-            {
-                id: 5,
-                name: "Jardines de La Granja - Segovia",
-                lat: 40.8918,
-                lng: -4.0027,
-                type: "park",
-                rating: 4.9,
-                reviews: 3200,
-                image: ""
-            },
-            {
-                id: 6,
-                name: "El Valle de los 6 Sentidos - Renedo",
-                lat: 41.6530,
-                lng: -4.6250,
-                type: "park",
-                rating: 4.8,
-                reviews: 560,
-                image: ""
-            },
-            {
-                id: 7,
-                name: "Museo de la Ciencia - Valladolid",
-                lat: 41.6420,
-                lng: -4.7290,
-                type: "museum",
-                rating: 4.7,
-                reviews: 1200,
-                image: ""
-            },
-            {
-                id: 8,
-                name: "Alcázar de Segovia",
-                lat: 40.9525,
-                lng: -4.1325,
-                type: "culture",
-                rating: 4.9,
-                reviews: 5000,
-                image: ""
-            },
-            {
-                id: 9,
-                name: "Parque de Quevedo - León",
-                lat: 42.6010,
-                lng: -5.5820,
-                type: "park",
-                rating: 4.5,
-                reviews: 320,
-                image: ""
-            },
-            {
-                id: 10,
-                name: "Parque de las Moreras - Valladolid",
-                lat: 41.6569,
-                lng: -4.7323,
-                type: "park",
-                rating: 4.6,
-                reviews: 780,
-                image: ""
-            }
+            // --- VALLADOLID ---
+            { id: 1, name: "Campo Grande - Valladolid", lat: 41.6480, lng: -4.7290, type: "park", rating: 4.9, reviews: 2450, image: "https://images.unsplash.com/photo-1596464716127-f9a804e0647e" },
+            { id: 7, name: "Museo de la Ciencia", lat: 41.6420, lng: -4.7290, type: "museum", rating: 4.7, reviews: 1200, image: "" },
+            { id: 10, name: "Plaza Mayor de Valladolid", lat: 41.6520, lng: -4.7286, type: "culture", rating: 4.8, reviews: 5000, image: "" },
+
+            // --- BURGOS ---
+            { id: 2, name: "Catedral de Burgos", lat: 42.3408, lng: -3.7042, type: "culture", rating: 4.9, reviews: 8500, image: "https://images.unsplash.com/photo-1559339352-11d035aa65de" },
+            { id: 11, name: "Museo de la Evolución Humana", lat: 42.3392, lng: -3.6972, type: "museum", rating: 4.8, reviews: 1850, image: "" },
+
+            // --- LEÓN ---
+            { id: 4, name: "Catedral de León", lat: 42.5994, lng: -5.5667, type: "culture", rating: 4.9, reviews: 7200, image: "" },
+            { id: 9, name: "Barrio Húmedo", lat: 42.5975, lng: -5.5680, type: "food", rating: 4.8, reviews: 3100, image: "" },
+            { id: 12, name: "Casa Botines (Gaudí)", lat: 42.6000, lng: -5.5714, type: "culture", rating: 4.7, reviews: 2900, image: "" },
+
+            // --- SALAMANCA ---
+            { id: 3, name: "Plaza Mayor de Salamanca", lat: 40.9650, lng: -5.6635, type: "culture", rating: 5.0, reviews: 9900, image: "" },
+            { id: 13, name: "Universidad de Salamanca", lat: 40.9610, lng: -5.6660, type: "culture", rating: 4.9, reviews: 4500, image: "" },
+
+            // --- SEGOVIA ---
+            { id: 5, name: "Acueducto de Segovia", lat: 40.9480, lng: -4.1180, type: "culture", rating: 4.9, reviews: 12000, image: "" },
+            { id: 8, name: "Alcázar de Segovia", lat: 40.9525, lng: -4.1325, type: "culture", rating: 4.9, reviews: 5000, image: "" },
+
+            // --- ÁVILA ---
+            { id: 14, name: "Murallas de Ávila", lat: 40.6565, lng: -4.6995, type: "culture", rating: 4.9, reviews: 6700, image: "" },
+
+            // --- SORIA ---
+            { id: 15, name: "Alameda de Cervantes", lat: 41.7640, lng: -2.4670, type: "park", rating: 4.8, reviews: 1200, image: "" },
+            { id: 16, name: "Ermita de San Saturio", lat: 41.7560, lng: -2.4570, type: "culture", rating: 4.9, reviews: 2100, image: "" },
+
+            // --- PALENCIA ---
+            { id: 17, name: "Cristo del Otero", lat: 42.0230, lng: -4.5200, type: "culture", rating: 4.7, reviews: 1500, image: "" },
+            { id: 18, name: "Calle Mayor", lat: 42.0100, lng: -4.5300, type: "walk", rating: 4.6, reviews: 900, image: "" },
+
+            // --- ZAMORA ---
+            { id: 19, name: "Catedral de Zamora", lat: 41.4980, lng: -5.7550, type: "culture", rating: 4.7, reviews: 1800, image: "" },
+            { id: 20, name: "Castillo de Zamora", lat: 41.4990, lng: -5.7570, type: "culture", rating: 4.6, reviews: 1100, image: "" }
         ];
     },
 
