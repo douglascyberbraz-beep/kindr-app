@@ -24,11 +24,12 @@ window.KindrMap = {
 
         console.log("Initializing Definitive Map Engine...");
 
-        // Setup the Base Map
+        // Setup the Base Map with Canvas for maximum performance
         const map = L.map(container, {
             zoomControl: false,
             attributionControl: false,
-            tap: true
+            tap: true,
+            preferCanvas: true // Use Canvas backend for better performance on mobile
         }).setView([41.6520, -4.7286], 13); // Default to Valladolid Center
 
         // Base Layer - OpenStreetMap (Reliable)
@@ -37,11 +38,7 @@ window.KindrMap = {
             maxZoom: 20
         }).addTo(map);
 
-        // Branded Blue Filter (Tinting via CSS)
-        setTimeout(() => {
-            const pane = document.querySelector('.leaflet-tile-pane');
-            if (pane) pane.style.filter = "sepia(1) hue-rotate(190deg) saturate(1.2) contrast(0.9) brightness(1.05)";
-        }, 100);
+        // REMOVED: CSS filters which cause choppiness on mobile
 
         window.KindrMap.instance = map;
         window.KindrMap.isInitialized = true;
@@ -125,6 +122,10 @@ window.KindrMap = {
                         <span class="popup-rating">⭐ ${loc.rating}</span>
                         <span>${loc.reviews} reviews</span>
                     </div>
+                    <!-- External Link Magic -->
+                    <button class="btn-external-maps" onclick="window.KindrMap.openExternal('${loc.name}', ${loc.lat}, ${loc.lng})">
+                        🚙 Abrir en Google Maps
+                    </button>
                 </div>
             </div>
         `;
@@ -219,6 +220,14 @@ window.KindrMap = {
 
     locateUser: () => {
         window.KindrMap.instance.locate({ setView: true, maxZoom: 16 });
+    },
+
+    openExternal: (name, lat, lng) => {
+        // Safe Google Maps Intent
+        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name)}&query_place_id=${lat},${lng}`;
+        // For mobile, this typically triggers the native app. 
+        // Fallback is the browser.
+        window.open(url, '_blank');
     },
 
     tryAutoLocate: () => {

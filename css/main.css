@@ -90,7 +90,6 @@ body {
     max-width: 280px;
     height: auto;
     /* Bleach background pattern to pure white so multiply eats it */
-    filter: contrast(1.1) brightness(1.1);
     mix-blend-mode: multiply;
     /* Makes white square transparent */
 }
@@ -1159,4 +1158,28 @@ body {
 .popup-rating {
     color: var(--accent-yellow);
     font-weight: 800;
+}
+
+.btn-external-maps {
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px;
+    background: var(--primary-navy);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-external-maps:active {
+    transform: scale(0.95);
+    background: var(--primary-blue);
 }
