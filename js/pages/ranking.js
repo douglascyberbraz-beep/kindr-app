@@ -37,11 +37,11 @@ window.KindrRanking = {
 
         const renderContributors = () => {
             const users = window.KindrData.getContributors();
-            list.innerHTML = '';
+            let htmlStr = '';
 
             users.forEach(user => {
                 if (user.special) {
-                    list.innerHTML += `
+                    htmlStr += `
                         <div class="contributor-card gold-border">
                             <div style="font-size: 1.5rem;">${user.role}</div>
                             <div style="flex:1">
@@ -52,7 +52,7 @@ window.KindrRanking = {
                         </div>
                     `;
                 } else {
-                    list.innerHTML += `
+                    htmlStr += `
                         <div class="ranking-card">
                             <div class="rank-position">${user.role}</div>
                             <div class="rank-info"><h3>${user.name}</h3><span class="rank-badge">${user.rank}</span></div>
@@ -61,6 +61,7 @@ window.KindrRanking = {
                     `;
                 }
             });
+            list.innerHTML = htmlStr;
         };
 
         // Initial Render

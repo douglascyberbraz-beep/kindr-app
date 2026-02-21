@@ -1,4 +1,7 @@
 window.KindrTribu = {
+    // Keep state cached in memory
+    postsCache: null,
+
     render: (container) => {
         container.innerHTML = `
             <div class="page-header sticky-header">
@@ -26,7 +29,11 @@ window.KindrTribu = {
         `;
 
         const feedContainer = document.getElementById('tribu-feed');
-        const posts = window.KindrData.getTribuPosts();
+
+        if (!window.KindrTribu.postsCache) {
+            window.KindrTribu.postsCache = window.KindrData.getTribuPosts();
+        }
+        const posts = window.KindrTribu.postsCache;
 
         const renderPosts = (postList) => {
             feedContainer.innerHTML = '';

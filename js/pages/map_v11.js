@@ -238,10 +238,14 @@ window.KindrMap = {
 
     tryAutoLocate: () => {
         // Silent locate if allowed
-        if (navigator.permissions) {
-            navigator.permissions.query({ name: 'geolocation' }).then(result => {
-                if (result.state === 'granted') window.KindrMap.locateUser();
-            });
+        try {
+            if (navigator.permissions && navigator.permissions.query) {
+                navigator.permissions.query({ name: 'geolocation' }).then(result => {
+                    if (result.state === 'granted') window.KindrMap.locateUser();
+                }).catch(e => console.warn('Geolocation permission query failed:', e));
+            }
+        } catch (e) {
+            console.warn('Geolocation permissions not fully supported:', e);
         }
     }
 };
