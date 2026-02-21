@@ -36,13 +36,17 @@ window.KindrMap = {
             preferCanvas: true
         }).setView([41.6520, -4.7286], 13); // Default to Valladolid Center
 
-        // Base Layer - CARTO Light (Premium & Clean)
-        // Fixed URL with retina support (@2x) to prevent squares loading logic failure
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        // Base Layer - CARTO Light (Premium & Clean) sin el parámetro {r} que falla en algunos móviles
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
             subdomains: 'abcd',
-            maxZoom: 20,
-            detectRetina: true
+            maxZoom: 20
         }).addTo(map);
+
+        // Ultimate fix para problema de celdas/cuadrículas en dispositivos móviles usando ResizeObserver
+        const resizeObserver = new ResizeObserver(() => {
+            map.invalidateSize();
+        });
+        resizeObserver.observe(container);
 
         // REMOVED: CSS filters which cause choppiness on mobile
 
@@ -193,8 +197,18 @@ window.KindrMap = {
     },
 
     analyzeWithGemini: async (query) => {
+        // MAGIA BETA FUNCIONAL: Si no hay clave, simulamos el analizador semántico de manera robusta
         if (!window.GEMINI_KEY || window.GEMINI_KEY.includes('PEGAR_AQUI')) {
-            throw new Error("No API Key");
+            console.log("Modo IA Simulado en ejecución porque no se proveyó clave de Gemini.");
+            const queryLower = query.toLowerCase();
+
+            // Reglas semánticas locales de la Demo
+            if (queryLower.match(/parque|verde|jugar|aire|naturaleza/)) return { type: "category", category: "park" };
+            if (queryLower.match(/cultura|museo|arte|historia|exposicion/)) return { type: "category", category: "culture" };
+            if (queryLower.match(/comida|comer|hambre|restaurante|cafeteria|cafe/)) return { type: "category", category: "food" };
+
+            // Fallback a geolocalización tradicional
+            return { type: "geocoding", location: query };
         }
 
         const prompt = `Analiza esta búsqueda de un usuario en una app de Castilla y León: "${query}". 
@@ -225,7 +239,44 @@ window.KindrMap = {
     },
 
     locateUser: () => {
-        window.KindrMap.instance.locate({ setView: true, maxZoom: 16 });
+        if (!navigator.geolocation) {
+            alert("Tu navegador no soporta geolocalización.");
+            return;
+        }
+
+        const input = document.getElementById('map-search-input');
+        if (input) input.placeholder = "Buscando tu ubicación...";
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                // Efecto de visualización suave hacia la ubicación
+                window.KindrMap.instance.setView([lat, lng], 16);
+
+                // Añadir un marcador de usuario en tiempo real si no existe
+                if (!window.KindrMap.userMarker) {
+                    const userIcon = L.divIcon({
+                        className: 'user-loc-icon',
+                        html: '<div style="width:20px;height:20px;background:#4CC9F0;border-radius:50%;border:3px solid white;box-shadow:0 0 10px rgba(0,0,0,0.5); animation: pulse 1.5s infinite;"></div>',
+                        iconSize: [20, 20],
+                        iconAnchor: [10, 10]
+                    });
+                    window.KindrMap.userMarker = L.marker([lat, lng], { icon: userIcon, zIndexOffset: 1000 }).addTo(window.KindrMap.instance);
+                    window.KindrMap.userMarker.bindPopup('<div style="font-weight:bold;color:var(--primary-navy)">¡Estás aquí!</div>').openPopup();
+                } else {
+                    window.KindrMap.userMarker.setLatLng([lat, lng]);
+                    window.KindrMap.userMarker.openPopup();
+                }
+
+                if (input) input.placeholder = "Pregunta lo que necesites...";
+            },
+            (error) => {
+                console.warn("Geolocalización falló:", error);
+                if (input) input.placeholder = "Error de GPS. Busca un lugar manual.";
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
     },
 
     openExternal: (name, lat, lng) => {
