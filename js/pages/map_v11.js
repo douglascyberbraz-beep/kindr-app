@@ -14,28 +14,34 @@ window.KindrMap = {
         // Ensure visibility
         container.style.display = 'block';
         if (window.KindrMap.instance) {
+            // CRITICAL: First invalidate immediately
             window.KindrMap.instance.invalidateSize();
+            // Then a few more times during and after the transition to be 100% sure
+            setTimeout(() => window.KindrMap.instance.invalidateSize(), 50);
             setTimeout(() => window.KindrMap.instance.invalidateSize(), 300);
+            setTimeout(() => window.KindrMap.instance.invalidateSize(), 1000);
         }
     },
 
     init: (container) => {
         if (window.KindrMap.isInitialized) return;
 
-        console.log("Initializing Definitive Map Engine...");
+        console.log("Initializing Definitive Map Engine v12...");
 
         // Setup the Base Map with Canvas for maximum performance
         const map = L.map(container, {
             zoomControl: false,
             attributionControl: false,
             tap: true,
-            preferCanvas: true // Use Canvas backend for better performance on mobile
+            preferCanvas: true
         }).setView([41.6520, -4.7286], 13); // Default to Valladolid Center
 
-        // Base Layer - OpenStreetMap (Reliable)
+        // Base Layer - CARTO Light (Premium & Clean)
+        // Fixed URL with retina support (@2x) to prevent squares loading logic failure
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             subdomains: 'abcd',
-            maxZoom: 20
+            maxZoom: 20,
+            detectRetina: true
         }).addTo(map);
 
         // REMOVED: CSS filters which cause choppiness on mobile

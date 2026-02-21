@@ -1,5 +1,5 @@
-const CACHE_NAME = 'kindr-cache-v11.3.1';
-const TILE_CACHE = 'kindr-tiles-v11.3.1';
+const CACHE_NAME = 'kindr-cache-v12.0.1';
+const TILE_CACHE = 'kindr-tiles-v12.0.1';
 const ASSETS = [
     './',
     'index.html',
@@ -39,12 +39,14 @@ self.addEventListener('activate', (event) => {
         Promise.all([
             // Force takeover
             clients.claim(),
-            // TOTAL NUCLEAR PURGE: Delete EVERY cache that exists
+            // Clean up old caches
             caches.keys().then((cacheNames) => {
                 return Promise.all(
                     cacheNames.map((cacheName) => {
-                        console.log('[SW] Nuclear Purge deleting cache:', cacheName);
-                        return caches.delete(cacheName);
+                        if (cacheName !== CACHE_NAME && cacheName !== TILE_CACHE) {
+                            console.log('[SW] Deleting old cache:', cacheName);
+                            return caches.delete(cacheName);
+                        }
                     })
                 );
             })
@@ -55,17 +57,24 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
 
-    // Map Tiles Strategy: Cache-First
+    // Map Tiles Strategy: Network-First with Cache Fallback for better reliability
     if (url.hostname.includes('basemaps.cartocdn.com')) {
         event.respondWith(
-            caches.open(TILE_CACHE).then((cache) => {
-                return cache.match(event.request).then((response) => {
-                    return response || fetch(event.request).then((networkResponse) => {
-                        cache.put(event.request, networkResponse.clone());
-                        return networkResponse;
-                    });
-                });
-            })
+            fetch(event.request)
+                .then((networkResponse) => {
+                    // Only cache successful requests
+                    if (networkResponse.ok) {
+                        const responseClone = networkResponse.clone();
+                        caches.open(TILE_CACHE).then((cache) => {
+                            cache.put(event.request, responseClone);
+                        });
+                    }
+                    return networkResponse;
+                })
+                .catch(() => {
+                    // If network fails, try cache
+                    return caches.match(event.request);
+                })
         );
         return;
     }

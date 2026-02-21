@@ -29,15 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.warn("⚠️ Advertencia: API Key de Gemini no configurada.");
     }
 
-    // Warm Initialization: Start loading map in background immediately
-    const mapContainer = document.getElementById('map-viewport-v11');
-    if (mapContainer) {
-        try {
-            window.KindrMap.init(mapContainer, null);
-        } catch (e) {
-            console.error("No se pudo pre-inicializar el mapa:", e);
-        }
-    }
+    // Map Initialization: Handled by loadPage('map') to ensure container is visible before L.map()
 
     // Simulate Splash Screen
     setTimeout(() => {
