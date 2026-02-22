@@ -1,5 +1,5 @@
-const CACHE_NAME = 'kindr-cache-v12.0.2';
-const TILE_CACHE = 'kindr-tiles-v12.0.2';
+const CACHE_NAME = 'kindr-cache-v12.0.3';
+const TILE_CACHE = 'kindr-tiles-v12.0.3';
 const ASSETS = [
     './',
     'index.html',
@@ -57,8 +57,8 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
 
-    // Map Tiles Strategy: Network-First with Cache Fallback for better reliability
-    if (url.hostname.includes('basemaps.cartocdn.com')) {
+    // Map Tiles Strategy: Network-First with Cache Fallback
+    if (url.hostname.includes('google.com') && url.pathname.includes('vt')) {
         event.respondWith(
             fetch(event.request)
                 .then((networkResponse) => {
