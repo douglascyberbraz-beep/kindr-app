@@ -216,16 +216,33 @@ window.KindrMap = {
         { "type": "geocoding" | "category" | "mixed", "location": "nombre ciudad o sitio", "category": "park" | "culture" | "museum" | "food", "reasoning": "breve" }
         Si busca un sitio concreto, usa "geocoding". Si busca planes generales, usa "category".`;
 
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${window.GEMINI_KEY}`, {
-            method: 'POST',
-            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-        });
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${window.GEMINI_KEY}`, {
+                method: 'POST',
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            });
 
-        const data = await response.json();
-        const text = data.candidates[0].content.parts[0].text;
-        // Clean JSON from markdown if exists
-        const cleanJson = text.replace(/```json|```/g, '').trim();
-        return JSON.parse(cleanJson);
+            if (!response.ok) {
+                console.error("Gemini HTTP Error:", response.status);
+                // Fallback a lógico
+                return { type: "geocoding", location: query };
+            }
+
+            const data = await response.json();
+
+            if (data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) {
+                const text = data.candidates[0].content.parts[0].text;
+                const cleanJson = text.replace(/```json|```/g, '').trim();
+                return JSON.parse(cleanJson);
+            } else {
+                console.warn("Gemini Response malformed.", data);
+                return { type: "geocoding", location: query };
+            }
+
+        } catch (e) {
+            console.error("Error connecting to Gemini API:", e);
+            return { type: "geocoding", location: query };
+        }
     },
 
     performGeocoding: async (place) => {

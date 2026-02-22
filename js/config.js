@@ -5,17 +5,18 @@
 // (La obtienes en Project Settings -> General -> Your apps -> Web app)
 
 const firebaseConfig = {
-    apiKey: "PEGAR_AQUI_TU_API_KEY",
-    authDomain: "PEGAR_AQUI_TU_PROJECT_ID.firebaseapp.com",
-    projectId: "PEGAR_AQUI_TU_PROJECT_ID",
-    storageBucket: "PEGAR_AQUI_TU_PROJECT_ID.firebasestorage.app",
-    messagingSenderId: "PEGAR_AQUI_SENDER_ID",
-    appId: "PEGAR_AQUI_APP_ID"
+    apiKey: "AIzaSyDppR0-A8bEKT1sjJDst1N6uZV-EsTLSYo",
+    authDomain: "kindr-8d660.firebaseapp.com",
+    projectId: "kindr-8d660",
+    storageBucket: "kindr-8d660.firebasestorage.app",
+    messagingSenderId: "552831875210",
+    appId: "1:552831875210:web:1af5583c40e0d62bbf9573",
+    measurementId: "G-2F3HNE2L5P"
 };
 
 // Paso 2: Pega aquí tu API Key de Google Gemini (Para el Chat IA)
 // (La obtienes en https://aistudio.google.com/app/apikey)
-const GEMINI_API_KEY = "PEGAR_AQUI_TU_GEMINI_API_KEY";
+const GEMINI_API_KEY = "AIzaSyD4tkqbo7diSZzpzu92magJiQJmpSoL8_Y";
 
 // --------------------------------------------------------------
 // NO TOCAR NADA DEBAJO DE ESTA LÍNEA
