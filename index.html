@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <!-- App CSS -->
-    <link rel="stylesheet" href="css/main.css?v=12.0.0">
+    <link rel="stylesheet" href="css/main.css?v=1.2.0">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -29,23 +29,19 @@
         <!-- Splash Screen -->
         <div id="splash-screen" class="splash-screen">
             <div class="logo-container">
-                <img src="assets/header-logo.png" alt="Kindr Logo" class="splash-logo">
-            </div>
-            <div id="v-tag"
-                style="position:absolute; bottom:20px; font-size:10px; opacity:0.5; color:var(--primary-dark);">
-                Version: v1.0.0 (Production Engine)
+                <img src="assets/kindr-premium-logo.png" alt="Kindr Logo" class="splash-logo">
             </div>
         </div>
-    </div>
 
-    <!-- Main Content Area -->
-    <main id="main-content" class="hidden">
-        <!-- Dynamic Content (News, Events, etc.) -->
-    </main>
+        <!-- Main Content Area inside #app -->
+        <main id="main-content" class="hidden">
+            <!-- Dynamic Content (News, Events, etc.) -->
+        </main>
 
-    <!-- Persistent Map Container v11 - Constrained to App -->
-    <div id="map-viewport-v11" class="map-viewport-v11" style="display: none;">
-        <!-- New Map lives here -->
+        <!-- Map Container inside #app -->
+        <div id="map-viewport-v11" class="map-viewport-v11" style="display: none;">
+            <!-- New Map lives here -->
+        </div>
     </div>
 
     <!-- Bottom Navigation with Smooth Centering -->
@@ -140,8 +136,8 @@
                     setTimeout(() => window.location.reload(true), 500);
                 };
 
-                navigator.serviceWorker.register('sw.js?v=1.1.3').then(reg => {
-                    console.log('Service Worker v1.1.3 registrado');
+                navigator.serviceWorker.register('sw.js?v=1.2.0').then(reg => {
+                    console.log('Service Worker v1.2.0 registrado');
 
                     // Detect updates and reload
                     reg.addEventListener('updatefound', () => {
