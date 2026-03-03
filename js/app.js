@@ -105,10 +105,18 @@ function loadPage(pageName) {
     mapViewport.style.display = 'none';
     container.innerHTML = ''; // Clear other pages content
 
-    // Special style for nav items
-    updateNavStyles(pageName);
+    function updateNavStyles(pageName) {
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(nav => {
+            if (nav.dataset.page === pageName) {
+                nav.classList.add('active');
+            } else {
+                nav.classList.remove('active');
+            }
+        });
+    }
 
-    if (pageName === 'map') {
+    function loadPage(pageName) {
         window.KindrMap.render(mapViewport);
     } else {
         container.classList.remove('hidden');
