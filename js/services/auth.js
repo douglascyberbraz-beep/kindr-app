@@ -1,27 +1,48 @@
 window.KindrAuth = {
     // Estado interno para evitar múltiples guardados
-    _currentUser: null,
+    _currentUser: (function () {
+        const stored = localStorage.getItem('kindr_local_user');
+        if (stored) {
+            try { return JSON.parse(stored); } catch (e) { return null; }
+        }
+        return null;
+    })(),
 
     init: (callback) => {
         // Escuchar cambios de estado de Firebase
         window.KindrAuthReal.onAuthStateChanged(async (user) => {
             if (user) {
-                // Obtener perfil extendido de Firestore si existe
-                const doc = await window.KindrDB.collection('users').doc(user.uid).get();
-                const profile = doc.exists ? doc.data() : {};
+                try {
+                    // Obtener perfil extendido de Firestore si existe
+                    const doc = await window.KindrDB.collection('users').doc(user.uid).get();
+                    const profile = doc.exists ? doc.data() : {};
 
-                window.KindrAuth._currentUser = {
-                    uid: user.uid,
-                    email: user.email || "Invitado",
-                    nickname: profile.nickname || "Explorador",
-                    points: profile.points || 0,
-                    level: profile.level || "Bronce",
-                    isGuest: user.isAnonymous,
-                    photo: profile.photo || "👤",
-                    referralCode: profile.referralCode || ""
-                };
+                    window.KindrAuth._currentUser = {
+                        uid: user.uid,
+                        email: user.email || "Invitado",
+                        nickname: profile.nickname || "Explorador",
+                        points: profile.points || 0,
+                        level: profile.level || "Bronce",
+                        isGuest: user.isAnonymous,
+                        photo: profile.photo || "👤",
+                        referralCode: profile.referralCode || ""
+                    };
+                } catch (e) {
+                    console.warn("Resilient Init: Error fetching firestore profile, using minimal local state", e);
+                    window.KindrAuth._currentUser = {
+                        uid: user.uid,
+                        email: user.email || "Invitado",
+                        nickname: "Explorador",
+                        points: 0,
+                        level: "Bronce",
+                        isGuest: user.isAnonymous,
+                        photo: "👤"
+                    };
+                }
             } else {
-                window.KindrAuth._currentUser = null;
+                // Si no hay user en Firebase, buscar si hay una sesión local de "emergencia"
+                const localUser = window.KindrAuth._checkLocalSession();
+                window.KindrAuth._currentUser = localUser;
             }
             if (callback) callback(window.KindrAuth._currentUser);
         });
@@ -80,6 +101,7 @@ window.KindrAuth = {
     },
 
     logout: async () => {
+        localStorage.removeItem('kindr_local_user');
         await window.KindrAuthReal.signOut();
         window.location.reload();
     },
@@ -89,9 +111,38 @@ window.KindrAuth = {
             const res = await window.KindrAuthReal.signInAnonymously();
             return res.user;
         } catch (e) {
-            console.error("Guest Auth Error:", e);
-            throw e;
+            console.error("Guest Auth Error (Firebase):", e);
+            console.warn("⚠️ Usando Local Fallback para modo invitado");
+
+            // Local Fallback
+            const mockUser = {
+                uid: 'local-guest-' + Date.now(),
+                email: 'guest@local',
+                nickname: 'Visitante Local',
+                isGuest: true,
+                points: 0,
+                level: 'Bronce'
+            };
+            window.KindrAuth._saveLocalSession(mockUser);
+            window.KindrAuth._currentUser = mockUser;
+            return mockUser;
         }
+    },
+
+    _saveLocalSession: (user) => {
+        localStorage.setItem('kindr_local_user', JSON.stringify(user));
+    },
+
+    _checkLocalSession: () => {
+        const stored = localStorage.getItem('kindr_local_user');
+        if (stored) {
+            try {
+                return JSON.parse(stored);
+            } catch (e) {
+                return null;
+            }
+        }
+        return null;
     },
 
     googleLogin: async () => {
@@ -241,7 +292,13 @@ window.KindrAuth = {
                     modal.remove();
                     location.reload();
                 } catch (e) {
-                    showError(e.message || "Error en el registro.");
+                    console.error("Reg error details:", e);
+                    let errMsg = "Error en el registro.";
+                    if (e.code === 'auth/email-already-in-use') errMsg = "El email ya está registrado.";
+                    if (e.code === 'auth/weak-password') errMsg = "La contraseña es muy débil (mín. 6 carecteres).";
+                    if (e.code === 'auth/operation-not-allowed') errMsg = "El registro por email no está activado en Firebase.";
+
+                    showError(errMsg);
                 }
             }
         });
