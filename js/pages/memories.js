@@ -137,25 +137,31 @@ window.KindrMemories = {
                         quests: activities.filter(a => a.type === 'quest_completed').length,
                         events: activities.map(a => window.KindrMemories._activityToEvent(a))
                     };
+                } else {
+                    // Si no hay actividad real pero está logueado, devolvemos un estado vacío motivador
+                    return {
+                        places: 0, photos: 0, points: user.points || 0, quests: 0,
+                        events: [{
+                            date: 'Hoy', icon: '👋', title: '¡Bienvenido a Memories!',
+                            description: 'Aquí aparecerán tus aventuras familiares. ¡Empieza explorando el mapa o completando una misión!',
+                            color: '#002C77'
+                        }]
+                    };
                 }
             } catch (e) {
                 console.warn("Activity fetch error:", e);
             }
         }
 
-        // Demo data
+        // Demo data for guests or if fetch fails
         return {
-            places: 8,
-            photos: 5,
-            points: user?.points || 340,
-            quests: 2,
+            places: 5,
+            photos: 3,
+            points: user?.points || 120,
+            quests: 1,
             events: [
-                { date: 'Hoy', icon: '⚔️', title: 'Misión Explorador completada', description: 'Visitaste 3 parques nuevos', points: 150, color: '#4A90D9' },
-                { date: 'Ayer', icon: '📸', title: 'Foto en Campo Grande', description: 'Subiste una foto familiar', points: 30, color: '#E67E22' },
-                { date: 'Hace 2 días', icon: '⭐', title: 'Reseña del Museo de la Ciencia', description: '"Increíble para niños de 5-10 años"', points: 20, color: '#27AE60' },
-                { date: 'Hace 3 días', icon: '💬', title: 'Post en La Tribu', description: '"¿Alguien para ir al Titirimundi?"', points: 5, color: '#8E44AD' },
-                { date: 'Hace 5 días', icon: '🛡️', title: 'Alerta de seguridad reportada', description: 'Obras en zona de columpios', points: 20, color: '#E74C3C' },
-                { date: 'Hace 1 semana', icon: '🤝', title: 'Referido exitoso', description: 'Tu amiga Ana se unió a KINDR', points: 100, color: '#16A085' }
+                { date: 'Hoy', icon: '⚔️', title: 'Primera Misión', description: '¡Has descubierto la sección de misiones!', points: 50, color: '#4A90D9' },
+                { date: 'Ayer', icon: '🗺️', title: 'Explorador Novel', description: 'Abriste el mapa por primera vez', points: 10, color: '#E67E22' }
             ]
         };
     },

@@ -50,7 +50,13 @@ window.KindrSafePage = {
         alertsList.innerHTML = '';
 
         if (alerts.length === 0) {
-            alertsList.innerHTML = '<p class="center-text p-20" style="color:#888;">No hay alertas activas en tu zona. ¡Buenas noticias! 🎉</p>';
+            alertsList.innerHTML = `
+                <div class="center-text p-40" style="color:#aaa;">
+                    <div style="font-size: 40px; margin-bottom: 15px;">🛡️</div>
+                    <h3 style="color: var(--primary-navy);">Todo despejado</h3>
+                    <p style="font-size: 14px;">No hay alertas de seguridad activas en tu zona ahora mismo.</p>
+                </div>
+            `;
         } else {
             alerts.forEach(alert => {
                 const typeInfo = window.KindrSafe.ALERT_TYPES[alert.type] || window.KindrSafe.ALERT_TYPES.INFO;

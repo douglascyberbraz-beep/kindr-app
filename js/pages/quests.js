@@ -103,23 +103,33 @@ window.KindrQuestsPage = {
             });
         }
 
-        // Advance quest progress (demo behavior)
+        // Advance quest progress (real persistence)
         list.querySelectorAll('.btn-quest-action').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', async (e) => {
                 const qId = e.target.dataset.quest;
                 const quest = quests.find(q => q.id === qId);
                 if (quest) {
-                    quest.progress = Math.min((quest.progress || 0) + 1, quest.totalSteps || quest.objectives?.length || 1);
-                    if (quest.progress >= (quest.totalSteps || quest.objectives?.length || 1)) {
-                        quest.status = 'completed';
-                        window.KindrPoints.addPoints('QUEST_COMPLETE');
-                        window.KindrSound.play('success');
-                        alert(`🎉 ¡Misión "${quest.title}" completada! +${quest.points} puntos`);
+                    const newProgress = Math.min((quest.progress || 0) + 1, quest.totalSteps || quest.objectives?.length || 1);
+                    const isComplete = newProgress >= (quest.totalSteps || quest.objectives?.length || 1);
+
+                    e.target.disabled = true;
+                    e.target.textContent = '⌛...';
+
+                    const success = await window.KindrQuests.updateQuestProgress(qId, newProgress, isComplete);
+
+                    if (success) {
+                        if (isComplete) {
+                            window.KindrSound.play('success');
+                            alert(`🎉 ¡Misión "${quest.title}" completada! +${quest.points} puntos`);
+                        } else {
+                            window.KindrSound.play('click');
+                        }
+                        // Re-render
+                        window.KindrQuestsPage.render(container);
                     } else {
-                        window.KindrSound.play('click');
+                        e.target.disabled = false;
+                        e.target.textContent = 'Error ⚠️';
                     }
-                    // Re-render
-                    window.KindrQuestsPage.render(container);
                 }
             });
         });
@@ -128,30 +138,31 @@ window.KindrQuestsPage = {
         document.getElementById('generate-quests-btn').addEventListener('click', async () => {
             const btn = document.getElementById('generate-quests-btn');
             btn.disabled = true;
-            btn.textContent = '🔄 Generando misiones con IA...';
-            list.innerHTML = '<div class="center-text p-20"><div class="typing-dots"><span></span><span></span><span></span></div><p>La IA está creando misiones personalizadas...</p></div>';
+            btn.innerHTML = '<span class="typing-dots"><span></span><span></span><span></span></span> Generando...';
 
             let coords = "41.6520, -4.7286";
             if (navigator.geolocation) {
-                const pos = await new Promise((resolve) => {
-                    navigator.geolocation.getCurrentPosition(resolve, () => resolve(null), { timeout: 5000 });
-                });
-                if (pos) coords = `${pos.coords.latitude}, ${pos.coords.longitude}`;
+                try {
+                    const pos = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+                    });
+                    if (pos) coords = `${pos.coords.latitude}, ${pos.coords.longitude}`;
+                } catch (e) { }
             }
 
             const newQuests = await window.KindrQuests.generateQuests(coords);
-            if (newQuests.length > 0) {
-                // Merge with defaults for display
-                const enriched = newQuests.map((q, i) => ({
-                    ...q,
-                    id: `ai-${Date.now()}-${i}`,
-                    progress: 0,
-                    totalSteps: q.objectives?.length || 3,
-                    status: 'active'
-                }));
-                list.innerHTML = '';
-                // Re-render with new quests by passing them through
+            if (newQuests && newQuests.length > 0) {
+                list.innerHTML = '<p class="center-text p-20">💾 Guardando misiones en tu perfil...</p>';
+
+                // Save them to Firestore properly
+                for (const q of newQuests) {
+                    await window.KindrQuests.saveQuest(q);
+                }
+
+                // Re-render to show new active quests from Firestore
                 window.KindrQuestsPage.render(container);
+            } else {
+                alert("No se pudieron generar misiones en este momento. Inténtalo de nuevo.");
             }
 
             btn.disabled = false;

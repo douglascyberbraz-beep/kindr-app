@@ -22,16 +22,73 @@ window.KindrQuests = {
             const snap = await window.KindrDB.collection('quests')
                 .where('userId', '==', user.uid)
                 .where('status', '==', 'active')
+                .orderBy('createdAt', 'desc')
                 .get();
 
             if (!snap.empty) {
                 return snap.docs.map(d => ({ id: d.id, ...d.data() }));
             }
         } catch (e) {
-            console.warn("Firestore quests fallback:", e);
+            console.warn("Firestore quests fetch error:", e);
         }
 
+        // Si no hay misiones en Firestore, devolvemos las de demo solo si es invitado o primer login
         return window.KindrQuests._getDefaultQuests();
+    },
+
+    // Guardar una misión generada por IA en la cuenta del usuario
+    saveQuest: async (questData) => {
+        const user = window.KindrAuth.checkAuth();
+        if (!user) return null;
+
+        try {
+            const newQuest = {
+                ...questData,
+                userId: user.uid,
+                status: 'active',
+                progress: 0,
+                totalSteps: questData.objectives?.length || 1,
+                createdAt: new Date()
+            };
+            const docRef = await window.KindrDB.collection('quests').add(newQuest);
+            return { id: docRef.id, ...newQuest };
+        } catch (e) {
+            console.error("Error saving quest:", e);
+            return null;
+        }
+    },
+
+    // Actualizar progreso de una misión
+    updateQuestProgress: async (questId, newProgress, isComplete) => {
+        const user = window.KindrAuth.checkAuth();
+        if (!user) return false;
+
+        try {
+            const updateData = { progress: newProgress };
+            if (isComplete) {
+                updateData.status = 'completed';
+                updateData.completedAt = new Date();
+            }
+
+            await window.KindrDB.collection('quests').doc(questId).update(updateData);
+
+            if (isComplete) {
+                // Registrar actividad para Memories
+                await window.KindrDB.collection('activity').add({
+                    userId: user.uid,
+                    type: 'quest_completed',
+                    title: 'Misión completada',
+                    description: `Has terminado la misión "${questId}"`, // Sería mejor el título pero necesitamos pasarlo
+                    timestamp: new Date(),
+                    points: 100 // Puntos base por misión
+                });
+                window.KindrPoints.addPoints('QUEST_COMPLETE');
+            }
+            return true;
+        } catch (e) {
+            console.error("Error updating quest progress:", e);
+            return false;
+        }
     },
 
     // Generar nuevas misiones con IA basadas en ubicación
