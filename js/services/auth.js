@@ -88,6 +88,16 @@ window.KindrAuth = {
         window.location.reload();
     },
 
+    setGuestMode: async () => {
+        try {
+            const res = await window.KindrAuthReal.signInAnonymously();
+            return res.user;
+        } catch (e) {
+            console.error("Guest Auth Error:", e);
+            throw e;
+        }
+    },
+
     googleLogin: async () => {
         try {
             const provider = new firebase.auth.GoogleAuthProvider();
