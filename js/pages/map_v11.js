@@ -5,14 +5,14 @@ window.KindrMap = {
     markers: [],
     currentFilter: 'all',
 
-    render: (container) => {
+    render: async (container) => {
         console.log("Rendering Kindr Map v1.0.0...");
 
         // CRITICAL FIX: Ensure visibility BEFORE any Leaflet calls
         container.style.display = 'block';
 
         if (!window.KindrMap.isInitialized) {
-            window.KindrMap.init(container);
+            await window.KindrMap.init(container);
         }
 
         if (window.KindrMap.instance) {
@@ -30,7 +30,7 @@ window.KindrMap = {
         }
     },
 
-    init: (container) => {
+    init: async (container) => {
         if (window.KindrMap.isInitialized) return;
 
         console.log("Initializing Definitive Map Engine v1.0.0...");
@@ -66,7 +66,7 @@ window.KindrMap = {
         window.KindrMap.injectUI(container);
 
         // Load Markers
-        window.KindrMap.loadMarkers();
+        await window.KindrMap.loadMarkers();
 
         // Check for Geolocation
         window.KindrMap.tryAutoLocate();
@@ -118,8 +118,8 @@ window.KindrMap = {
         });
     },
 
-    loadMarkers: () => {
-        const locations = window.KindrData.getLocations();
+    loadMarkers: async () => {
+        const locations = await window.KindrData.getLocations();
         window.KindrMap.clearMarkers();
 
         locations.forEach(loc => {

@@ -222,31 +222,31 @@ body {
     right: 0 !important;
     bottom: 0 !important;
     width: 100% !important;
-    height: 140% !important;
-    /* Extra height for infinite horizon tilt */
+    height: 115% !important;
+    /* Slight over-extend for tilt coverage */
     z-index: 0;
     background: #eef2f7;
     overflow: hidden !important;
 
-    /* Magical GPS Perspective */
-    transform: perspective(800px) rotateX(40deg);
+    /* Magical GPS Perspective - Refined for stability */
+    transform: perspective(800px) rotateX(25deg);
     transform-origin: bottom center;
-    margin-top: -30%;
-    /* Compensate for aggressive tilt */
+    margin-top: -8%;
+    /* Subtle compensation */
 }
 
 /* Magical Floating Markers */
 @keyframes magical-float {
     0% {
-        transform: translateY(0) rotateX(-40deg);
+        transform: translateY(0) rotateX(-25deg);
     }
 
     50% {
-        transform: translateY(-12px) rotateX(-40deg);
+        transform: translateY(-12px) rotateX(-25deg);
     }
 
     100% {
-        transform: translateY(0) rotateX(-40deg);
+        transform: translateY(0) rotateX(-25deg);
     }
 }
 
@@ -312,7 +312,7 @@ body {
     height: 150px;
     background: linear-gradient(to top, var(--accent-pink), transparent);
     transform-origin: bottom center;
-    transform: translateX(-50%) rotateX(-40deg);
+    transform: translateX(-50%) rotateX(-25deg);
     animation: magic-beam 3s infinite linear;
     pointer-events: none;
     z-index: -1;
@@ -343,10 +343,6 @@ body {
 .kindr-map-tiles {
     filter: brightness(1.08) contrast(1.1) saturate(1.5) sepia(0.05);
     opacity: 1;
-}
-
-/* This creates high-contrast, poppy colors with vibrant greens and soft blues */
-opacity: 1;
 }
 
 /* Ensure common Leaflet elements stay crisp */
