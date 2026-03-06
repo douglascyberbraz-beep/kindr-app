@@ -129,20 +129,21 @@ window.KindrMap = {
     },
 
     createMarker: (loc) => {
-        // Official Kindr Icon for markers (Heart + Pin concept)
+        // Official Kindr Icon for markers (Magical Floating Orb concept)
         const isHighRated = loc.rating >= 4.5;
         const kindrIcon = L.divIcon({
             className: `custom-div-icon ${isHighRated ? 'highlight-poi' : ''}`,
             html: `
                 <div class="kindr-marker">
-                    <div class="kindr-marker-pin" style="background-color: ${isHighRated ? 'var(--accent-pink)' : 'var(--primary-blue)'}; border: 2.5px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-                        <img src="assets/logo_white.png" style="width: 80%; height: 80%; object-fit: contain;">
+                    <div class="kindr-marker-pin" style="background: ${isHighRated ? 'linear-gradient(135deg, var(--accent-pink), #ff758c)' : 'linear-gradient(135deg, var(--primary-blue), #4cc9f0)'};">
+                        <img src="assets/logo_white.png" style="width: 70%; height: 70%; object-fit: contain;">
                     </div>
+                    ${isHighRated ? `<div class="marker-label-floating" style="position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); background: white; padding: 2px 10px; border-radius: 10px; font-size: 10px; font-weight: 800; color: var(--primary-navy); white-space: nowrap; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #eee;">${loc.name}</div>` : ''}
                 </div>
             `,
-            iconSize: [40, 40],
-            iconAnchor: [20, 40],
-            popupAnchor: [0, -35]
+            iconSize: [44, 44],
+            iconAnchor: [22, 44],
+            popupAnchor: [0, -45]
         });
 
         const popupContent = `
