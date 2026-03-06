@@ -41,7 +41,7 @@ window.KindrMap = {
             attributionControl: false,
             tap: true,
             preferCanvas: true
-        }).setView([41.6520, -4.7286], 13); // Default to Valladolid Center
+        }).setView([41.6520, -4.7286], 16); // Default to Valladolid Center (Street level for GPS)
 
         // Switching to CartoDB Voyager for a more vibrant, "Waze-style" base
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
