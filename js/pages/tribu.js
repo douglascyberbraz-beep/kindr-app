@@ -5,14 +5,15 @@ window.KindrTribu = {
 
     render: async (container) => {
         container.innerHTML = `
-            <div class="page-header sticky-header" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px;">
+            <div class="page-header sticky-header">
                 <h2 id="tribu-title">🏘️ La Tribu</h2>
-                <button class="btn-icon-pulse" id="tribu-action-btn">➕</button>
             </div>
             
             <div id="tribu-content" class="content-list stagger-group" style="padding-bottom: 100px; width: 100%; display: flex; flex-direction: column; align-items: center;">
                 <div class="center-text p-20"><div class="typing-dots"><span></span><span></span><span></span></div></div>
             </div>
+
+            <button class="fab-btn" id="tribu-action-btn">➕</button>
 
             <!-- New Post Modal -->
             <div id="post-modal" class="modal hidden">

@@ -130,11 +130,12 @@ window.KindrMap = {
 
     createMarker: (loc) => {
         // Official Kindr Icon for markers (Heart + Pin concept)
+        const isHighRated = loc.rating >= 4.5;
         const kindrIcon = L.divIcon({
-            className: 'custom-div-icon',
+            className: `custom-div-icon ${isHighRated ? 'highlight-poi' : ''}`,
             html: `
                 <div class="kindr-marker">
-                    <div class="kindr-marker-pin" style="background-color: var(--primary-blue); border: 2.5px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                    <div class="kindr-marker-pin" style="background-color: ${isHighRated ? 'var(--accent-pink)' : 'var(--primary-blue)'}; border: 2.5px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
                         <img src="assets/logo_white.png" style="width: 80%; height: 80%; object-fit: contain;">
                     </div>
                 </div>

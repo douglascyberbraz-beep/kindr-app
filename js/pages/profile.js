@@ -76,10 +76,10 @@ window.KindrProfile = {
                     </div>
                 </div>
 
-                <div class="profile-actions" style="margin-top: 10px;">
-                    <button id="install-pwa-btn" class="btn-primary full-width" style="display:none; margin-bottom: 10px;">📲 Instalar App</button>
-                    <button id="terms-link" class="btn-text full-width" style="margin-bottom: 10px; color: var(--primary-blue);">📜 Términos y Condiciones</button>
-                    <button id="logout-btn" class="btn-outline full-width">Cerrar Sesión</button>
+                <div class="profile-actions" style="margin-top: 20px; display: flex; flex-direction: column; align-items: center; width: 100%;">
+                    <button id="install-pwa-btn" class="btn-primary full-width" style="display:none; margin-bottom: 12px;">📲 Instalar App</button>
+                    <button id="terms-link" class="btn-text" style="margin-bottom: 15px; color: var(--text-light); font-size: 13px;">📜 Términos y Condiciones</button>
+                    <button id="logout-btn" class="btn-outline" style="width: 180px; padding: 10px; font-weight: 700;">Cerrar Sesión</button>
                 </div>
             </div>
         `;

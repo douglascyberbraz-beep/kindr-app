@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             splash.style.display = 'none';
             document.getElementById('bottom-nav').classList.remove('hidden');
 
-            // Beta Readiness Notification removed for Production
+            // Production: Request location immediately for personalized experience
+            if (window.KindrMap) window.KindrMap.locateUser();
         }, 500);
     }, 2000); // Reduced slightly for better feel
 
