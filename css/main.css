@@ -224,8 +224,21 @@ body {
     width: 100% !important;
     height: 100% !important;
     z-index: 0;
-    background: var(--secondary-blue);
+    background: #f0f4f8;
+    /* Softer background */
     overflow: hidden !important;
+}
+
+/* Branded Map Layer - Clean & Professional */
+.kindr-map-tiles {
+    filter: hue-rotate(190deg) saturate(0.8) brightness(1.02) contrast(1.1);
+    /* This creates a soft blue/navy tint aligned with Kindr colors */
+    opacity: 0.95;
+}
+
+/* Ensure common Leaflet elements stay crisp */
+.leaflet-container {
+    background: #f0f4f8 !important;
 }
 
 /* Profile & Gamification */
