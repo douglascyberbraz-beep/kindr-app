@@ -42,7 +42,8 @@ window.KidoaMap = {
                     zoomControl: false,
                     attributionControl: false,
                     tap: true,
-                    preferCanvas: true
+                    preferCanvas: true,
+                    doubleClickZoom: false // Disabled so double click can be used for dropping a pin instead
                 }).setView([41.6520, -4.7286], 15); // Default to Valladolid Center
 
                 // Standard Google Maps Look 
@@ -79,24 +80,23 @@ window.KidoaMap = {
 
             // Try to immediately find the user first
             window.KidoaMap.locateUser(true); // true = silent initial locate
+            // Force temporary user icon at default center until GPS locks to prevent it from missing visually
+            window.KidoaMap.updateUserIcon(41.6520, -4.7286);
 
             // Start GPS watch for moving
             window.KidoaMap.startGPSWatch();
 
-            // New Feature: Clic largo o clic normal para añadir punto en el mapa
+            // New Feature: Doble Clic o Clic Largo para añadir punto en el mapa
             window.KidoaMap.instance.on('contextmenu', (e) => {
                 window.KidoaMap.showAddSiteModal(e.latlng.lat, e.latlng.lng);
             });
-            window.KidoaMap.instance.on('click', (e) => {
-                // Prevent map click from firing if clicking ON a marker or control
+            window.KidoaMap.instance.on('dblclick', (e) => {
+                // Prevent map double-click from firing if clicking ON a marker
                 const targetClass = e.originalEvent.target.className;
                 if (typeof targetClass === 'string' && (targetClass.includes('leaflet-interactive') || targetClass.includes('kidoa-marker'))) {
                     return;
                 }
-
-                setTimeout(() => {
-                    window.KidoaMap.showAddSiteModal(e.latlng.lat, e.latlng.lng);
-                }, 250);
+                window.KidoaMap.showAddSiteModal(e.latlng.lat, e.latlng.lng);
             });
         } catch (e) {
             console.error("KidoaMap Init Failed:", e);

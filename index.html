@@ -153,14 +153,9 @@
                 }).catch(err => console.log('Error al registrar SW', err));
             });
 
-            // Handle controller change (claim)
-            let refreshing = false;
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-                if (!refreshing) {
-                    window.location.reload();
-                    refreshing = true;
-                }
-            });
+            // Note: Removed the aggressive window.location.reload() on 'controllerchange'
+            // because it forces a double-load the moment the app boots for the first time
+            // or updates. We let the PWA handle files silently.
         }
     </script>
 </body>

@@ -82,7 +82,21 @@ body {
 
 .logo-container {
     text-align: center;
-    animation: pulse 2s infinite;
+    animation: logoBounce 2s infinite ease-in-out;
+}
+
+@keyframes logoBounce {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.03);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .logo-text {
