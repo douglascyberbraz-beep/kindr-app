@@ -99,6 +99,7 @@ window.KidoaProfile = {
 
         // Interaction logic
         document.getElementById('logout-btn').onclick = () => window.KidoaAuth.logout();
+
         document.getElementById('copy-ref-link').onclick = (e) => {
             const link = `https://kidoa.app/invite/${user.referralCode}`;
             navigator.clipboard.writeText(link);
@@ -107,7 +108,26 @@ window.KidoaProfile = {
             setTimeout(() => e.target.innerText = "Copiar Enlace de Invitación", 2000);
         };
 
-        container.querySelectorAll('.quick-card').forEach(card => {
+        document.getElementById('share-app-btn').onclick = () => {
+            const shareData = {
+                title: 'Únete a Kidoa',
+                text: `¡Hola! Únete a Kidoa y explora planes increíbles en familia. Usa mi código: ${user.referralCode}`,
+                url: `https://kidoa.app/invite/${user.referralCode}`
+            };
+            if (navigator.share) {
+                navigator.share(shareData).catch(() => {
+                    document.getElementById('copy-ref-link').click();
+                });
+            } else {
+                document.getElementById('copy-ref-link').click();
+            }
+        };
+
+        document.getElementById('terms-link').onclick = () => {
+            window.KidoaApp.loadPage('legal');
+        };
+
+        container.querySelectorAll('.quick-card[data-goto]').forEach(card => {
             card.onclick = () => {
                 const target = card.dataset.goto;
                 if (target) {

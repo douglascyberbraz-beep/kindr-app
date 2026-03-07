@@ -25,7 +25,7 @@ window.KidoaNewsEvents = {
         const loadContent = async (tab) => {
             content.innerHTML = '<div class="center-text p-20"><div class="typing-dots"><span></span><span></span><span></span></div><p>Cargando información personalizada...</p></div>';
 
-            let coords = window.lastKnownCoords || "41.6520, -4.7286"; // Cache or Default
+            let coords = window.lastKnownCoords || "41.6520, -4.7286";
 
             if (!window.lastKnownCoords && navigator.geolocation) {
                 try {
@@ -46,13 +46,16 @@ window.KidoaNewsEvents = {
 
             if (tab === 'news') {
                 const news = await window.KidoaData.getNews(coords);
-                renderNews(news);
+                if (news && news.length > 0) renderNews(news);
+                else content.innerHTML = '<div class="p-40 center-text text-light">No hemos encontrado noticias en tu zona hoy. 🏜️</div>';
             } else if (tab === 'events') {
                 const events = await window.KidoaData.getEvents(coords);
-                renderEvents(events);
+                if (events && events.length > 0) renderEvents(events);
+                else content.innerHTML = '<div class="p-40 center-text text-light">No hay eventos próximos registrados cerca de ti. 🎭</div>';
             } else if (tab === 'becas') {
                 const becas = await window.KidoaData.getBecas(coords);
-                renderBecas(becas);
+                if (becas && becas.length > 0) renderBecas(becas);
+                else content.innerHTML = '<div class="p-40 center-text text-light">No hay becas activas en este momento. 💎</div>';
             }
         };
 
@@ -93,22 +96,17 @@ window.KidoaNewsEvents = {
                 card.style.width = '92%';
                 card.style.maxWidth = '500px';
                 card.style.background = 'white';
-                card.style.padding = '0';
+                card.style.padding = '20px';
                 card.style.borderRadius = '24px';
                 card.style.marginBottom = '15px';
-                card.style.overflow = 'hidden';
                 card.style.boxShadow = 'var(--shadow-soft)';
 
                 card.innerHTML = `
-                    <div style="height: 10px; background: linear-gradient(90deg, #FAD02E, #F28C28);"></div>
-                    <div style="padding: 20px;">
-                        <div style="font-size: 11px; font-weight: 800; color: #F28C28; margin-bottom: 5px;">📍 ${item.location}</div>
-                        <h3 style="color: var(--primary-navy); margin: 0 0 10px 0;">${item.title}</h3>
-                        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-                            <span style="font-size: 12px; color: #666;">🕒 ${item.date}</span>
-                            <span style="font-size: 12px; color: #666;">💰 ${item.price}</span>
-                        </div>
-                        <button class="btn-primary full-width" style="padding: 12px; border-radius: 12px; font-weight: 700;">Reservar Plaza / Ver más</button>
+                    <div style="font-size: 11px; font-weight: 800; color: #F28C28; margin-bottom: 5px;">📍 ${item.location}</div>
+                    <h3 style="color: var(--primary-navy); margin: 0 0 10px 0;">${item.title}</h3>
+                    <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                        <span style="font-size: 12px; color: #666;">🕒 ${item.date}</span>
+                        <span style="font-size: 12px; color: #666;">💰 ${item.price}</span>
                     </div>
                 `;
                 content.appendChild(card);
@@ -116,19 +114,8 @@ window.KidoaNewsEvents = {
         };
 
         const renderBecas = (items) => {
-            content.innerHTML = `
-                <div class="becas-list" style="width: 92%; max-width: 500px;">
-                    <div class="info-alert" style="background: #e3f2fd; padding: 15px; border-radius: 15px; margin-bottom: 20px; border-left: 5px solid var(--primary-blue);">
-                        <p style="margin:0; font-size: 0.9rem; color: var(--primary-navy);"><strong>💡 Tip Kidoa:</strong> Mantén activadas las notificaciones para no perderte ningún plazo de matriculación en tu zona.</p>
-                    </div>
-                </div>
-            `;
+            content.innerHTML = '<div class="becas-list" style="width: 92%; max-width: 500px;"></div>';
             const listContainer = content.querySelector('.becas-list');
-
-            if (!items || items.length === 0) {
-                listContainer.innerHTML += `<div class="p-20 center-text text-light">No hay becas recientes.</div>`;
-                return;
-            }
 
             items.forEach(item => {
                 const card = document.createElement('div');
