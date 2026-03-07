@@ -1,18 +1,17 @@
 window.KidoaProfile = {
     render: async (container) => {
-        // Mostrar cargando mientras se inicializa auth si es necesario
-        container.innerHTML = `<div class="p-20 center-text"><div class="typing-dots"><span></span><span></span><span></span></div><p>Cargando perfil...</p></div>`;
+        container.innerHTML = `<div class="p-20 center-text"><div class="typing-dots"><span></span><span></span><span></span></div><p>Sincronizando con la nube...</p></div>`;
 
-        // Pequeña espera para asegurar que el estado de auth se ha propagado
         const user = window.KidoaAuth.checkAuth();
 
         if (!user) {
             container.innerHTML = `
-                <div class="p-20 center-text">
-                    <div style="font-size: 3rem; margin-bottom: 20px;">👤</div>
-                    <h3>No has iniciado sesión</h3>
-                    <p>Inicia sesión para ver tus puntos, nivel y código de invitación.</p>
-                    <button id="login-from-profile" class="btn-primary" style="margin-top: 20px;">Iniciar Sesión</button>
+                <div class="p-20 center-text entry-anim">
+                    <div style="font-size: 5rem; margin-bottom: 30px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));">🕶️</div>
+                    <h3 style="color: var(--primary-navy); font-size: 20px; font-weight: 800;">¿Quién eres?</h3>
+                    <p style="color: #666; margin-top: 10px;">Identifícate para desbloquear tu nivel, puntos y premios exclusivos.</p>
+                    <button id="login-from-profile" class="btn-primary" style="margin-top: 30px; padding: 15px 40px; font-size: 16px;">Entrar a Kidoa</button>
+                    <p style="font-size: 12px; color: #aaa; margin-top: 20px;">Únete a miles de familias 🌍</p>
                 </div>
             `;
             document.getElementById('login-from-profile').addEventListener('click', () => {
@@ -24,145 +23,113 @@ window.KidoaProfile = {
         const levelInfo = window.KidoaPoints.getLevelInfo(user.points);
 
         container.innerHTML = `
-            <div class="profile-page">
-                <div class="profile-hero center-text">
-                    <div class="profile-avatar-large gradient-bg">${user.photo || '👤'}</div>
-                    <h2 class="profile-name">${user.nickname || 'Usuario Kidoa'}</h2>
-                    <p class="profile-email">${user.email}</p>
+            <div class="profile-page entry-anim">
+                <div class="profile-hero-premium">
+                    <div class="profile-avatar-wrapper">
+                        <div class="profile-avatar-large profile-glow">${user.photo || '👤'}</div>
+                        <div class="level-label-bubble">Nivel ${user.level}</div>
+                    </div>
+                    <div class="profile-info-header">
+                        <h2 class="profile-name-premium">${user.nickname || 'Explorador Kidoa'}</h2>
+                        <div class="profile-badge-row">
+                            <span class="p-badge"><i class="icon">💎</i> Premium</span>
+                            <span class="p-badge"><i class="icon">📍</i> ${user.city || 'España'}</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="profile-section gamification-card premium-glass">
-                    <div class="level-header">
-                        <span class="level-badge">${levelInfo.icon} ${levelInfo.name}</span>
-                        <span class="points-total"><strong>${user.points}</strong> pts</span>
+                <div class="gamification-dashboard premium-glass">
+                    <div class="dashboard-header">
+                        <div class="points-circle">
+                            <span class="big-pts">${user.points}</span>
+                            <span class="pts-label">PUNTOS</span>
+                        </div>
+                        <div class="level-status">
+                            <h3 style="margin:0; font-size: 18px;">${levelInfo.icon} ${levelInfo.name}</h3>
+                            <p style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
+                                ${levelInfo.nextPoints ? `Próximo: ${levelInfo.nextPoints} pts` : '¡Máximo Nivel!'}
+                            </p>
+                        </div>
                     </div>
-                    <div class="level-progress-container">
-                        <div class="level-progress-bar" style="width: ${levelInfo.progress}%"></div>
-                    </div>
-                    <p class="level-footer">
-                        ${levelInfo.nextPoints ? `Te faltan ${levelInfo.nextPoints - user.points} pts para el siguiente nivel` : '¡Nivel máximo alcanzado!'}
-                    </p>
-                </div>
-
-                <div class="profile-section invite-card premium-glass">
-                    <h3>🎁 Invita y Gana</h3>
-                    <p>Gana 100 puntos por cada amigo que se registre con tu código.</p>
                     
-                    <div id="referral-qr" class="referral-qr"></div>
-                    
-                    <div class="referral-code-box">
-                        <span id="ref-code">${user.referralCode}</span>
-                        <button id="copy-ref-link" class="btn-secondary small">Copiar Enlace</button>
+                    <div class="premium-progress-container">
+                        <div class="premium-progress-bar" style="width: ${levelInfo.progress}%">
+                            <div class="progress-glow"></div>
+                        </div>
+                    </div>
+                    <p class="progress-flavor-text">${levelInfo.progress === 100 ? '¡Eres una leyenda!' : `Estás al ${Math.floor(levelInfo.progress)}% de tu siguiente reto.`}</p>
+                </div>
+
+                <div class="quick-grid">
+                    <div class="quick-card card-anim" data-goto="memories">
+                        <span class="q-icon">📸</span>
+                        <h4>Recuerdos</h4>
+                        <p>Mis fotos</p>
+                    </div>
+                    <div class="quick-card card-anim" id="share-app-btn">
+                        <span class="q-icon">🎁</span>
+                        <h4>Invitar</h4>
+                        <p>+100 pts</p>
                     </div>
                 </div>
 
-                <div class="profile-section premium-glass" style="padding: 20px; border-radius: 20px; margin-bottom: 20px;">
-                    <h3 style="font-size: 14px; color: var(--primary-navy); margin-bottom: 15px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px;">🚀 Acciones Rápidas</h3>
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <button class="profile-quick-btn" id="share-app-btn" style="background:#e3f2fd; border:none; padding:15px; border-radius:14px; cursor:pointer; text-align:left; width: 100%; display: flex; align-items: center; gap: 15px;">
-                            <span style="font-size:1.3rem;">📲</span>
-                            <div style="display:flex; flex-direction:column;">
-                                <span style="font-size:14px; font-weight:700; color:var(--primary-navy);">Compartir KIDOA</span>
-                                <span style="font-size:11px; color:#5d8aa8;">Invita a otras familias</span>
-                            </div>
-                        </button>
-                        <button class="profile-quick-btn" data-goto="memories" style="background:#f5f5f5; border:none; padding:15px; border-radius:14px; cursor:pointer; text-align:left; width: 100%; display: flex; align-items: center; gap: 15px;">
-                            <span style="font-size:1.3rem;">📖</span>
-                            <div style="display:flex; flex-direction:column;">
-                                <span style="font-size:14px; font-weight:700; color:var(--primary-navy);">Mis Recuerdos</span>
-                                <span style="font-size:11px; color:#888;">Tus aventuras guardadas</span>
-                            </div>
-                        </button>
+                <div class="referral-premium-box premium-glass">
+                    <div class="ref-header">
+                        <div class="ref-texts">
+                            <h3>Tu Código Mágico</h3>
+                            <p>Cópialo y envíalo a tus grupos de WhatsApp</p>
+                        </div>
+                        <div id="ref-code-display" class="ref-code-big">${user.referralCode}</div>
                     </div>
+                    <button id="copy-ref-link" class="btn-primary-gradient full-width">Copiar Enlace de Invitación</button>
+                    <div id="referral-qr" class="qr-preview"></div>
                 </div>
 
-                <div class="profile-actions" style="margin-top: 20px; display: flex; flex-direction: column; align-items: center; width: 100%;">
-                    <button id="install-pwa-btn" class="btn-primary full-width" style="display:none; margin-bottom: 12px;">📲 Instalar App</button>
-                    <button id="terms-link" class="btn-text" style="margin-bottom: 15px; color: var(--text-light); font-size: 13px;">📜 Términos y Condiciones</button>
-                    <button id="logout-btn" class="btn-outline" style="width: 180px; padding: 10px; font-weight: 700;">Cerrar Sesión</button>
+                <div class="account-actions-list">
+                    <button id="terms-link" class="action-list-item">
+                        <span>📜 Términos y Soporte</span>
+                        <span class="arrow">→</span>
+                    </button>
+                    <button id="logout-btn" class="action-list-item danger">
+                        <span>🚪 Cerrar Sesión</span>
+                    </button>
                 </div>
             </div>
         `;
 
-        // Generate QR Code
+        // Interaction logic
+        document.getElementById('logout-btn').onclick = () => window.KidoaAuth.logout();
+        document.getElementById('copy-ref-link').onclick = (e) => {
+            const link = `https://kidoa.app/invite/${user.referralCode}`;
+            navigator.clipboard.writeText(link);
+            e.target.innerText = "¡Copiado! ✅";
+            window.KidoaSound.play('success');
+            setTimeout(() => e.target.innerText = "Copiar Enlace de Invitación", 2000);
+        };
+
+        container.querySelectorAll('.quick-card').forEach(card => {
+            card.onclick = () => {
+                const target = card.dataset.goto;
+                if (target) {
+                    window.KidoaSound.play('click');
+                    window.KidoaApp.loadPage(target);
+                }
+            };
+        });
+
+        // Generate QR
         setTimeout(() => {
             const qrContainer = document.getElementById('referral-qr');
             if (qrContainer && window.QRCode) {
                 new QRCode(qrContainer, {
                     text: `https://kidoa.app/invite/${user.referralCode}`,
-                    width: 128,
-                    height: 128,
-                    colorDark: "#001d3d",
+                    width: 100,
+                    height: 100,
+                    colorDark: "#002C77",
                     colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H
+                    correctLevel: QRCode.CorrectLevel.M
                 });
             }
-        }, 100);
-
-        // Copy Link Logic
-        document.getElementById('copy-ref-link').addEventListener('click', () => {
-            const link = `https://kidoa.app/join?ref=${user.referralCode}`;
-            navigator.clipboard.writeText(link).then(() => {
-                const btn = document.getElementById('copy-ref-link');
-                btn.innerText = '¡Copiado!';
-                btn.classList.add('success');
-                setTimeout(() => {
-                    btn.innerText = 'Copiar Enlace';
-                    btn.classList.remove('success');
-                }, 2000);
-            });
-        });
-
-        // Native Share Logic
-        const shareBtn = document.getElementById('share-app-btn');
-        if (shareBtn) {
-            shareBtn.addEventListener('click', async () => {
-                const shareData = {
-                    title: 'Únete a KIDOA',
-                    text: `¡Hola! Me encanta esta app para hacer planes en familia. Usa mi código de invitación: ${user.referralCode}`,
-                    url: `https://kidoa.app/join?ref=${user.referralCode}`
-                };
-
-                if (navigator.share) {
-                    try {
-                        await navigator.share(shareData);
-                    } catch (err) { console.log('Share failed:', err); }
-                } else {
-                    // Fallback to clipboard
-                    navigator.clipboard.writeText(shareData.url);
-                    alert("Enlace de invitación copiado al portapapeles.");
-                }
-            });
-        }
-
-        // Quick navigation buttons
-        container.querySelectorAll('.profile-quick-btn[data-goto]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                window.KidoaApp.loadPage(btn.dataset.goto);
-            });
-        });
-
-        // Terms & Conditions link
-        document.getElementById('terms-link').addEventListener('click', () => {
-            window.KidoaApp.loadPage('legal');
-        });
-
-        // PWA Install
-        const installBtn = document.getElementById('install-pwa-btn');
-        if (window.deferredPrompt) {
-            installBtn.style.display = 'block';
-            installBtn.addEventListener('click', async () => {
-                window.deferredPrompt.prompt();
-                const result = await window.deferredPrompt.userChoice;
-                if (result.outcome === 'accepted') {
-                    installBtn.style.display = 'none';
-                }
-                window.deferredPrompt = null;
-            });
-        }
-
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            window.KidoaAuth.logout();
-        });
+        }, 300);
     }
 };

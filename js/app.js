@@ -3,15 +3,18 @@
 window.KidoaSound = {
     play: (type) => {
         const sounds = {
-            click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3', // Soft wooden tap
-            start: 'https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3', // Ethereal chime
-            success: 'https://assets.mixkit.co/active_storage/sfx/1918/1918-preview.mp3' // Harp success
+            click: 'https://cdn.pixabay.com/audio/2022/03/15/audio_73268c2f16.mp3', // Pop/click
+            start: 'https://cdn.pixabay.com/audio/2021/08/04/audio_985536554b.mp3', // Magic chime
+            success: 'https://cdn.pixabay.com/audio/2022/03/24/audio_349d7936a7.mp3', // Win/Success
+            boop: 'https://cdn.pixabay.com/audio/2022/03/10/audio_f69168b449.mp3' // Subtle boop
         };
-        if (sounds[type]) {
-            const audio = new Audio(sounds[type]);
-            audio.volume = 0.2; // Softer volume for premium feel
-            audio.play().catch(e => console.log('Audio auto-play blocked:', e));
-        }
+        try {
+            if (sounds[type]) {
+                const audio = new Audio(sounds[type]);
+                audio.volume = 0.15;
+                audio.play().catch(e => { });
+            }
+        } catch (e) { }
     }
 };
 

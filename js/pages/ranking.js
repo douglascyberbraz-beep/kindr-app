@@ -2,119 +2,149 @@ window.KidoaRanking = {
     render: async (container) => {
         container.innerHTML = `
             <div class="page-header center-text">
-                <h2 style="color: var(--primary-navy); font-weight: 800;">🏆 Ranking KIDOA</h2>
+                <h2 style="color: var(--primary-navy); font-weight: 800; font-size: 24px;">🏆 Ranking KIDOA</h2>
+                <p style="font-size: 13px; color: #888; margin-top: -5px; margin-bottom: 15px;">Los mejores de la comunidad</p>
                 <div class="tab-scroller">
                     <button class="tab-btn active" data-tab="sites">Top Sitios</button>
                     <button class="tab-btn" data-tab="users">Contribuidores</button>
                 </div>
             </div>
             
-            <div id="ranking-list" class="content-list stagger-group" style="padding-bottom: 20px;">
+            <div id="ranking-list" class="ranking-container stagger-group" style="padding-bottom: 100px;">
                 <div class="center-text p-20"><div class="typing-dots"><span></span><span></span><span></span></div></div>
             </div>
         `;
 
         const list = document.getElementById('ranking-list');
 
-        const formatName = (name) => {
-            const parts = name.split(' ');
-            if (parts.length > 1) {
-                // Return "I. Surname" as requested (P. Gomez)
-                return `${parts[0][0]}. ${parts[parts.length - 1]}`;
-            }
-            return name;
+        const getPlaceholder = (type) => {
+            const colors = {
+                park: '#4CAF50',
+                food: '#FF9800',
+                museum: '#9C27B0',
+                culture: '#E91E63',
+                generic: '#2196F3'
+            };
+            const color = colors[type] || colors.generic;
+            return `linear-gradient(135deg, ${color}, ${color}dd)`;
         };
 
         const renderSites = async () => {
             list.innerHTML = '<div class="center-text p-20"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
             const locations = await window.KidoaData.getLocations();
             const sorted = [...locations].sort((a, b) => (b.rating || 0) - (a.rating || 0)).slice(0, 10);
-            list.innerHTML = '';
-            sorted.forEach((site, index) => {
-                const card = document.createElement('div');
-                card.className = `ranking-card rank-${index + 1} entry-anim`;
-                card.style.cursor = 'pointer';
-                let medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `<span class="rank-num">#${index + 1}</span>`;
-                card.innerHTML = `
-                    <div class="rank-position" style="font-size: 1.5rem; min-width: 40px; display: flex; justify-content: center;">${medal}</div>
-                    <div class="rank-image" style="width: 50px; height: 50px; border-radius: 12px; overflow: hidden; margin-right: 12px; background: #eee; flex-shrink: 0;">
-                        ${site.image ? `<img src="${site.image}" style="width: 100%; height: 100%; object-fit: cover;">` : `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--primary-blue), #4cc9f0); color: white; font-size: 1.2rem;">📍</div>`}
-                    </div>
-                    <div class="rank-info" style="flex: 1; padding: 0;">
-                        <h3 style="margin: 0; font-size: 1rem; color: var(--primary-navy);">${site.name}</h3>
-                        <span class="rank-badge" style="font-size: 0.75rem; color: #888;">${site.type || 'Lugar'}</span>
-                    </div>
-                    <div class="rank-score" style="font-weight: 800; color: #FBC02D; min-width: 50px; text-align: right;">⭐ ${site.rating || '?'}</div>
-                `;
 
-                // Clicking triggers map navigation
-                card.onclick = () => {
-                    // Navigate to Map
-                    window.KidoaApp.loadPage('tribu'); // Note: The user might expect the map tab? 
-                    // Actually we need to make sure the app loads the MAP page and sets the view
-                    window.KidoaApp.navigate('map');
-                    setTimeout(() => {
-                        if (window.KidoaMap && window.KidoaMap.instance) {
-                            window.KidoaMap.instance.flyTo([site.lat, site.lng], 16);
-                            // Open popup after fly
-                            const m = window.KidoaMap.markers.find(m => m.data.id === site.id);
-                            if (m) m.instance.openPopup();
-                        }
-                    }, 500);
-                };
-                list.appendChild(card);
+            if (sorted.length === 0) {
+                list.innerHTML = '<p class="center-text p-40">¡Aún no hay sitios en el ranking!</p>';
+                return;
+            }
+
+            // Podium split
+            const top3 = sorted.slice(0, 3);
+            const others = sorted.slice(3);
+
+            let html = '<div class="podium-section">';
+
+            // Order for podium: 2, 1, 3
+            const pOrder = [1, 0, 2];
+            pOrder.forEach(idx => {
+                const site = top3[idx];
+                if (!site) return;
+                const pos = idx + 1;
+                const medal = pos === 1 ? '🥇' : pos === 2 ? '🥈' : '🥉';
+                const size = pos === 1 ? 'large' : 'medium';
+
+                html += `
+                    <div class="podium-card ${size} entry-anim" onclick="window.KidoaRanking.goToMap('${site.id}', ${site.lat}, ${site.lng})">
+                        <div class="podium-rank">${medal}</div>
+                        <div class="podium-image" style="background: ${site.image ? `url(${site.image})` : getPlaceholder(site.type)}; background-size: cover; background-position: center;">
+                            ${!site.image ? '<span class="podium-icon">📍</span>' : ''}
+                        </div>
+                        <div class="podium-info">
+                            <h4 class="truncate">${site.name}</h4>
+                            <span class="stars">⭐ ${site.rating}</span>
+                        </div>
+                    </div>
+                `;
             });
+            html += '</div>';
+
+            // Others list
+            html += '<div class="ranking-rows">';
+            others.forEach((site, i) => {
+                html += `
+                    <div class="ranking-row card-anim" onclick="window.KidoaRanking.goToMap('${site.id}', ${site.lat}, ${site.lng})">
+                        <span class="row-rank">#${i + 4}</span>
+                        <div class="row-thumb" style="background: ${site.image ? `url(${site.image})` : getPlaceholder(site.type)}; background-size: cover;"></div>
+                        <div class="row-info">
+                            <h4 class="truncate">${site.name}</h4>
+                            <span class="row-type">${site.type || 'Lugar'}</span>
+                        </div>
+                        <div class="row-score">⭐ ${site.rating}</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            list.innerHTML = html;
         };
 
         const renderContributors = async () => {
             list.innerHTML = '<div class="center-text p-20"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
             let users = await window.KidoaData.getContributors();
-
-            // Inject current user
             const me = window.KidoaAuth.checkAuth();
             if (me && !me.isGuest) {
-                users.push({
-                    name: me.nickname || me.email,
-                    points: me.points,
-                    rank: me.level,
-                    role: "Tú",
-                    special: true
-                });
+                if (!users.find(u => u.name === (me.nickname || me.email))) {
+                    users.push({ name: me.nickname || me.email, points: me.points, rank: me.level, role: "Tú", special: true, avatar: me.photo || '👤' });
+                }
             }
-
             users.sort((a, b) => b.points - a.points);
 
-            let htmlStr = '';
-            users.forEach((user, idx) => {
-                const displayName = user.special ? user.name : formatName(user.name);
-                if (user.special) {
-                    htmlStr += `
-                        <div class="contributor-card gold-border entry-anim">
-                            <div style="font-size: 1.5rem;">⭐</div>
-                            <div style="flex:1">
-                                <h4 style="color:var(--primary-navy)">Tu Posición</h4>
-                                <p style="font-size:0.8rem">${displayName}</p>
-                            </div>
-                            <div class="points-badge">${user.points} pts</div>
+            const top3 = users.slice(0, 3);
+            const others = users.slice(3);
+
+            let html = '<div class="podium-section">';
+            const pOrder = [1, 0, 2];
+            pOrder.forEach(idx => {
+                const user = top3[idx];
+                if (!user) return;
+                const pos = idx + 1;
+                const medal = pos === 1 ? '🥇' : pos === 2 ? '🥈' : '🥉';
+                const size = pos === 1 ? 'large' : 'medium';
+                html += `
+                    <div class="podium-card ${size} entry-anim ${user.special ? 'is-me' : ''}">
+                        <div class="podium-rank">${medal}</div>
+                        <div class="podium-avatar gradient-bg">${user.avatar || '👤'}</div>
+                        <div class="podium-info">
+                            <h4 class="truncate">${user.name}</h4>
+                            <span class="points">${user.points} pts</span>
                         </div>
-                    `;
-                } else {
-                    htmlStr += `
-                        <div class="ranking-card entry-anim">
-                            <div class="rank-position">#${idx + 1}</div>
-                            <div class="rank-info"><h3>${displayName}</h3><span class="rank-badge">${user.rank}</span></div>
-                            <div class="rank-score">${user.points} pts</div>
-                        </div>
-                    `;
-                }
+                    </div>
+                `;
             });
-            list.innerHTML = htmlStr;
+            html += '</div>';
+
+            html += '<div class="ranking-rows">';
+            others.forEach((user, i) => {
+                html += `
+                    <div class="ranking-row card-anim ${user.special ? 'is-me' : ''}">
+                        <span class="row-rank">#${i + 4}</span>
+                        <div class="row-avatar gradient-bg small">${user.avatar || '👤'}</div>
+                        <div class="row-info">
+                            <h4 class="truncate">${user.name}</h4>
+                            <span class="row-type">${user.rank || 'Nivel 1'}</span>
+                        </div>
+                        <div class="row-score">${user.points} pts</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            list.innerHTML = html;
         };
 
-        // Initial Render
         await renderSites();
 
-        // Tab Logic
         container.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 const tab = e.target.dataset.tab;
@@ -125,6 +155,16 @@ window.KidoaRanking = {
                 window.KidoaSound.play('click');
             });
         });
+    },
+
+    goToMap: (id, lat, lng) => {
+        window.KidoaApp.navigate('map');
+        setTimeout(() => {
+            if (window.KidoaMap && window.KidoaMap.instance) {
+                window.KidoaMap.instance.flyTo([lat, lng], 16, { animate: true, duration: 2 });
+                const m = window.KidoaMap.markers.find(m => m.data.id === id || (m.data.lat === lat && m.data.lng === lng));
+                if (m) m.instance.openPopup();
+            }
+        }, 600);
     }
 };
-
