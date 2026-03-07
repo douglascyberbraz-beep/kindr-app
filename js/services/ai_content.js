@@ -8,28 +8,31 @@ window.KidoaAI = {
 
     // Buscar Noticias Regionales
     getNews: async (coordinates = "41.6520, -4.7286") => {
-        const prompt = `Busca las 3 noticias o eventos oficiales más relevantes de HOY sobre crianza, ayudas, becas o actividades familiares en un radio de 50km de las coordenadas ${coordinates}. 
-        IMPORTANTE: Busca información REAL en páginas oficiales del ayuntamiento, periódicos locales o el BOE.
-        Resumen corto y tono premium.
-        Formato JSON estricto: [ { "title": "", "summary": "", "link": "url_real", "sourceName": "Ayuntamiento de...", "date": "Hoy" } ]`;
+        const prompt = `Busca las 3 noticias o eventos oficiales más relevantes de HOY sobre crianza, niños, hijos, parques, escuelas o trámites familiares cerca de ${coordinates}.
+        IMPORTANTE: Busca información REAL en páginas oficiales (ej: jcyl.es, ayuntamientos o diarios locales de Castilla y León). 
+        Prioriza palabras clave: crianza, hijos, educación infantil.
+        Resumen corto y elegante.
+        Formato JSON estricto: [ { "title": "", "summary": "", "link": "url_real", "sourceName": "JCYL / Ayto / Diario...", "date": "Hoy" } ]`;
 
         return await window.KidoaAI._callGemini(prompt);
     },
 
     // Buscar Eventos Infantiles (0-15 años)
     getEvents: async (coordinates = "41.6520, -4.7286") => {
-        const prompt = `Busca eventos infantiles (0-15 años) para los próximos 7 días en un radio de 30km de las coordenadas GPS reales: ${coordinates}.
-        Incluye: Teatro, talleres, cuentacuentos, ocio activo.
-        IMPORTANTE: Necesito las coordenadas aproximadas del evento para el mapa.
-        Formato JSON estricto: [ { "title": "", "date": "", "location": "", "price": "" } ]`;
+        const prompt = `Busca eventos infantiles (0-15 años) para los próximos 7 días cerca de ${coordinates}.
+        Enfoque: Actividades al aire libre, musicales, obras de teatro infantil, talleres en museos locales. 
+        IMPORTANTE: Busca en agendas culturales de Ayuntamientos o prensa local de la zona.
+        Necesito las coordenadas aproximadas del evento.
+        Formato JSON estricto: [ { "title": "", "date": "", "location": "", "price": "", "lat": NUM, "lng": NUM } ]`;
 
         return await window.KidoaAI._callGemini(prompt);
     },
 
     // Buscar Becas y Ayudas
     getBecas: async (coordinates = "41.6520, -4.7286") => {
-        const prompt = `Busca las 3 becas, ayudas económicas o subvenciones familiares más relevantes cuyo plazo de solicitud esté abierto o próximo a abrir en la comunidad autónoma o radio cercano a estas coordenadas GPS: ${coordinates}.
-        Formato JSON estricto: [ { "title": "", "description": "", "status": "Plazo Abierto / Próximamente", "statusColor": "green o orange", "linkText": "Ver bases" } ]`;
+        const prompt = `Busca las 3 becas o ayudas económicas familiares más recientes en el BOCYL (Boletín Oficial de Castilla y León) o JCYL cerca de ${coordinates}.
+        Keywords: niños, hijos, crianza, infantil, libros, guardería.
+        Formato JSON estricto: [ { "title": "", "description": "", "status": "PLAZO ABIERTO / CERRADO", "statusColor": "green o orange", "linkText": "Ver en BOCYL/JCYL" } ]`;
 
         return await window.KidoaAI._callGemini(prompt);
     },

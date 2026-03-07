@@ -86,13 +86,28 @@ body {
 }
 
 .splash-logo {
-    width: 220px;
+    width: 280px;
+    /* Increased from 220px */
     height: auto;
-    max-width: 80%;
+    max-width: 85%;
     /* Multiply blends non-perfect whites if parent is white */
     mix-blend-mode: multiply;
     /* Filter pushes near-white pixels to pure white (#fff) for perfect multiply blending */
     filter: brightness(1.05) contrast(1.05);
+    /* Entrance Animation */
+    animation: logoEntrance 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes logoEntrance {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 @keyframes logoBounce {
