@@ -139,7 +139,7 @@ async function loadPage(pageName) {
 
             // Map table of renderers to satisfy pageName
             const renderers = {
-                'tribu': window.KidoaTribu,
+                'today': window.KidoaToday,
                 'ranking': window.KidoaRanking,
                 'news_events': window.KidoaNewsEvents,
                 'profile': window.KidoaProfile,
