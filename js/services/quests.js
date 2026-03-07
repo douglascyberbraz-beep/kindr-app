@@ -94,25 +94,10 @@ window.KidoaQuests = {
     // Generar nuevas misiones con IA basadas en ubicación
     generateQuests: async (coords = "41.6520, -4.7286") => {
         try {
-            const prompt = `Genera 3 misiones familiares divertidas para padres con niños cerca de las coordenadas ${coords}.
-            Cada misión debe ser completable en 1-7 días y motivar a explorar la ciudad.
-            Tipos: exploración de parques, fotografía familiar, restaurantes kid-friendly, retos sociales.
-            
-            Formato JSON estricto:
-            [
-                {
-                    "title": "nombre corto de la misión",
-                    "description": "descripción motivadora de 1-2 líneas",
-                    "type": "EXPLORE|PHOTO|GASTRO|SOCIAL|TRIVIA|ADVENTURE",
-                    "objectives": ["objetivo 1", "objetivo 2"],
-                    "points": 100,
-                    "timeLimit": "7 días",
-                    "difficulty": "fácil|media|difícil"
-                }
-            ]`;
-
-            const missions = await window.KidoaAI._callGemini(prompt);
-            return Array.isArray(missions) ? missions : [];
+            if (window.GEMINI_KEY && !window.GEMINI_KEY.includes('PEGAR_AQUI')) {
+                return await window.KidoaAI.generateLocalQuests(coords);
+            }
+            return window.KidoaQuests._getDefaultQuests();
         } catch (e) {
             console.error("Error generando misiones:", e);
             return window.KidoaQuests._getDefaultQuests();

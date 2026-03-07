@@ -104,6 +104,40 @@ window.KidoaTribu = {
         const posts = await window.KidoaData.getTribuPosts();
         window.KidoaTribu.postsCache = posts;
         window.KidoaTribu.renderPosts(container, posts);
+
+        // Async AI Topic Injection
+        setTimeout(async () => {
+            if (window.GEMINI_KEY && !window.GEMINI_KEY.includes('PEGAR_AQUI')) {
+                try {
+                    let coords = "41.6520, -4.7286";
+                    try {
+                        const pos = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 3000 }));
+                        if (pos) coords = `${pos.coords.latitude}, ${pos.coords.longitude}`;
+                    } catch (e) { }
+
+                    const aiTopic = await window.KidoaAI.getDailyTribuTopic(coords);
+                    if (aiTopic && aiTopic.title) {
+                        const aiPost = {
+                            id: 'ai-topic',
+                            user: "KIDOA IA",
+                            avatar: "🤖",
+                            time: aiTopic.date || "Ahora",
+                            content: `<strong>${aiTopic.title}</strong><br><br>${aiTopic.content}`,
+                            likes: aiTopic.likes || 12,
+                            comments: aiTopic.comments || 4,
+                            isAI: true
+                        };
+                        window.KidoaTribu.postsCache.unshift(aiPost);
+                        // Only re-render if still on comunidad tab
+                        if (window.KidoaTribu.activeTab === 'comunidad') {
+                            window.KidoaTribu.renderPosts(container, window.KidoaTribu.postsCache);
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Error loading AI Topic:", e);
+                }
+            }
+        }, 500);
     },
 
     renderPosts: (container, postList) => {
@@ -114,16 +148,21 @@ window.KidoaTribu = {
         }
         postList.forEach(post => {
             const card = document.createElement('div');
-            card.className = 'tribu-card entry-anim';
+            card.className = `tribu-card entry-anim ${post.isAI ? 'ai-sponsored-card' : ''}`;
+            if (post.isAI) {
+                card.style.background = 'linear-gradient(135deg, rgba(74, 144, 217, 0.05), rgba(76, 201, 240, 0.15))';
+                card.style.border = '1px solid var(--primary-blue)';
+            }
+
             card.innerHTML = `
                 <div class="tribu-header">
-                    <div class="tribu-avatar">${post.avatar}</div>
+                    <div class="tribu-avatar" style="${post.isAI ? 'background: var(--primary-navy); box-shadow: 0 0 10px var(--primary-blue);' : ''}">${post.avatar}</div>
                     <div class="tribu-info">
-                        <span class="tribu-user">${post.user}</span>
+                        <span class="tribu-user" style="${post.isAI ? 'font-weight: 900; color: var(--primary-blue);' : ''}">${post.user} ${post.isAI ? '✨ (Oficial)' : ''}</span>
                         <span class="tribu-time">${post.time}</span>
                     </div>
                 </div>
-                <p class="tribu-content">${post.content}</p>
+                <p class="tribu-content" style="${post.isAI ? 'font-size: 14px; line-height: 1.5; color: var(--primary-navy);' : ''}">${post.content}</p>
                 <div class="tribu-actions">
                     <button class="action-btn">❤️ ${post.likes}</button>
                     <button class="action-btn">💬 ${post.comments}</button>

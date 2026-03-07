@@ -7,7 +7,11 @@ window.KidoaSafePage = {
                     <p style="color: #888; font-size: 13px;">Alertas de seguridad en tu zona</p>
                 </div>
 
-                <div class="safe-report-bar premium-glass" style="display: flex; justify-content: center; padding: 12px;">
+                <div id="ai-safe-insight" class="info-alert" style="margin: 0 15px 15px 15px; padding: 12px; background: linear-gradient(135deg, rgba(74, 144, 217, 0.1), rgba(76, 201, 240, 0.1)); border-radius: 12px; border-left: 4px solid var(--primary-blue); font-size: 13px; color: var(--primary-navy); line-height: 1.4; display: none;">
+                    <span style="font-weight: 800;">✨ KIDOA IA:</span> <span id="ai-safe-text">Analizando tu zona...</span>
+                </div>
+
+                <div class="safe-report-bar premium-glass" style="display: flex; justify-content: center; padding: 12px; margin-top: 10px;">
                     <button id="report-alert-btn" class="btn-primary" style="font-size: 14px;">
                         ⚠️ Reportar Alerta
                     </button>
@@ -44,6 +48,28 @@ window.KidoaSafePage = {
         `;
 
         const alertsList = document.getElementById('alerts-list');
+        const insightBox = document.getElementById('ai-safe-insight');
+        const insightText = document.getElementById('ai-safe-text');
+
+        // Load AI Insight asynchronously
+        setTimeout(async () => {
+            if (window.GEMINI_KEY && !window.GEMINI_KEY.includes('PEGAR_AQUI')) {
+                insightBox.style.display = 'block';
+                try {
+                    let coords = "41.6520, -4.7286";
+                    try {
+                        const pos = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 3000 }));
+                        if (pos) coords = `${pos.coords.latitude}, ${pos.coords.longitude}`;
+                    } catch (e) { }
+
+                    const insight = await window.KidoaAI.getDailySafeInsight(coords);
+                    if (insight) insightText.innerText = insight;
+                    else insightBox.style.display = 'none';
+                } catch (e) {
+                    insightBox.style.display = 'none';
+                }
+            }
+        }, 100);
 
         // Load alerts
         const alerts = await window.KidoaSafe.getAlerts();

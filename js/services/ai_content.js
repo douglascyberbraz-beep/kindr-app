@@ -54,6 +54,33 @@ window.KidoaAI = {
         return await window.KidoaAI._callGemini(prompt);
     },
 
+    // Generar Misiones Contextuales
+    generateLocalQuests: async (coordinates = "41.6520, -4.7286") => {
+        const prompt = `Crea 2 'Misiones Familiares' (Quests) divertidas y muy específicas para jugar hoy basadas en lugares REALES cerca de estas coordenadas GPS: ${coordinates}.
+        Ejemplo: "Encuentra la estatua en la Plaza de Zorrilla", "Haz un mini picnic en el Parque Ribera de Castilla".
+        Ten en cuenta el clima actual típico de la zona.
+        Formato JSON estricto: [ { "id": "q_ai_1", "title": "Nombre divertido", "description": "Breve descripción", "type": "EXPLORATION"|"CREATIVITY", "category": "Misión", "difficulty": "fácil"|"media", "points": 100, "objectives": ["Paso 1", "Paso 2"], "totalSteps": 2, "status": "active" } ]`;
+
+        return await window.KidoaAI._callGemini(prompt);
+    },
+
+    // Generar Alerta/Consejo de Seguridad (Clima o Noticias)
+    getDailySafeInsight: async (coordinates = "41.6520, -4.7286") => {
+        const prompt = `Genera un consejo rápido de seguridad o meteorología infantil (1 o 2 frases) para una familia que se encuentra ahora mismo en la zona de las coordenadas GPS: ${coordinates}.
+        Ejemplo: "Atención: Hoy se esperan lluvias a partir de las 17h, no olvides llevar paraguas y calzado adecuado."
+        Formato texto plano.`;
+
+        return await window.KidoaAI._callGemini(prompt, false); // False = Devuelve texto, no JSON
+    },
+
+    // Generar Topic Diario para la Tribu
+    getDailyTribuTopic: async (coordinates = "41.6520, -4.7286") => {
+        const prompt = `Genera un post para un foro de padres ('La Tribu') en la ciudad correspondiente a las coordenadas GPS: ${coordinates}.
+        Debe ser un debate o consejo interesante sobre crianza y la vida en esa ciudad específica.
+        Formato JSON estricto: { "authorKey": "KIDOA_IA", "title": "El Debate del Día 🤖", "content": "Contenido del debate..." }`;
+        return await window.KidoaAI._callGemini(prompt, true);
+    },
+
     // Chat Especializado
     chat: async (userMessage, history = []) => {
         const prompt = `${window.KidoaAI.SYSTEM_PROMPT}\n\nHistorial: ${JSON.stringify(history)}\nUsuario: ${userMessage}`;
