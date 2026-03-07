@@ -92,11 +92,10 @@ window.KidoaMap = {
         const overlay = document.createElement('div');
         overlay.className = 'map-search-container';
         overlay.innerHTML = `
-            <div class="map-search-bar" style="display:flex; align-items:center; background: white; border-radius: 25px; padding: 2px 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex:1;">
+            <div class="map-search-bar" style="display:flex; align-items:center; background: white; border-radius: 25px; padding: 2px 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex:1; width: 100%;">
                 <span class="gemini-sparkle" style="margin-right:8px; font-size:1.2rem;">✨</span>
                 <input type="text" id="map-search-input" class="map-search-input" placeholder="Pregunta a Gemini o busca un lugar..." style="background:transparent; border:none; color:var(--text-dark); flex:1; outline:none; padding:12px 0; font-size: 0.95rem;">
             </div>
-            <button id="locate-me-btn" class="locate-me-btn" style="background: white; border: none; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex-shrink: 0; font-size: 1.2rem; cursor: pointer;">📍</button>
             <div id="search-results-list"></div>
             <div class="map-filters">
                 <div class="filter-chip active" data-type="all">Todos</div>
@@ -108,6 +107,13 @@ window.KidoaMap = {
             </div>
         `;
         container.appendChild(overlay);
+
+        // Floating Locate Button
+        const locateBtn = document.createElement('button');
+        locateBtn.id = 'locate-me-btn';
+        locateBtn.className = 'fab-btn locate-fab';
+        locateBtn.innerHTML = '🎯'; // GPS center icon
+        container.appendChild(locateBtn);
 
         // Event Listeners
         const input = document.getElementById('map-search-input');
@@ -459,9 +465,16 @@ window.KidoaMap = {
         if (!window.KidoaMap.userMarker) {
             const familyIcon = L.divIcon({
                 className: 'family-loc-icon',
-                html: '<div class="family-car-icon">🚙💨</div>',
-                iconSize: [40, 40],
-                iconAnchor: [20, 20]
+                html: `
+                    <div class="kidoa-user-marker">
+                        <div class="kidoa-user-pin" style="background: var(--white); border: 3px solid var(--primary-blue); border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(76, 201, 240, 0.5);">
+                            <span style="font-size: 1.5rem;">👨‍👩‍👧‍👦</span>
+                        </div>
+                        <div class="user-pulse"></div>
+                    </div>
+                `,
+                iconSize: [45, 45],
+                iconAnchor: [22, 22]
             });
             window.KidoaMap.userMarker = L.marker([lat, lng], { icon: familyIcon, zIndexOffset: 1000 }).addTo(window.KidoaMap.instance);
             window.KidoaMap.userMarker.bindPopup('<div style="font-weight:bold;color:var(--primary-navy)">¡De camino en familia!</div>');

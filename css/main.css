@@ -681,6 +681,59 @@ body {
 }
 
 /* Marker Highlights & Pulses */
+.locate-fab {
+    bottom: max(115px, calc(env(safe-area-inset-bottom) + 90px));
+    /* well above the bottom nav pill */
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 1.4rem;
+    background: var(--white);
+    color: var(--primary-navy);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.locate-fab:active {
+    background: var(--secondary-blue);
+}
+
+/* User Marker Pulse */
+.kidoa-user-marker {
+    position: relative;
+    width: 45px;
+    height: 45px;
+}
+
+.kidoa-user-pin {
+    position: relative;
+    z-index: 2;
+}
+
+.user-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 45px;
+    height: 45px;
+    background: var(--primary-blue);
+    border-radius: 50%;
+    z-index: 1;
+    animation: gpsPulse 2s infinite ease-out;
+}
+
+@keyframes gpsPulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 0;
+    }
+}
+
 @keyframes marker-pulse {
     0% {
         transform: scale(1) rotateX(-25deg);
