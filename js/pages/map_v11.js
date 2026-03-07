@@ -45,8 +45,8 @@ window.KidoaMap = {
                     preferCanvas: true
                 }).setView([41.6520, -4.7286], 15); // Default to Valladolid Center
 
-                // Switching to CartoDB Dark Matter for a Waze-style Night Navigation look
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                // Switching to Waze-style Night Navigation look (via CSS inversion)
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                     attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
                     subdomains: 'abcd',
                     maxZoom: 20,
@@ -70,8 +70,12 @@ window.KidoaMap = {
             // Load Markers
             await window.KidoaMap.loadMarkers();
 
-            // Check for Geolocation
-            window.KidoaMap.tryAutoLocate();
+            // Permanent Navigator Mode
+            document.getElementById('map-viewport-v11').classList.add('navigator-view');
+            window.KidoaMap.isNavModeActive = true;
+
+            // Start Continuous Tracking
+            window.KidoaMap.startGPSWatch();
 
             // New Feature: Clic largo o clic para añadir punto
             window.KidoaMap.instance.on('contextmenu', (e) => {
@@ -91,8 +95,7 @@ window.KidoaMap = {
         overlay.innerHTML = `
             <div class="map-search-bar">
                 <span class="gemini-sparkle">✨</span>
-                <input type="text" id="map-search-input" class="map-search-input" placeholder="Pregunta a Gemini o busca un lugar...">
-                <button id="nav-mode-btn" class="locate-me-btn nav-mode-btn">🚙 Navegar</button>
+                <input type="text" id="map-search-input" class="map-search-input" placeholder="Pregunta a Gemini o busca un lugar..." style="background:transparent; border:none; color:white; flex:1; outline:none; padding:10px;">
                 <button id="locate-me-btn" class="locate-me-btn">📍</button>
             </div>
             <div id="search-results-list"></div>
@@ -113,8 +116,14 @@ window.KidoaMap = {
             if (e.key === 'Enter') window.KidoaMap.handleSearch(input.value);
         });
 
-        document.getElementById('locate-me-btn').addEventListener('click', () => window.KidoaMap.locateUser());
-        document.getElementById('nav-mode-btn').addEventListener('click', () => window.KidoaMap.toggleNavMode());
+        document.getElementById('locate-me-btn').addEventListener('click', () => {
+            if (window.KidoaMap.userMarker) {
+                const pos = window.KidoaMap.userMarker.getLatLng();
+                window.KidoaMap.instance.flyTo([pos.lat, pos.lng], 18, { animate: true, duration: 1.5 });
+            } else {
+                window.KidoaMap.startGPSWatch();
+            }
+        });
 
         // Chips
         const chips = document.querySelectorAll('.filter-chip');
@@ -417,32 +426,7 @@ window.KidoaMap = {
         }
     },
 
-    toggleNavMode: () => {
-        const btn = document.getElementById('nav-mode-btn');
-        const mapViewport = document.getElementById('map-viewport-v11');
-
-        if (window.KidoaMap.isNavModeActive) {
-            // Disable
-            window.KidoaMap.isNavModeActive = false;
-            btn.classList.remove('active');
-            btn.innerHTML = '🚙 Navegar';
-            mapViewport.classList.remove('navigator-view');
-
-            if (window.KidoaMap.watchId) {
-                navigator.geolocation.clearWatch(window.KidoaMap.watchId);
-                window.KidoaMap.watchId = null;
-            }
-        } else {
-            // Enable
-            window.KidoaMap.isNavModeActive = true;
-            btn.classList.add('active');
-            btn.innerHTML = '🛑 Detener';
-            mapViewport.classList.add('navigator-view');
-
-            // Start continuous GPS tracking
-            window.KidoaMap.startGPSWatch();
-        }
-    },
+    // Toggle removed, it is now permanent navigator
 
     startGPSWatch: () => {
         if (!navigator.geolocation) return;

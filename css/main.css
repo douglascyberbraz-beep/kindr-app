@@ -312,18 +312,25 @@ body {
 
 /* Magical Glass UI */
 .map-search-container {
-    background: rgba(255, 255, 255, 0.4) !important;
+    background: rgba(15, 23, 42, 0.85) !important;
+    /* Waze Dark UI */
+    color: white !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.5) !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
     margin: 15px !important;
     border-radius: 28px !important;
 }
 
+.map-search-container input::placeholder {
+    color: #94a3b8 !important;
+}
+
 .filter-chip {
-    background: rgba(255, 255, 255, 0.6) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #e2e8f0 !important;
     backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
 .filter-chip.active {
@@ -1889,15 +1896,18 @@ body {
     display: inline-block;
     margin-top: 6px;
 }
+
 /* Navigator Mode GPS Styles */
 .navigator-view .leaflet-pane.leaflet-map-pane {
-    transform: perspective(800px) rotateX(60deg) scale(1.5) !important;
-    transform-origin: center calc(100% - 150px);
-    transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+    transform: perspective(600px) rotateX(50deg) scale(1.4) !important;
+    /* 50deg tilted Waze style */
+    transform-origin: center calc(100% - 100px);
+    transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .kidoa-map-tiles.night-mode {
-    filter: brightness(0.9) contrast(1.2) saturate(2) hue-rotate(200deg);
+    /* Pure dark blue Waze-like theme from a light basemap */
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(110%) saturate(140%) !important;
 }
 
 .nav-mode-btn {
@@ -1919,9 +1929,17 @@ body {
 }
 
 @keyframes navPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .family-car-icon {
@@ -1929,7 +1947,7 @@ body {
     line-height: 1;
     text-align: center;
     text-shadow: 0 0 15px rgba(76, 201, 240, 0.9);
-    filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+    filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.5));
     transform: translateY(-20px);
     animation: floatCar 2s ease-in-out infinite;
     position: relative;
@@ -1948,11 +1966,17 @@ body {
     padding: 2px 8px;
     border-radius: 10px;
     border: 2px solid white;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes floatCar {
-    0%, 100% { transform: translateY(-20px) scale(1); }
-    50% { transform: translateY(-25px) scale(1.05); }
-}
 
+    0%,
+    100% {
+        transform: translateY(-20px) scale(1);
+    }
+
+    50% {
+        transform: translateY(-25px) scale(1.05);
+    }
+}
