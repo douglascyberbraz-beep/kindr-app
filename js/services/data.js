@@ -30,14 +30,17 @@ window.KidoaData = {
     },
 
     // -- NEWS --
-    getNews: async () => {
+    getNews: async (coords) => {
         try {
+            if (window.GEMINI_KEY && !window.GEMINI_KEY.includes('PEGAR_AQUI')) {
+                return await window.KidoaAI.getNews(coords);
+            }
             const snap = await window.KidoaDB.collection('news').orderBy('date', 'desc').limit(10).get();
             if (!snap.empty) {
                 return snap.docs.map(d => ({ id: d.id, ...d.data() }));
             }
         } catch (e) {
-            console.warn("Firestore getNews fallback:", e);
+            console.warn("Firestore/AI getNews fallback:", e);
         }
         // Fallback estático
         return [
@@ -47,19 +50,38 @@ window.KidoaData = {
     },
 
     // -- EVENTS --
-    getEvents: async () => {
+    getEvents: async (coords) => {
         try {
+            if (window.GEMINI_KEY && !window.GEMINI_KEY.includes('PEGAR_AQUI')) {
+                return await window.KidoaAI.getEvents(coords);
+            }
             const snap = await window.KidoaDB.collection('events').orderBy('date', 'asc').limit(10).get();
             if (!snap.empty) {
                 return snap.docs.map(d => ({ id: d.id, ...d.data() }));
             }
         } catch (e) {
-            console.warn("Firestore getEvents fallback:", e);
+            console.warn("Firestore/AI getEvents fallback:", e);
         }
         // Fallback estático
         return [
             { id: 1, title: "Titirimundi 2025: Avance", date: "Sábado, 15 Mar - 11:00", location: "Plaza Mayor de Segovia", price: "Gratis", link: "#" },
             { id: 2, title: "Taller 'Pequeños Evolucionadores'", date: "Domingo, 16 Mar - 12:30", location: "Museo Evolución Humana, Burgos", price: "5€", link: "#" }
+        ];
+    },
+
+    // -- BECAS --
+    getBecas: async (coords) => {
+        try {
+            if (window.GEMINI_KEY && !window.GEMINI_KEY.includes('PEGAR_AQUI')) {
+                return await window.KidoaAI.getBecas(coords);
+            }
+        } catch (e) {
+            console.warn("AI getBecas fallback:", e);
+        }
+        // Fallback estático
+        return [
+            { title: "Ayudas para Comedor Escolar 2026", description: "Plazo abierto hasta el 30 de Mayo de 2026. Disponible para Centros Públicos y Concertados.", status: "PLAZO ABIERTO", statusColor: "#27AE60", linkText: "Bases y Solicitud" },
+            { title: "Jornadas de Puertas Abiertas (Escuelas Infantiles)", description: "Consulta el calendario de visitas para el próximo curso escolar en tu ciudad.", status: "PRÓXIMAMENTE", statusColor: "#F39C12", linkText: "Ver centros" }
         ];
     },
 

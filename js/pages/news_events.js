@@ -41,13 +41,14 @@ window.KidoaNewsEvents = {
             }
 
             if (tab === 'news') {
-                const news = await window.KidoaData.getNews(); // Simplified or IA based
+                const news = await window.KidoaData.getNews(coords);
                 renderNews(news);
             } else if (tab === 'events') {
-                const events = await window.KidoaData.getEvents();
+                const events = await window.KidoaData.getEvents(coords);
                 renderEvents(events);
             } else if (tab === 'becas') {
-                renderBecas();
+                const becas = await window.KidoaData.getBecas(coords);
+                renderBecas(becas);
             }
         };
 
@@ -110,32 +111,39 @@ window.KidoaNewsEvents = {
             });
         };
 
-        const renderBecas = () => {
+        const renderBecas = (items) => {
             content.innerHTML = `
                 <div class="becas-list" style="width: 92%; max-width: 500px;">
                     <div class="info-alert" style="background: #e3f2fd; padding: 15px; border-radius: 15px; margin-bottom: 20px; border-left: 5px solid var(--primary-blue);">
                         <p style="margin:0; font-size: 0.9rem; color: var(--primary-navy);"><strong>💡 Tip Kidoa:</strong> Mantén activadas las notificaciones para no perderte ningún plazo de matriculación en tu zona.</p>
                     </div>
-                    
-                    <div class="beca-item premium-glass" style="padding: 20px; border-radius: 20px; margin-bottom: 15px; border: 1px solid #eee;">
-                        <h4 style="color: var(--primary-navy); margin-bottom: 5px;">Ayudas para Comedor Escolar 2026</h4>
-                        <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Plazo abierto hasta el 30 de Mayo de 2026. Disponible para Centros Públicos y Concertados.</p>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="color: #27AE60; font-weight: 800; font-size: 11px;">🟢 PLAZO ABIERTO</span>
-                            <button class="btn-text" style="color: var(--primary-blue); font-weight: 700;">Bases y Solicitud</button>
-                        </div>
-                    </div>
-
-                    <div class="beca-item premium-glass" style="padding: 20px; border-radius: 20px; margin-bottom: 15px; border: 1px solid #eee;">
-                        <h4 style="color: var(--primary-navy); margin-bottom: 5px;">Jornadas de Puertas Abiertas (Escuelas Infantiles)</h4>
-                        <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Consulta el calendario de visitas para el próximo curso escolar en Valladolid.</p>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="color: #666; font-weight: 800; font-size: 11px;">📅 PRÓXIMAMENTE</span>
-                            <button class="btn-text" style="color: var(--primary-blue); font-weight: 700;">Ver centros</button>
-                        </div>
-                    </div>
                 </div>
             `;
+            const listContainer = content.querySelector('.becas-list');
+
+            if (!items || items.length === 0) {
+                listContainer.innerHTML += `<div class="p-20 center-text text-light">No hay becas recientes.</div>`;
+                return;
+            }
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'beca-item premium-glass entry-anim';
+                card.style.padding = '20px';
+                card.style.borderRadius = '20px';
+                card.style.marginBottom = '15px';
+                card.style.border = '1px solid #eee';
+
+                card.innerHTML = `
+                    <h4 style="color: var(--primary-navy); margin-bottom: 5px;">${item.title}</h4>
+                    <p style="font-size: 12px; color: #666; margin-bottom: 10px;">${item.description}</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: ${item.statusColor || '#27AE60'}; font-weight: 800; font-size: 11px;">${item.status}</span>
+                        <button class="btn-text" style="color: var(--primary-blue); font-weight: 700;">${item.linkText || 'Ver Bases'}</button>
+                    </div>
+                `;
+                listContainer.appendChild(card);
+            });
         };
 
         // Tab Logic

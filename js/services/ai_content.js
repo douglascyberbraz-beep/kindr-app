@@ -17,10 +17,18 @@ window.KidoaAI = {
 
     // Buscar Eventos Infantiles (0-15 años)
     getEvents: async (coordinates = "41.6520, -4.7286") => {
-        const prompt = `Busca eventos infantiles (0-15 años) para los próximos 7 días en un radio de 30km de las coordenadas ${coordinates}.
+        const prompt = `Busca eventos infantiles (0-15 años) para los próximos 7 días en un radio de 30km de las coordenadas GPS reales: ${coordinates}.
         Incluye: Teatro, talleres, cuentacuentos, ocio activo.
         IMPORTANTE: Necesito las coordenadas aproximadas del evento para el mapa.
-        Formato JSON estricto: [ { "name": "", "date": "", "info": "", "url": "", "lat": 0.0, "lng": 0.0 } ]`;
+        Formato JSON estricto: [ { "title": "", "date": "", "location": "", "price": "" } ]`;
+
+        return await window.KidoaAI._callGemini(prompt);
+    },
+
+    // Buscar Becas y Ayudas
+    getBecas: async (coordinates = "41.6520, -4.7286") => {
+        const prompt = `Busca las 3 becas, ayudas económicas o subvenciones familiares más relevantes cuyo plazo de solicitud esté abierto o próximo a abrir en la comunidad autónoma o radio cercano a estas coordenadas GPS: ${coordinates}.
+        Formato JSON estricto: [ { "title": "", "description": "", "status": "Plazo Abierto / Próximamente", "statusColor": "green o orange", "linkText": "Ver bases" } ]`;
 
         return await window.KidoaAI._callGemini(prompt);
     },
