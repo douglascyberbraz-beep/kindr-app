@@ -88,11 +88,15 @@ window.KidoaMap = {
                 window.KidoaMap.showAddSiteModal(e.latlng.lat, e.latlng.lng);
             });
             window.KidoaMap.instance.on('click', (e) => {
-                // If they click on the empty map, let them create a site there
-                // We add a tiny delay to ensure it doesn't fire when dragging
+                // Prevent map click from firing if clicking ON a marker or control
+                const targetClass = e.originalEvent.target.className;
+                if (typeof targetClass === 'string' && (targetClass.includes('leaflet-interactive') || targetClass.includes('kidoa-marker'))) {
+                    return;
+                }
+
                 setTimeout(() => {
                     window.KidoaMap.showAddSiteModal(e.latlng.lat, e.latlng.lng);
-                }, 200);
+                }, 250);
             });
         } catch (e) {
             console.error("KidoaMap Init Failed:", e);

@@ -40,10 +40,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             splash.style.display = 'none';
             document.getElementById('bottom-nav').classList.remove('hidden');
 
-            // Production: Request location immediately for personalized experience
-            if (window.KidoaMap) window.KidoaMap.locateUser();
+            // Set up initial view if map was loaded first
+            if (appState.currentPage === 'map' && window.KidoaMap && window.KidoaMap.instance) {
+                window.KidoaMap.instance.invalidateSize();
+            }
         }, 500);
-    }, 2000); // Reduced slightly for better feel
+    }, 1500); // Shorter splash screen
 
     // Initialize Firebase Auth and wait for state
     window.KidoaAuth.init((user) => {
