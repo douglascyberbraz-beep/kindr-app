@@ -126,7 +126,7 @@ window.KidoaNewsEvents = {
             content.innerHTML = '<div class="becas-list" style="width: 92%; max-width: 500px;"></div>';
             const listContainer = content.querySelector('.becas-list');
 
-            items.forEach(item => {
+            items.forEach((item, idx) => {
                 const card = document.createElement('div');
                 card.className = 'beca-item premium-glass entry-anim';
                 card.style.padding = '20px';
@@ -139,10 +139,21 @@ window.KidoaNewsEvents = {
                     <p style="font-size: 12px; color: #666; margin-bottom: 10px;">${item.description}</p>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: ${item.statusColor || '#27AE60'}; font-weight: 800; font-size: 11px;">${item.status}</span>
-                        <button class="btn-text" style="color: var(--primary-blue); font-weight: 700;">${item.linkText || 'Ver Bases'}</button>
+                        <button id="beca-btn-${idx}" class="btn-text" style="color: var(--primary-blue); font-weight: 700;">${item.linkText || 'Ver Bases'}</button>
                     </div>
                 `;
                 listContainer.appendChild(card);
+
+                const becaBtn = document.getElementById(`beca-btn-${idx}`);
+                if (becaBtn) {
+                    becaBtn.onclick = () => {
+                        if (item.link && item.link !== "") {
+                            window.open(item.link, '_blank');
+                        } else {
+                            alert(`ℹ️ Información sobre: ${item.title}\n\nPuedes consultar las bases oficiales y los requisitos completos de esta ayuda familiar buscando en la sede electrónica de tu ayuntamiento o comunidad autónoma.`);
+                        }
+                    };
+                }
             });
         };
 

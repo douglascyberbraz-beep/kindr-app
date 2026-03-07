@@ -95,7 +95,7 @@ window.KidoaToday = {
                     </div>
                     
                     <div style="display: flex; gap: 10px;">
-                        <button class="btn-primary-gradient" style="flex: 2; padding: 12px; border-radius: 14px; font-size: 13px;">${act.link ? 'Ver más / Info' : '¡Me apunto!'}</button>
+                        <button id="action-btn-${idx}" class="btn-primary-gradient" style="flex: 2; padding: 12px; border-radius: 14px; font-size: 13px;">${act.link ? 'Ver más / Info' : '¡Me apunto!'}</button>
                         <button id="map-btn-${idx}" class="btn-secondary" style="flex: 1; padding: 12px; border-radius: 14px; font-size: 13px; background: #f0f4f8; border:none; display:flex; align-items:center; justify-content:center;">🗺️ Mapa</button>
                     </div>
                 `;
@@ -108,8 +108,8 @@ window.KidoaToday = {
                         if (window.KidoaMap && window.KidoaMap.instance) {
                             window.KidoaMap.instance.flyTo({
                                 center: [act.lng || -4.7286, act.lat || 41.6520],
-                                zoom: 18.5,
-                                pitch: 80,
+                                zoom: 18,
+                                pitch: 60,
                                 speed: 1.5
                             });
                         }
@@ -118,6 +118,21 @@ window.KidoaToday = {
 
                 document.getElementById(`loc-btn-${idx}`).onclick = goToMap;
                 document.getElementById(`map-btn-${idx}`).onclick = goToMap;
+
+                const actionBtn = document.getElementById(`action-btn-${idx}`);
+                if (actionBtn) {
+                    actionBtn.onclick = () => {
+                        if (act.link && act.link !== "") {
+                            window.open(act.link, '_blank');
+                        } else {
+                            if (window.KidoaPoints) window.KidoaPoints.addPoints('QUEST');
+                            alert(`¡Plan familiar aceptado! Te has apuntado a: ${act.title}.\n\n¡Disfrutad mucho de la experiencia! ✨ (Has ganado +50 puntos Kidoa)`);
+                            actionBtn.innerText = "¡Apuntado! ✅";
+                            actionBtn.style.background = "linear-gradient(135deg, #27AE60, #2ECC71)";
+                            actionBtn.style.color = "white";
+                        }
+                    };
+                }
             });
         };
     }
