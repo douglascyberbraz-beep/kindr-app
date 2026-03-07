@@ -45,12 +45,12 @@ window.KidoaMap = {
                     preferCanvas: true
                 }).setView([41.6520, -4.7286], 15); // Default to Valladolid Center
 
-                // Switching to Waze-style Night Navigation look (via CSS inversion)
+                // Standard Navigator Look - Clean, Bright, and Brand-friendly
                 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                     attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
                     subdomains: 'abcd',
                     maxZoom: 20,
-                    className: 'kidoa-map-tiles night-mode'
+                    className: 'kidoa-map-tiles nav-brand-mode'
                 }).addTo(map);
 
                 window.KidoaMap.instance = map;
@@ -93,11 +93,11 @@ window.KidoaMap = {
         const overlay = document.createElement('div');
         overlay.className = 'map-search-container';
         overlay.innerHTML = `
-            <div class="map-search-bar">
-                <span class="gemini-sparkle">✨</span>
-                <input type="text" id="map-search-input" class="map-search-input" placeholder="Pregunta a Gemini o busca un lugar..." style="background:transparent; border:none; color:white; flex:1; outline:none; padding:10px;">
-                <button id="locate-me-btn" class="locate-me-btn">📍</button>
+            <div class="map-search-bar" style="display:flex; align-items:center; background: white; border-radius: 25px; padding: 2px 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex:1;">
+                <span class="gemini-sparkle" style="margin-right:8px; font-size:1.2rem;">✨</span>
+                <input type="text" id="map-search-input" class="map-search-input" placeholder="Pregunta a Gemini o busca un lugar..." style="background:transparent; border:none; color:var(--text-dark); flex:1; outline:none; padding:12px 0; font-size: 0.95rem;">
             </div>
+            <button id="locate-me-btn" class="locate-me-btn" style="background: white; border: none; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex-shrink: 0; font-size: 1.2rem; cursor: pointer;">📍</button>
             <div id="search-results-list"></div>
             <div class="map-filters">
                 <div class="filter-chip active" data-type="all">Todos</div>
