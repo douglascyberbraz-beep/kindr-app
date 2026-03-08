@@ -206,8 +206,8 @@ window.KidoaAuth = {
             <div class="auth-container slide-up-anim">
                 <div class="auth-card premium-glass">
                     <div class="auth-header">
-                        <div class="premium-logo-wrap" style="margin-bottom: 35px; transform: scale(1.1); transition: all 0.5s ease;">
-                            <img src="assets/logo.png" alt="Kidoa" style="height: 110px; width: auto; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));">
+                        <div class="premium-logo-wrap" style="margin-bottom: 30px; transform: scale(1.05);">
+                            <img src="assets/logo.png" alt="Kidoa" style="height: 115px; width: auto; object-fit: contain; mix-blend-mode: multiply;">
                         </div>
                         <h2 style="color:var(--primary-navy); font-size: 1.9rem; font-weight: 900; margin-bottom: 8px; letter-spacing: -0.5px;">Bienvenido a KIDOA</h2>
                         <p style="color: #64748b; font-size: 1rem; font-weight: 500;">Explora, comparte y crece con tu tribu</p>
@@ -235,19 +235,18 @@ window.KidoaAuth = {
                         
                         <div class="social-divider"><span>o continúa con</span></div>
                         
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:20px;">
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:20px;">
-                            <button id="do-google" class="btn-outline" style="display:flex; align-items:center; justify-content:center; gap:10px; height: 50px; border-radius: 15px; background: white; border: 1px solid #ddd;">
-                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> Google
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:15px;">
+                            <button id="do-google" class="btn-outline" style="display:flex; align-items:center; justify-content:center; gap:10px; height: 50px; border-radius: 15px; background: white; border: 1px solid #e2e8f0; font-weight: 600;">
+                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"> Google
                             </button>
-                            <button id="do-apple" class="btn-outline" style="display:flex; align-items:center; justify-content:center; gap:10px; height: 50px; border-radius: 15px; background: black; color: white;">
-                                 Apple
+                            <button id="do-apple" class="btn-outline" style="display:flex; align-items:center; justify-content:center; gap:10px; height: 50px; border-radius: 15px; background: #000; color: white; border: none; font-weight: 600;">
+                                <span style="font-size: 1.2rem;"></span> Apple
                             </button>
                         </div>
 
-                        <div style="text-align: center; margin-top: 15px;">
-                            <button id="do-guest" class="btn-text" style="font-weight: 800; color: var(--primary-navy); font-size: 0.95rem; text-decoration: none; padding: 12px 24px; border-radius: 50px; background: rgba(0,44,119,0.05); border: 1px solid rgba(0,44,119,0.1); width: 100%; transition: all 0.3s ease;">
-                                🚀 Explorar como invitado
+                        <div style="text-align: center; margin-top: 10px;">
+                            <button id="do-guest" class="btn-outline" style="font-weight: 700; color: var(--text-main); font-size: 0.9rem; border: 1px solid #e2e8f0; background: #f8fafc; width: 100%; height: 50px; border-radius: 15px; cursor: pointer;">
+                                Explorar como invitado
                             </button>
                         </div>
                     </div>

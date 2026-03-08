@@ -38,25 +38,22 @@ window.KidoaMap = {
             window.KidoaMap.instance.on('load', async () => {
                 window.KidoaMap.isInitialized = true;
 
-                // Waze-Style / Clean 2D-Tilted Setup
-                // Remove 3D building extrusions if any (liberty style usually doesn't have them but we ensure they are flat)
-                const layers = window.KidoaMap.instance.getStyle().layers;
-                layers.forEach(layer => {
-                    if (layer.type === 'fill-extrusion') {
-                        window.KidoaMap.instance.removeLayer(layer.id);
-                    }
-                });
+                // Kidoa Harmonious Palette
+                window.KidoaMap.instance.setPaintProperty('water', 'fill-color', '#4CC9F0'); // Kidoa Light Blue
+                window.KidoaMap.instance.setPaintProperty('landuse-natural', 'fill-color', '#C8E6C9'); // Soft Green
+                window.KidoaMap.instance.setPaintProperty('landuse-park', 'fill-color', '#A5D6A7'); // Park Green
+                window.KidoaMap.instance.setPaintProperty('land', 'fill-color', '#F8FAFC'); // Kidoa Grayish White
 
-                // Customize palette for vibrancy
-                window.KidoaMap.instance.setPaintProperty('water', 'fill-color', '#4CC9F0'); // Brighter water
-                window.KidoaMap.instance.setPaintProperty('landuse-natural', 'fill-color', '#C8E6C9'); // Lush green for nature
-                window.KidoaMap.instance.setPaintProperty('landuse-park', 'fill-color', '#A5D6A7'); // Distinctive park green
-                window.KidoaMap.instance.setPaintProperty('land', 'fill-color', '#F1F5F9'); // Clean light gray-blue land
+                // Buildings (Flat but themed)
+                if (window.KidoaMap.instance.getLayer('building')) {
+                    window.KidoaMap.instance.setPaintProperty('building', 'fill-color', '#E2E8F0');
+                    window.KidoaMap.instance.setPaintProperty('building', 'fill-outline-color', '#CBD5E1');
+                }
 
                 // Thicker, cleaner roads
                 if (window.KidoaMap.instance.getLayer('road-primary')) {
                     window.KidoaMap.instance.setPaintProperty('road-primary', 'line-color', '#ffffff');
-                    window.KidoaMap.instance.setPaintProperty('road-primary', 'line-width', 4);
+                    window.KidoaMap.instance.setPaintProperty('road-primary', 'line-width', 5);
                 }
 
                 window.KidoaMap.injectUI(container);
@@ -267,23 +264,35 @@ window.KidoaMap = {
         if (!window.KidoaMap.userMarker) {
             const el = document.createElement('div');
             el.innerHTML = `
-                <div class="user-gps-arrow" style="
+                <div class="user-kidoa-orb" style="
                     width: 50px; height: 50px;
-                    background: radial-gradient(circle, rgba(0,255,150,0.3) 0%, transparent 70%);
+                    background: radial-gradient(circle, rgba(76, 201, 240, 0.4) 0%, transparent 70%);
                     display: flex; justify-content: center; align-items: center;
                     border-radius: 50%;
-                    transform: rotate(${heading}deg);
-                    transition: transform 0.3s ease-out;
                 ">
                     <div style="
-                        width: 0; 
-                        height: 0; 
-                        border-left: 12px solid transparent;
-                        border-right: 12px solid transparent;
-                        border-bottom: 24px solid var(--accent-pink);
-                        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
-                        transform: translateY(-4px);
-                    "></div>
+                        width: 24px; 
+                        height: 24px; 
+                        background: white;
+                        border-radius: 50%;
+                        display: flex; align-items: center; justify-content: center;
+                        box-shadow: 0 0 15px rgba(76, 201, 240, 0.8), inset 0 0 5px rgba(0,0,0,0.1);
+                        border: 2px solid var(--primary-navy);
+                        position: relative;
+                    ">
+                        <span style="font-size: 14px; filter: none !important;">✨</span>
+                        <!-- Directional Indicator (Subtle) -->
+                        <div style="
+                            position: absolute;
+                            top: -8px;
+                            width: 0; height: 0;
+                            border-left: 6px solid transparent;
+                            border-right: 6px solid transparent;
+                            border-bottom: 10px solid var(--primary-navy);
+                            transform-origin: bottom center;
+                            transform: rotate(${heading}deg) translateY(-2px);
+                        "></div>
+                    </div>
                 </div>
             `;
             window.KidoaMap.userMarker = new maplibregl.Marker({ element: el, pitchAlignment: 'map', rotationAlignment: 'map' })
@@ -291,8 +300,8 @@ window.KidoaMap = {
                 .addTo(window.KidoaMap.instance);
         } else {
             window.KidoaMap.userMarker.setLngLat([lng, lat]);
-            const arrow = window.KidoaMap.userMarker.getElement().querySelector('.user-gps-arrow');
-            if (arrow) arrow.style.transform = `rotate(${heading}deg)`;
+            const indicator = window.KidoaMap.userMarker.getElement().querySelector('[style*="border-bottom: 10px solid"]');
+            if (indicator) indicator.style.transform = `rotate(${heading}deg) translateY(-2px)`;
         }
     },
 
