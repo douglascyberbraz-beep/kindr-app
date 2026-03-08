@@ -206,8 +206,8 @@ window.KidoaAuth = {
             <div class="auth-container slide-up-anim">
                 <div class="auth-card premium-glass">
                     <div class="auth-header">
-                        <div class="premium-logo-wrap" style="background: rgba(67, 97, 238, 0.05); padding: 25px; border-radius: 24px; display: inline-block; margin-bottom: 25px; border: 1px solid rgba(67, 97, 238, 0.1);">
-                            <img src="assets/logo.png" alt="Kidoa" style="height: 80px; width: auto; object-fit: contain;">
+                        <div class="premium-logo-wrap" style="margin-bottom: 30px;">
+                            <img src="assets/logo.png" alt="Kidoa" style="height: 90px; width: auto; object-fit: contain;">
                         </div>
                         <h2 style="color:var(--primary-navy); font-size: 1.8rem; font-weight: 800; margin-bottom: 8px;">Bienvenido a KIDOA</h2>
                         <p style="color: #64748b; font-size: 0.95rem;">Explora,comparte y crece con tu tribu</p>
@@ -245,7 +245,9 @@ window.KidoaAuth = {
                             </button>
                         </div>
 
-                        <button id="do-guest" class="btn-secondary full-width" style="height: 50px; border-radius: 15px; font-weight: 700; border: 1px solid #eee; background: #f8f9fa; color: #666;">Explorar como Invitado</button>
+                        <div style="text-align: center; margin-top: 10px;">
+                            <button id="do-guest" class="btn-text" style="font-weight: 700; color: #64748b; font-size: 0.9rem; text-decoration: underline;">O entra como invitado</button>
+                        </div>
                     </div>
                 </div>
             </div>

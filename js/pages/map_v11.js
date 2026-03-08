@@ -39,6 +39,15 @@ window.KidoaMap = {
                 window.KidoaMap.isInitialized = true;
 
                 // Simple Clean Setup - No confusing extrusions
+                window.KidoaMap.instance.setPaintProperty('water', 'fill-color', '#002C77');
+                window.KidoaMap.instance.setPaintProperty('landuse-natural', 'fill-color', '#E0F7FA');
+                window.KidoaMap.instance.setPaintProperty('land', 'fill-color', '#F8FAFC');
+
+                // Add a subtle blue glow to roads for premium feel
+                if (window.KidoaMap.instance.getLayer('road-primary')) {
+                    window.KidoaMap.instance.setPaintProperty('road-primary', 'line-color', '#ffffff');
+                }
+
                 window.KidoaMap.injectUI(container);
                 await window.KidoaMap.loadMarkers();
                 window.KidoaMap.startGPSWatch();
