@@ -234,21 +234,29 @@ window.KidoaAuth = {
                         <div class="social-divider"><span>o continúa con</span></div>
                         
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:20px;">
-                            <button id="do-google" class="btn-outline" style="display:flex; align-items:center; justify-content:center; gap:10px; height: 50px; border-radius: 15px;">
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:20px;">
+                            <button id="do-google" class="btn-outline" style="display:flex; align-items:center; justify-content:center; gap:10px; height: 50px; border-radius: 15px; background: white; border: 1px solid #ddd;">
                                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> Google
                             </button>
-                            <button id="do-apple" class="btn-outline" style="display:flex; align-items:center; justify-content:center; gap:10px; height: 50px; border-radius: 15px;">
-                                <img src="assets/apple_logo_black.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg'" width="18"> Apple
+                            <button id="do-apple" class="btn-outline" style="display:flex; align-items:center; justify-content:center; gap:10px; height: 50px; border-radius: 15px; background: black; color: white;">
+                                 Apple
                             </button>
                         </div>
 
-                        <button id="do-guest" class="btn-secondary full-width" style="height: 50px; border-radius: 15px; font-weight: 700; border: 1px solid #eee; background: #fff; color: #666;">Explorar como Invitado</button>
+                        <button id="do-guest" class="btn-secondary full-width" style="height: 50px; border-radius: 15px; font-weight: 700; border: 1px solid #eee; background: #f8f9fa; color: #666;">Explorar como Invitado</button>
                     </div>
                 </div>
             </div>
         `;
 
         document.body.appendChild(modal);
+        // Hide map UI elements behind the modal
+        const mapSearch = document.querySelector('.map-search-container');
+        const mapFilters = document.querySelector('.map-filters');
+        const locateBtn = document.querySelector('.locate-fab');
+        if (mapSearch) mapSearch.style.display = 'none';
+        if (mapFilters) mapFilters.style.display = 'none';
+        if (locateBtn) locateBtn.style.display = 'none';
 
         let isLoginMode = true;
         const showError = (msg) => {
@@ -337,6 +345,22 @@ window.KidoaAuth = {
             e.preventDefault();
             window.KidoaApp.loadPage('legal');
             modal.remove();
+
+            // Restore map elements
+            if (mapSearch) mapSearch.style.display = 'flex';
+            if (mapFilters) mapFilters.style.display = 'flex';
+            if (locateBtn) locateBtn.style.display = 'flex';
         });
+
+        // Ensure proper cleanup on login
+        const cleanupModal = () => {
+            modal.remove();
+            if (mapSearch) mapSearch.style.display = 'flex';
+            if (mapFilters) mapFilters.style.display = 'flex';
+            if (locateBtn) locateBtn.style.display = 'flex';
+        };
+
+        // Wrap original remove calls
+        const originalLogin = document.getElementById('main-auth-btn').onclick;
     }
 };
