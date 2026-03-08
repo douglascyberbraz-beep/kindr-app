@@ -98,17 +98,7 @@ window.KidoaMap = {
         locateBtn.innerHTML = '🎯';
         container.appendChild(locateBtn);
 
-        const compassBtn = document.createElement('button');
-        compassBtn.id = 'map-compass';
-        compassBtn.className = 'fab-btn';
-        compassBtn.style.bottom = '160px';
-        compassBtn.style.right = '20px';
-        compassBtn.innerHTML = '🧭';
-        container.appendChild(compassBtn);
-
-        compassBtn.onclick = () => {
-            window.KidoaMap.instance.easeTo({ bearing: 0, pitch: 0, duration: 1000 });
-        };
+        // Brujula eliminada por peticion del usuario
 
         const input = document.getElementById('map-search-input');
         input.addEventListener('keypress', (e) => {
