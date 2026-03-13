@@ -28,8 +28,8 @@ window.KidoaMap = {
                 container: container,
                 style: 'https://tiles.openfreemap.org/styles/liberty',
                 center: [-4.7286, 41.6520],
-                zoom: 17,
-                pitch: 60, // Tilted but 2D-Clean
+                zoom: 16.5,
+                pitch: 0, // Flat 2D view as requested
                 bearing: 0,
                 antialias: true,
                 hash: false
@@ -38,22 +38,32 @@ window.KidoaMap = {
             window.KidoaMap.instance.on('load', async () => {
                 window.KidoaMap.isInitialized = true;
 
-                // Kidoa Harmonious Palette
+                // Kidoa Harmonious Palette - Flat layers
                 window.KidoaMap.instance.setPaintProperty('water', 'fill-color', '#4CC9F0'); // Kidoa Light Blue
                 window.KidoaMap.instance.setPaintProperty('landuse-natural', 'fill-color', '#C8E6C9'); // Soft Green
                 window.KidoaMap.instance.setPaintProperty('landuse-park', 'fill-color', '#A5D6A7'); // Park Green
                 window.KidoaMap.instance.setPaintProperty('land', 'fill-color', '#F8FAFC'); // Kidoa Grayish White
 
-                // Buildings (Flat but themed)
+                // Remove 3D Buildings - Force them to be flat
                 if (window.KidoaMap.instance.getLayer('building')) {
+                    // If the style has 3D extrusion, we override it to be a simple flat fill
                     window.KidoaMap.instance.setPaintProperty('building', 'fill-color', '#E2E8F0');
                     window.KidoaMap.instance.setPaintProperty('building', 'fill-outline-color', '#CBD5E1');
+                    window.KidoaMap.instance.setPaintProperty('building', 'fill-opacity', 0.8);
+                    
+                    // Specific override for potential 3D extrusion properties to ensure flatness
+                    try {
+                        window.KidoaMap.instance.setPaintProperty('building', 'fill-extrusion-height', 0);
+                        window.KidoaMap.instance.setPaintProperty('building', 'fill-extrusion-base', 0);
+                    } catch (e) {
+                        // Properties might not exist if it's already a fill layer
+                    }
                 }
 
                 // Thicker, cleaner roads
                 if (window.KidoaMap.instance.getLayer('road-primary')) {
                     window.KidoaMap.instance.setPaintProperty('road-primary', 'line-color', '#ffffff');
-                    window.KidoaMap.instance.setPaintProperty('road-primary', 'line-width', 5);
+                    window.KidoaMap.instance.setPaintProperty('road-primary', 'line-width', 4);
                 }
 
                 window.KidoaMap.injectUI(container);
@@ -114,7 +124,7 @@ window.KidoaMap = {
         document.getElementById('locate-me-btn').addEventListener('click', () => {
             if (window.KidoaMap.userMarker) {
                 const lngLat = window.KidoaMap.userMarker.getLngLat();
-                window.KidoaMap.instance.easeTo({ center: lngLat, zoom: 18, pitch: 60, speed: 1.2 });
+                window.KidoaMap.instance.easeTo({ center: lngLat, zoom: 18, pitch: 0, speed: 1.2 });
             } else {
                 window.KidoaMap.locateUser();
             }
@@ -200,14 +210,14 @@ window.KidoaMap = {
             if (results && results.length > 0) {
                 window.KidoaMap.clearMarkers();
                 results.forEach(loc => window.KidoaMap.createMarker(loc));
-                window.KidoaMap.instance.flyTo({ center: [results[0].lng, results[0].lat], zoom: 17, pitch: 60, speed: 1.0 });
+                window.KidoaMap.instance.flyTo({ center: [results[0].lng, results[0].lat], zoom: 17, pitch: 0, speed: 1.0 });
             } else {
                 // geocoding fallback
                 const resp = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=1`);
                 const data = await resp.json();
                 if (data.features && data.features.length > 0) {
                     const c = data.features[0].geometry.coordinates;
-                    window.KidoaMap.instance.flyTo({ center: c, zoom: 17, pitch: 60 });
+                    window.KidoaMap.instance.flyTo({ center: c, zoom: 17, pitch: 0 });
                 }
             }
         } catch (e) { console.warn("Search error:", e); }
@@ -252,7 +262,7 @@ window.KidoaMap = {
             window.KidoaMap.instance.easeTo({
                 center: [lng, lat],
                 bearing: heading || window.KidoaMap.instance.getBearing(),
-                pitch: 65, // Increased tilt for Waze feel
+                pitch: 0, // Flat view
                 zoom: 17.5,
                 duration: 1500,
                 easing: (t) => t * (2 - t) // Smooth deceleration
@@ -316,7 +326,7 @@ window.KidoaMap = {
         navigator.geolocation.getCurrentPosition((pos) => {
             const lat = pos.coords.latitude;
             const lng = pos.coords.longitude;
-            window.KidoaMap.instance.flyTo({ center: [lng, lat], zoom: 18, pitch: 60 });
+            window.KidoaMap.instance.flyTo({ center: [lng, lat], zoom: 18, pitch: 0 });
             window.KidoaMap.updateUserIcon(lat, lng);
         });
     },
