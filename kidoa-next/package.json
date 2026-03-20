@@ -9,23 +9,26 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
+    "@capacitor/android": "latest",
+    "@capacitor/core": "latest",
+    "@capacitor/geolocation": "latest",
+    "@capacitor/ios": "latest",
+    "@capacitor/splash-screen": "latest",
+    "@capacitor/status-bar": "latest",
     "firebase": "latest",
     "framer-motion": "latest",
     "lucide-react": "latest",
     "maplibre-gl": "latest",
-    "@capacitor/core": "latest",
-    "@capacitor/ios": "latest",
-    "@capacitor/android": "latest",
-    "@capacitor/geolocation": "latest",
-    "@capacitor/splash-screen": "latest",
-    "@capacitor/status-bar": "latest"
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.2.0",
+    "@types/react": "19.2.14",
     "autoprefixer": "latest",
     "postcss": "latest",
-    "tailwindcss": "latest"
+    "tailwindcss": "latest",
+    "typescript": "5.9.3"
   }
 }

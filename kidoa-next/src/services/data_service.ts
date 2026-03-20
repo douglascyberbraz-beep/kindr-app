@@ -42,4 +42,18 @@ export class DataService {
         const prompt = `Busca NOTICIAS y EVENTOS REALES para familias en ${coords}. Devuelve JSON: {news: [], events: []}`;
         return await KidoaAI.callGemini(prompt, true);
     }
+
+    static async getRankings() {
+        try {
+            const q = query(collection(db, "users"), orderBy("points", "desc"), limit(10));
+            const snap = await getDocs(q);
+            return snap.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+        } catch (e) {
+            console.error("Error fetching rankings:", e);
+            return [];
+        }
+    }
 }

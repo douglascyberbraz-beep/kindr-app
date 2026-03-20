@@ -1,4 +1,6 @@
 import { Metadata } from 'next'
+import { AppProvider } from '../context/AppContext'
+import './globals.css'
  
 export const metadata: Metadata = {
   title: 'Kidoa - Explora en Familia',
@@ -23,7 +25,11 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/assets/logo.png" />
       </head>
-      <body>{children}</body>
+      <body>
+        <AppProvider>
+          {children}
+        </AppProvider>
+      </body>
     </html>
   )
 }

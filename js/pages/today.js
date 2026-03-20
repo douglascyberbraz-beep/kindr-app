@@ -68,6 +68,8 @@ window.KidoaToday = {
                 const priceText = act.price || 'Gratis';
                 const isFree = priceText.toLowerCase().includes('grat');
 
+                const isMock = activities.length > 0 && activities[0].id && activities[0].id < 100; // Mock IDs wrap low
+
                 card.innerHTML = `
                     <div class="card-top">
                         <span class="age-badge">${act.age || 'Familiar'}</span>
@@ -94,6 +96,10 @@ window.KidoaToday = {
                     <div style="display: flex; gap: 10px;">
                         <button id="action-btn-${idx}" class="btn-primary-gradient" style="flex: 2;">${act.link ? 'Ver Entradas / Info' : '¡Me apunto!'}</button>
                         <button id="map-btn-${idx}" class="btn-secondary" style="flex: 1; padding: 12px; border-radius: 14px; font-size: 13px; background: #f1f5f9; border:none; display:flex; align-items:center; justify-content:center;">🗺️ Mapa</button>
+                    </div>
+
+                    <div style="font-size: 9px; color: ${isMock ? '#e63946' : '#27AE60'}; margin-top: 15px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">
+                        ● ${isMock ? 'Datos de Ejemplo (Ubicación no detectada)' : 'Sincronizado con KIDOA IA Real'}
                     </div>
                 `;
 
@@ -167,8 +173,16 @@ window.KidoaToday = {
         };
 
         // Initial attempt
+        // Initial attempt
         const initialCoords = window.lastKnownCoords || "41.6520, -4.7286";
         fetchAndRender(initialCoords, storedPrefs);
+
+        // Listen for GPS updates
+        window.KidoaToday._syncHandler = (e) => {
+            console.log("TODAY Sync: Real location found, refreshing...", e.detail);
+            fetchAndRender(e.detail, storedPrefs);
+        };
+        window.addEventListener('kidoa-location-sync', window.KidoaToday._syncHandler, { once: true });
     },
 
     renderQuestionnaire: (container) => {

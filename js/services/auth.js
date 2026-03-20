@@ -304,9 +304,21 @@ window.KidoaAuth = {
                 if (!termsAccepted) return showError("Debes aceptar los Términos y Condiciones.");
 
                 try {
+                    const mainBtn = document.getElementById('main-auth-btn');
+                    const originalText = mainBtn.textContent;
+                    mainBtn.disabled = true;
+                    mainBtn.textContent = "Creando cuenta premium...";
+                    
+                    console.log("Iniciando registro para:", email, nick);
                     await window.KidoaAuth.register(email, pass, nick);
+                    
+                    mainBtn.textContent = "Sincronizando perfil...";
+                    // Wait 1.5s for Firestore consistency
+                    await new Promise(r => setTimeout(r, 1500));
+                    
+                    alert("¡Cuenta creada con éxito! Bienvenido a la Tribu ✨");
                     modal.remove();
-                    location.reload();
+                    window.location.reload();
                 } catch (e) {
                     console.error("Reg error details:", e);
                     let errMsg = "Error en el registro.";

@@ -33,17 +33,16 @@ export class KidoaAI {
 
     static async getTodayActivities(coords: string, prefs: any) {
         const prompt = `
-            ACTÚA COMO UN GUÍA LOCAL EXPERTO PARA FAMILIAS.
+            ACTÚA COMO UN GUÍA LOCAL EXPERTO PARA FAMILIAS (Estilo Google Maps 2025).
             UBICACIÓN: ${coords} (Lat, Lng)
             FAMILIA: ${prefs.adults} adultos, ${prefs.kids} niños (Edades: ${prefs.ages}).
             PREFERENCIAS: Ambiente ${prefs.environment}, Presupuesto ${prefs.budget}.
 
             OBJETIVO: Devuelve 3 planes REALES y ESPECÍFICOS para HOY.
             REGLAS ESTRICTAS:
-            1. PROHIBIDO INVENTAR: Usa solo lugares reales que existan en Google Maps en esa zona.
-            2. NO USAR EJEMPLOS GENÉRICOS.
-            3. Si no hay planes reales, devuelve una lista vacía [].
-            4. Formato JSON: [{id, title, summary, location, lat, lng, time, duration, price, age, tip, link}]
+            1. PROHIBIDO INVENTAR: Usa solo lugares reales que existan hoy en esa ciudad.
+            2. AI INSIGHTS: Para cada lugar, añade un "Expert Tip" (ej: dónde aparcar, mejor hora para ir) y un "Vibe" (ej: concurrido, relajante).
+            3. Formato JSON: [{id, title, summary, location, lat, lng, time, price, expertTip, vibe, imageUrl}]
         `;
         return await this.callGemini(prompt, true);
     }

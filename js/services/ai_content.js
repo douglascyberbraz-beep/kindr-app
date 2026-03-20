@@ -12,7 +12,8 @@ window.KidoaAI = {
         1. Identifica la CIUDAD y PROVINCIA de estas coordenadas.
         2. Busca 3 noticias o avisos oficiales REALES de HOY sobre crianza, parques, colegios o vida familiar específicos de esa ciudad o provincia.
         3. Prioriza fuentes oficiales (ayuntamientos, juntas regionales, diarios locales).
-        4. No menciones otras regiones. Solo información de su zona o provincia autonoma.
+        4. PROHIBIDO: No uses ejemplos, no uses noticias de otras regiones, no inventes nombres de colegios o parques. SI NO HAY NOTICIAS REALES HOY, devuelve una lista vacía [].
+        5. No menciones otras regiones. Solo información de su zona o provincia autonoma.
         Formato JSON: [ { "title": "", "summary": "", "link": "url", "sourceName": "Fuente Local", "date": "Hoy" } ]`;
 
         return await window.KidoaAI._callGemini(prompt);
@@ -24,6 +25,7 @@ window.KidoaAI = {
         1. Identifica la CIUDAD de estas coordenadas.
         2. Busca eventos REALES para los próximos 7 días: teatro infantil, música, aire libre, talleres.
         3. Solo eventos en su municipio o municipios colindantes (su zona).
+        4. PROHIBIDO: No inventes eventos. Si no hay nada real, devuelve una lista vacía [].
         Formato JSON: [ { "title": "", "date": "", "location": "Sitio Real", "price": "", "lat": NUM, "lng": NUM } ]`;
 
         return await window.KidoaAI._callGemini(prompt);
@@ -33,8 +35,8 @@ window.KidoaAI = {
     getBecas: async (coordinates = "41.6520, -4.7286") => {
         const prompt = `Ubicación: ${coordinates}.
         1. Identifica la PROVINCIA y COMUNIDAD AUTÓNOMA.
-        2. Busca 3 becas o ayudas familiares activas en el boletín oficial de esa comunidad (ej: BOCYL, DOGC, BOCM, etc.) o del ayuntamiento local.
-        3. Keywords: niños, crianza, infantil, educación.
+        2. Busca 3 becas o ayudas familiares de fuentes oficiales vigentes (BOCYL, DOGC, BOCM, etc.).
+        3. PROHIBIDO: No inventes plazos o nombres de becas si no existen. Si no hay nada real, devuelve [].
         Formato JSON: [ { "title": "", "description": "", "status": "PLAZO ABIERTO", "statusColor": "green", "linkText": "Ver bases oficiales" } ]`;
 
         return await window.KidoaAI._callGemini(prompt);
@@ -52,29 +54,22 @@ window.KidoaAI = {
             `;
         }
 
-        const prompt = `Actúa como un planificador de ocio familiar experto y creativo. Ubicación del usuario: ${coordinates}.
+        const prompt = `Actúa como un planificador de ocio familiar experto y creativo. Ubicación: ${coordinates}. No uses datos de ejemplo.
         ${prefsContext}
-        Tu misión es generar el hub "TODAY" (¿Qué hacer hoy?) totalmente personalizado.
         1. Identifica la CIUDAD y PROVINCIA de estas coordenadas.
-        2. Genera 3-4 actividades para HOY mismo que encajen con el contexto familiar arriba descrito.
-        3. IMPORTANTE: Sé muy específico con el clima. Si es invierno o llueve, prioriza ${preferences?.environment === 'Outdoor' ? 'sitios con encanto pero protegidos' : 'interiores'}. 
-        4. No te limites solo a eventos oficiales. CREA PLANES basados en la geografía local:
-           - "Picnic familiar en el Parque [Nombre]" (detallando qué llevar y mejor zona).
-           - "Ruta de exploración de estatuas/fuentes por el centro".
-           - "Tarde de juegos tradicionales en la Plaza [Nombre]".
-           - Museos, cine o talleres REALES de la zona.
-        5. Para cada actividad, necesito: 
-           - Título MUY ATRACTIVO y EMOCIONANTE.
-           - Resumen breve inspirador que explique POR QUÉ es ideal para niños de esas edades.
-           - Horarios sugeridos para HOY.
-           - Ubicación exacta (nombre del sitio real).
-           - Coordenadas REALES (lat, lng).
-           - Precio detallado (ej: "Gratis", "12€/adulto, 5€/niño", "Desde 10€").
-           - Enlace oficial para comprar entradas o ver info (si existe, si no, vacío).
-           - Edad recomendada específica.
-           - DURACIÓN estimada (ej: "2 horas", "Toda la tarde").
-           - CONSEJO CLAVE (ej: "Llevad calzado cómodo", "Reservad antes de ir").
-        6. Formato JSON estricto: [ { "title": "", "summary": "", "time": "", "location": "", "lat": NUM, "lng": NUM, "price": "", "link": "", "age": "", "duration": "", "tip": "" } ]`;
+        2. Genera 3-4 actividades para HOY mismo que encajen con el contexto.
+        3. PROHIBIDO: Inventar nombres de parques o sitios. Usa lugares que existan en Google Maps.
+        4. Para cada actividad, necesito:
+           - Título real y emocionante.
+           - Resumen específico (nada de "disfruta de un día genial").
+           - Horarios reales sugeridos.
+           - Ubicación exacta real.
+           - Coordenadas REALES precisas.
+           - Precio aproximado real.
+           - Enlace real si existe.
+           - Edad, Duración y un Consejo Útil.
+        5. Si no hay nada real bajo este contexto, devuelve [].
+        Formato JSON: [ { "title": "", "summary": "", "time": "", "location": "", "lat": NUM, "lng": NUM, "price": "", "link": "", "age": "", "duration": "", "tip": "" } ]`;
 
         return await window.KidoaAI._callGemini(prompt);
     },
@@ -108,11 +103,10 @@ window.KidoaAI = {
 
     // Generador Dinámico de Mapa (Basado en Coordenadas)
     getDynamicLocations: async (coordinates = "41.6520, -4.7286") => {
-        const prompt = `Actúa como guía turístico local familiar. Genera 8 sitios reales increíbles para ir con niños (parques, museos, ludotecas, restaurantes kid-friendly) en un radio cercano de las coordenadas GPS: ${coordinates}.
-        Devuélvelos en formato JSON estricto para mapearlos directamente.
-        Asegúrate de incluir sus nombres reales locales, no te inventes nombres de comercios si no existen, dales coordenadas muy cercanas al usuario.
-        Formato esperado:
-        [ { "id": UID_NUMERICO_UNICO, "name": "Nombre Real", "type": "park"|"museum"|"school"|"theater"|"kidzone"|"food", "lat": NUMERO, "lng": NUMERO, "rating": NUMERO_4_A_5, "reviews": NUMERO } ]`;
+        const prompt = `Ubicación GPS: ${coordinates}. Genera 8 sitios REALES verificados para familias (parques, museos, etc.).
+        ADVERTENCIA: PROHIBIDO inventar nombres. Si no conoces el sitio real, no lo listes.
+        Devuelve JSON con nombres locales exactos y coordenadas reales.
+        Formato: [ { "id": UID, "name": "Nombre Real Exacto", "type": "park"|"museum"|"school"|"theater"|"kidzone"|"food", "lat": NUM, "lng": NUM, "rating": 4.5, "reviews": 100 } ]`;
 
         return await window.KidoaAI._callGemini(prompt);
     },
@@ -223,45 +217,29 @@ window.KidoaAI = {
 
                     return JSON.parse(cleanText);
                 } catch (e) {
-                    console.error("Error parsing Gemini JSON:", text, e);
+                    console.warn("⚠️ Fallback AI (Error de Parseo JSON):", text);
                     return window.KidoaAI._getMockData(prompt);
                 }
             }
             return text.trim();
         } catch (e) {
-            console.error("Network or execution error en KidoaAI:", e);
+            console.error("❌ Error Crítico Gemini (Red o Ejecución):", e);
             return window.KidoaAI._getMockData(prompt);
         }
     },
 
     _getMockData: (prompt) => {
         const lowerPrompt = prompt.toLowerCase();
-        // Fallback robusto para demos sin internet/clave - Centrado en Valladolid/Castilla y León
+        const msg = "Para ver planes reales en tu zona, activa el GPS y asegúrate de tener conexión.";
+        
         if (lowerPrompt.includes('today') || lowerPrompt.includes('activities') || lowerPrompt.includes('hoy')) return [
-            { id: 1, title: "Pícnic en el Campo Grande", summary: "Disfruta de una tarde entre pavos reales y patos en el corazón de Valladolid. ¡Llevad pan para los patos!", time: "16:00 - 19:00", location: "Parque Campo Grande", lat: 41.6444, lng: -4.7303, price: "Gratis", age: "Todas las edades" },
-            { id: 2, title: "Ruta de Fuentes Monumentales", summary: "Explora las fuentes más famosas del centro: desde la Fuente de Cervantes hasta la Plaza Mayor.", time: "Mañana o Tarde", location: "Plaza Mayor", lat: 41.6525, lng: -4.7286, price: "Gratis", age: "6-12 años" },
-            { id: 3, title: "Visita al Museo de la Ciencia", summary: "Descubre el planetario y las salas interactivas. Ideal para un día nublado.", time: "10:00 - 18:00", location: "Museo de la Ciencia", lat: 41.6385, lng: -4.7431, price: "5€", age: "4-15 años" }
+            { id: 1, title: "Activando KIDOA IA...", summary: msg, time: "Aviso", location: "Tu Ciudad", lat: 0, lng: 0, price: "Gratis", age: "Familiar" }
         ];
 
-        if (lowerPrompt.includes('news') || lowerPrompt.includes('noticias')) return [
-            { id: 101, title: "Nuevas ayudas a la Conciliación JCYL", summary: "La Junta de Castilla y León anuncia el nuevo programa de apoyo para familias con niños menores de 3 años.", source: "https://www.jcyl.es", sourceName: "Junta de Castilla y León", date: "Hoy" },
-            { id: 102, title: "Valladolid amplía carriles bici escolares", summary: "El ayuntamiento mejora la seguridad en los accesos a los centros educativos del barrio de Parquesol.", source: "https://www.valladolid.es", sourceName: "Ayto. Valladolid", date: "Ayer" }
-        ];
-
-        if (lowerPrompt.includes('events') || lowerPrompt.includes('eventos')) return [
-            { id: 201, title: "Taller de Teatro Infantil", date: "Próximo Sábado", location: "Teatro Calderón", price: "3€", lat: 41.6550, lng: -4.7240 }
-        ];
-
-        if (lowerPrompt.includes('becas') || lowerPrompt.includes('ayudas')) return [
-            { title: "Ayudas de Comedor", description: "Beca de comedor para rentas bajas.", status: "PLAZO ABIERTO", statusColor: "green", linkText: "Bases" }
-        ];
-
-        if (lowerPrompt.includes('lugares') || lowerPrompt.includes('locations') || lowerPrompt.includes('guía turístico')) return [
-            { id: 301, name: "Parque Ribera de Castilla", type: "park", lat: 41.6620, lng: -4.7250, rating: 4.8, reviews: 310 },
-            { id: 302, name: "Teatro Zorrilla Infantil", type: "theater", lat: 41.6525, lng: -4.7290, rating: 4.5, reviews: 154 },
-            { id: 303, name: "Ludoteca La Magia", type: "kidzone", lat: 41.6410, lng: -4.7400, rating: 4.9, reviews: 89 },
-            { id: 304, name: "Restaurante Kid-Friendly El Parque", type: "food", lat: 41.6510, lng: -4.7320, rating: 4.3, reviews: 205 }
-        ];
+        if (lowerPrompt.includes('news') || lowerPrompt.includes('noticias')) return [];
+        if (lowerPrompt.includes('events') || lowerPrompt.includes('eventos')) return [];
+        if (lowerPrompt.includes('becas') || lowerPrompt.includes('ayudas')) return [];
+        if (lowerPrompt.includes('lugares') || lowerPrompt.includes('locations')) return [];
 
         return [];
     }
