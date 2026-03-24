@@ -30,7 +30,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const playSound = (type: 'click' | 'start' | 'success' | 'boop') => {
+  const playSound = (type: 'click' | 'start' | 'success' | 'boop' | 'error') => {
     const sounds = {
       click: 'https://cdn.pixabay.com/audio/2022/03/15/audio_73268c2f16.mp3',
       start: 'https://cdn.pixabay.com/audio/2021/08/04/audio_985536554b.mp3',
