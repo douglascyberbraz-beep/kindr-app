@@ -1,5 +1,5 @@
-const CACHE_NAME = 'gohappy-cache-v2.0.0';
-const TILE_CACHE = 'kidoa-tiles-v1.2.9';
+const CACHE_NAME = 'gohappy-cache-v2.0.1';
+const TILE_CACHE = 'gohappy-tiles-v1.2.9';
 const ASSETS = [
     './',
     'index.html',
@@ -13,8 +13,8 @@ const ASSETS = [
     'js/services/quests.js',
     'js/services/safety.js',
     'js/pages/map_v11.js',
-    'js/pages/news.js',
-    'js/pages/events.js',
+    'js/pages/news_events.js',
+    'js/pages/today.js',
     'js/pages/tribu.js',
     'js/pages/ranking.js',
     'js/pages/profile.js',
@@ -27,10 +27,7 @@ const ASSETS = [
     'assets/logo.png',
     'assets/map-marker.png',
     'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
-    'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
-    'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
-    'https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3',
-    'https://assets.mixkit.co/active_storage/sfx/1918/1918-preview.mp3'
+    'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
 ];
 
 self.addEventListener('install', (event) => {

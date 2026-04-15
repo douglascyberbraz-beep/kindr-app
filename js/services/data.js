@@ -54,8 +54,8 @@ window.GoHappyData = {
         }
         // Fallback estático real
         return [
-            { id: 1, title: "Nuevas ayudas a la Conciliación JCYL", summary: "La Junta de Castilla y León anuncia el programa de apoyo para familias con niños menores de 3 años.", source: "Junta de Castilla y León", date: "Hace 2 horas" },
-            { id: 2, title: "Valladolid amplía carriles bici escolares", summary: "Mejora de seguridad en accesos a centros educativos del barrio de Parquesol.", source: "Ayuntamiento de Valladolid", date: "Hace 5 horas" }
+            { id: 1, title: "Nuevas ayudas a la Conciliación JCYL", summary: "La Junta de Castilla y León anuncia el programa de apoyo para familias con niños menores de 3 años.", sourceName: "Junta de Castilla y León", link: "#", date: "Hace 2 horas" },
+            { id: 2, title: "Valladolid amplía carriles bici escolares", summary: "Mejora de seguridad en accesos a centros educativos del barrio de Parquesol.", sourceName: "Ayuntamiento de Valladolid", link: "#", date: "Hace 5 horas" }
         ];
     },
 

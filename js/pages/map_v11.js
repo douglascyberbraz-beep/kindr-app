@@ -38,27 +38,32 @@ window.GoHappyMap = {
             window.GoHappyMap.instance.on('load', async () => {
                 window.GoHappyMap.isInitialized = true;
 
-                // GoHappy Harmonious Palette - Flat layers
-                window.GoHappyMap.instance.setPaintProperty('water', 'fill-color', '#4CC9F0'); // GoHappy Light Blue
-                window.GoHappyMap.instance.setPaintProperty('landuse-natural', 'fill-color', '#C8E6C9'); // Soft Green
-                window.GoHappyMap.instance.setPaintProperty('landuse-park', 'fill-color', '#A5D6A7'); // Park Green
-                window.GoHappyMap.instance.setPaintProperty('land', 'fill-color', '#F8FAFC'); // GoHappy Grayish White
+                // Check if layers exist before modifying them to prevent Error: Layer does not exist
+                if (window.GoHappyMap.instance.getLayer('water')) {
+                    window.GoHappyMap.instance.setPaintProperty('water', 'fill-color', '#4CC9F0'); // GoHappy Light Blue
+                }
+                if (window.GoHappyMap.instance.getLayer('landuse-natural')) {
+                    window.GoHappyMap.instance.setPaintProperty('landuse-natural', 'fill-color', '#C8E6C9'); // Soft Green
+                }
+                if (window.GoHappyMap.instance.getLayer('landuse-park')) {
+                    window.GoHappyMap.instance.setPaintProperty('landuse-park', 'fill-color', '#A5D6A7'); // Park Green
+                }
+                if (window.GoHappyMap.instance.getLayer('land')) {
+                    window.GoHappyMap.instance.setPaintProperty('land', 'fill-color', '#F8FAFC'); // GoHappy Grayish White
+                }
 
                 // Remove 3D Buildings - Force them to be flat
-                if (window.GoHappyMap.instance.getLayer('building')) {
-                    // If the style has 3D extrusion, we override it to be a simple flat fill
-                    window.GoHappyMap.instance.setPaintProperty('building', 'fill-color', '#E2E8F0');
-                    window.GoHappyMap.instance.setPaintProperty('building', 'fill-outline-color', '#CBD5E1');
-                    window.GoHappyMap.instance.setPaintProperty('building', 'fill-opacity', 0.8);
-                    
-                    // Specific override for potential 3D extrusion properties to ensure flatness
-                    try {
+                try {
+                    if (window.GoHappyMap.instance.getLayer('building')) {
+                        // If the style has 3D extrusion, we override it to be a simple flat fill
+                        window.GoHappyMap.instance.setPaintProperty('building', 'fill-color', '#E2E8F0');
+                        window.GoHappyMap.instance.setPaintProperty('building', 'fill-outline-color', '#CBD5E1');
+                        window.GoHappyMap.instance.setPaintProperty('building', 'fill-opacity', 0.8);
+                        
                         window.GoHappyMap.instance.setPaintProperty('building', 'fill-extrusion-height', 0);
                         window.GoHappyMap.instance.setPaintProperty('building', 'fill-extrusion-base', 0);
-                    } catch (e) {
-                        // Properties might not exist if it's already a fill layer
                     }
-                }
+                } catch (e) {}
 
                 // Thicker, cleaner roads
                 if (window.GoHappyMap.instance.getLayer('road-primary')) {
@@ -179,7 +184,7 @@ window.GoHappyMap = {
 
         const popup = new maplibregl.Popup({ offset: 40, className: 'premium-popup-3d' }).setHTML(popupHTML);
 
-        const marker = new maplibregl.Marker({ element: el })
+        const marker = new maplibregl.Marker({ element: el, anchor: 'bottom', offset: [0, -10] })
             .setLngLat([loc.lng, loc.lat])
             .setPopup(popup)
             .addTo(window.GoHappyMap.instance);
