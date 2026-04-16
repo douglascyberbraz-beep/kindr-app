@@ -23,6 +23,9 @@
     
     /* Patterns */
     --brand-pattern: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M30 10c-11.046 0-20 8.954-20 20s8.954 20 20 20 20-8.954 20-20-8.954-20-20-20zm0 36c-8.837 0-16-7.163-16-16s7.163-16 16-16 16 7.163 16 16-7.163 16-16 16z'/%3E%3Cpath d='M22 24c0-1.105.895-2 2-2s2 .895 2 2-.895 2-2 2-2-.895-2-2zM34 24c0-1.105.895-2 2-2s2 .895 2 2-.895 2-2 2-2-.895-2-2z'/%3E%3Cpath d='M20 34c0 5.523 4.477 10 10 10s10-4.477 10-10H20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+
+    --safe-top: env(safe-area-inset-top, 20px);
+    --safe-bottom: env(safe-area-inset-bottom, 20px);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -55,7 +58,7 @@ h1, h2, h3, .logo-text, .premium-header h2 { font-family: 'Poppins', sans-serif;
     overflow: hidden;
 }
 
-/* Splash Screen */
+/* Splash Screen - Clean Minimalist */
 .splash-screen {
     position: absolute;
     top: 0;
@@ -63,27 +66,24 @@ h1, h2, h3, .logo-text, .premium-header h2 { font-family: 'Poppins', sans-serif;
     width: 100%;
     height: 100%;
     height: 100dvh;
-    background: var(--primary-cobalt);
-    background-image: var(--brand-pattern);
+    background: white;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter 0.8s ease;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .logo-container {
-    background: white;
-    width: 320px;
-    height: 320px;
-    border-radius: 50%;
+    background: transparent;
+    width: 100%;
+    max-width: 320px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
     padding: 30px;
-    animation: splashLogoPop 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation: splashLogoScale 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .splash-logo-img {
@@ -93,9 +93,9 @@ h1, h2, h3, .logo-text, .premium-header h2 { font-family: 'Poppins', sans-serif;
     object-fit: contain;
 }
 
-@keyframes splashLogoPop {
-    0% { transform: scale(0.6); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+@keyframes splashLogoScale {
+    0% { transform: scale(0.85); opacity: 0; filter: blur(10px); }
+    100% { transform: scale(1); opacity: 1; filter: blur(0); }
 }
 
 @keyframes breathing {
@@ -120,7 +120,7 @@ button:active, .card:active {
 
 .bottom-nav {
     position: absolute;
-    bottom: max(35px, env(safe-area-inset-bottom));
+    bottom: max(35px, env(safe-area-inset-bottom, 20px));
     left: 50%;
     transform: translateX(-50%);
     width: 94%;
@@ -690,9 +690,9 @@ button:active, .card:active {
     box-shadow: 0 4px 10px rgba(76, 201, 240, 0.2);
 }
 
-/* Page Header */
+/* Page Header - Mobile Optimized */
 .page-header {
-    padding: 24px 20px 15px;
+    padding: calc(env(safe-area-inset-top, 20px) + 15px) 20px 15px;
     text-align: center;
     width: 100%;
 }
@@ -1127,7 +1127,7 @@ button:active, .card:active {
 
 /* --- Consolidate Page Styles --- */
 .premium-header {
-    padding: 30px 20px 10px;
+    padding: calc(env(safe-area-inset-top, 20px) + 20px) 20px 10px;
 }
 
 .premium-header h2 {
@@ -1465,8 +1465,7 @@ button:active, .card:active {
     flex: 1;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 90px;
-    /* Space for fixed bottom nav */
+    padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 90px);
     display: flex;
     flex-direction: column;
     align-items: center;
